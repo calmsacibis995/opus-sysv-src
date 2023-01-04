@@ -1,0 +1,3271 @@
+
+===== The following commands/libraries failed =====
+Some that we don't care about have been filtered out
+
+Mail
+assist
+fmli
+help
+lp
+m4
+net.admin
+pg
+tail
+vi
+
+======== Mail
+cd Mail
+**** Build of Mail failed (no makefile found in directory)
+
+======== assist
+cd assist
+make -b -f assist.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cd ./src/forms; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin FFLAG= INS=/etc/install INCLUDE= CURSES=-lcurses -f forms.mk install
+	cc  -c fill_out.c
+	cc  -c muse.c
+	cc  -c menu.c
+	cc  -c support.c
+	cc  -c read_in.c
+	cc  -c popup.c
+	cc  -c command.c
+	cc  -c update.c
+	cc  -c msupport.c
+	cc  -c valid.c
+"/usr/include/regexp.h", line 508: warning: Constant out of range ==
+	cc  -c expand.c
+	cc  -s  -o mforms fill_out.o muse.o menu.o support.o read_in.o popup.o command.o update.o msupport.o valid.o expand.o -lcurses -lm
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to mforms
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f assist.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd ./src/forms; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f forms.mk clobber
+	rm -f fill_out.o muse.o menu.o support.o read_in.o popup.o command.o update.o msupport.o valid.o expand.o
+	rm -f mforms mecho
+	cd ./src/scripts; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f mscript.mk clobber
+	rm -f mscript.o do_line.o utilities.o callout.o mkscript.o
+	rm -f mscript
+	cd ./src/search; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f msearch.mk clobber
+	rm -f msearch.o format.o syn.o
+	rm -f msearch
+	cd ./src/setup; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f setup.mk clobber
+	rm -f msetup.o intro.o term.o update.o
+	rm -f tsetup
+	rm -f msetup
+	cd ./src/astgen; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f tools.mk clobber
+	rm -f bottom.o show_cap.o get_path.o m_field.o m_global.o vsupport.o cf_global.o  dhelp.o err_mess.o move.o cf_field.o pick_val.o util.o editval.o  select.o control.o writefile.o perm_chk.o  ../forms/read_in.o field_type.o ../forms/support.o
+	rm -f tforms
+	rm -f assist astgen
+**** Build of assist failed (make)
+
+======== fmli
+cd fmli
+make -b -f fmli.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+Making all in sys subsystem
+	cc -c -O -I../inc  actrec.c
+"actrec.c", line 125: warning: expression not used!
+	ar rv libsys.a actrec.o
+ar: creating libsys.a
+a - actrec.o
+	/bin/rm -f actrec.o
+	cc -c -O -I../inc  ar_mfuncs.c
+	ar rv libsys.a ar_mfuncs.o
+a - ar_mfuncs.o
+	/bin/rm -f ar_mfuncs.o
+	cc -c -O -I../inc  backslash.c
+	ar rv libsys.a backslash.o
+a - backslash.o
+	/bin/rm -f backslash.o
+	cc -c -O -I../inc  chgenv.c
+	ar rv libsys.a chgenv.o
+a - chgenv.o
+	/bin/rm -f chgenv.o
+	cc -c -O -I../inc  chgepenv.c
+	ar rv libsys.a chgepenv.o
+a - chgepenv.o
+	/bin/rm -f chgepenv.o
+	cc -c -O -I../inc  coproc.c
+"coproc.c", line 69: warning: illegal types: pointer = pointer
+	ar rv libsys.a coproc.o
+a - coproc.o
+	/bin/rm -f coproc.o
+	cc -c -O -I../inc  copyfile.c
+	ar rv libsys.a copyfile.o
+a - copyfile.o
+	/bin/rm -f copyfile.o
+	cc -c -O -I../inc  estrtok.c
+	ar rv libsys.a estrtok.o
+a - estrtok.o
+	/bin/rm -f estrtok.o
+	cc -c -O -I../inc  evfuncs.c
+	ar rv libsys.a evfuncs.o
+a - evfuncs.o
+	/bin/rm -f evfuncs.o
+	cc -c -O -I../inc  eval.c
+	ar rv libsys.a eval.o
+a - eval.o
+	/bin/rm -f eval.o
+	cc -c -O -I../inc  evstr.c
+	ar rv libsys.a evstr.o
+a - evstr.o
+	/bin/rm -f evstr.o
+	cc -c -O -I../inc  exit.c
+	ar rv libsys.a exit.o
+a - exit.o
+	/bin/rm -f exit.o
+	cc -c -O -I../inc  expand.c
+	ar rv libsys.a expand.o
+a - expand.o
+	/bin/rm -f expand.o
+	cc -c -O -I../inc  filename.c
+	ar rv libsys.a filename.o
+a - filename.o
+	/bin/rm -f filename.o
+	cc -O -I../inc  -c genfind.c
+	ar rv libsys.a genfind.o
+a - genfind.o
+	/bin/rm -f genfind.o
+	cc -c -O -I../inc  getaltenv.c
+	ar rv libsys.a getaltenv.o
+a - getaltenv.o
+	/bin/rm -f getaltenv.o
+	cc -c -O -I../inc  getepenv.c
+	ar rv libsys.a getepenv.o
+a - getepenv.o
+	/bin/rm -f getepenv.o
+	cc -c -O -I../inc  io.c
+	ar rv libsys.a io.o
+a - io.o
+	/bin/rm -f io.o
+	cc -c -O -I../inc  itoa.c
+	ar rv libsys.a itoa.o
+a - itoa.o
+	/bin/rm -f itoa.o
+	cc -c -O -I../inc  memshift.c
+	ar rv libsys.a memshift.o
+a - memshift.o
+	/bin/rm -f memshift.o
+	cc -O -I../inc  -c mencmds.c
+	ar rv libsys.a mencmds.o
+a - mencmds.o
+	/bin/rm -f mencmds.o
+	cc -c -O -I../inc  nstrcat.c
+	ar rv libsys.a nstrcat.o
+a - nstrcat.o
+	/bin/rm -f nstrcat.o
+	cc -c -O -I../inc  onexit.c
+	ar rv libsys.a onexit.o
+a - onexit.o
+	/bin/rm -f onexit.o
+	cc -c -O -I../inc  parent.c
+	ar rv libsys.a parent.o
+a - parent.o
+	/bin/rm -f parent.o
+	cc -c -O -I../inc  putaltenv.c
+	ar rv libsys.a putaltenv.o
+a - putaltenv.o
+	/bin/rm -f putaltenv.o
+	cc -c -O -I../inc  readfile.c
+	ar rv libsys.a readfile.o
+a - readfile.o
+	/bin/rm -f readfile.o
+	cc -c -O -I../inc  scrclean.c
+	ar rv libsys.a scrclean.o
+a - scrclean.o
+	/bin/rm -f scrclean.o
+	cc -c -O -I../inc  spawn.c
+	ar rv libsys.a spawn.o
+a - spawn.o
+	/bin/rm -f spawn.o
+	cc -c -O -I../inc  strappend.c
+	ar rv libsys.a strappend.o
+a - strappend.o
+	/bin/rm -f strappend.o
+	cc -c -O -I../inc  strCcmp.c
+	ar rv libsys.a strCcmp.o
+a - strCcmp.o
+	/bin/rm -f strCcmp.o
+	cc -c -O -I../inc  stream.c
+	ar rv libsys.a stream.o
+a - stream.o
+	/bin/rm -f stream.o
+	cc -c -O -I../inc  strsave.c
+	ar rv libsys.a strsave.o
+a - strsave.o
+	/bin/rm -f strsave.o
+	cc -c -O -I../inc  tempfiles.c
+	ar rv libsys.a tempfiles.o
+a - tempfiles.o
+	/bin/rm -f tempfiles.o
+	cc -c -O -I../inc  terrmess.c
+	ar rv libsys.a terrmess.o
+a - terrmess.o
+	/bin/rm -f terrmess.o
+	cc -c -O -I../inc  terror.c
+	ar rv libsys.a terror.o
+a - terror.o
+	/bin/rm -f terror.o
+	cc -c -O -I../inc  varappend.c
+	ar rv libsys.a varappend.o
+a - varappend.o
+	/bin/rm -f varappend.o
+	cc -c -O -I../inc  varchkapnd.c
+	ar rv libsys.a varchkapnd.o
+a - varchkapnd.o
+	/bin/rm -f varchkapnd.o
+	cc -c -O -I../inc  varcreate.c
+	ar rv libsys.a varcreate.o
+a - varcreate.o
+	/bin/rm -f varcreate.o
+	cc -c -O -I../inc  vardelete.c
+	ar rv libsys.a vardelete.o
+a - vardelete.o
+	/bin/rm -f vardelete.o
+	cc -c -O -I../inc  vargrow.c
+	ar rv libsys.a vargrow.o
+a - vargrow.o
+	/bin/rm -f vargrow.o
+	cc -c -O -I../inc  varinsert.c
+	ar rv libsys.a varinsert.o
+a - varinsert.o
+	/bin/rm -f varinsert.o
+	cc -c -O -I../inc  varshrink.c
+	ar rv libsys.a varshrink.o
+a - varshrink.o
+	/bin/rm -f varshrink.o
+	cc -c -O -I../inc  watch.c
+	ar rv libsys.a watch.o
+a - watch.o
+	/bin/rm -f watch.o
+Making all in proc subsystem
+	cc -c -O  -I../inc pclose.c
+	ar rv libproc.a pclose.o
+ar: creating libproc.a
+a - pclose.o
+	/bin/rm -f pclose.o
+	cc -c -O  -I../inc pcurrent.c
+"pcurrent.c", line 67: warning: illegal types: pointer = pointer
+"pcurrent.c", line 68: warning: illegal types: pointer = pointer
+	ar rv libproc.a pcurrent.o
+a - pcurrent.o
+	/bin/rm -f pcurrent.o
+	cc -c -O  -I../inc pctl.c
+	ar rv libproc.a pctl.o
+a - pctl.o
+	/bin/rm -f pctl.o
+	cc -c -O  -I../inc pdefault.c
+	ar rv libproc.a pdefault.o
+a - pdefault.o
+	/bin/rm -f pdefault.o
+	cc -c -O  -I../inc list.c
+	ar rv libproc.a list.o
+a - list.o
+	/bin/rm -f list.o
+	cc -c -O  -I../inc pnoncur.c
+	ar rv libproc.a pnoncur.o
+a - pnoncur.o
+	/bin/rm -f pnoncur.o
+	cc -c -O  -I../inc open.c
+	ar rv libproc.a open.o
+a - open.o
+	/bin/rm -f open.o
+	cc -c -O  -I../inc suspend.c
+	ar rv libproc.a suspend.o
+a - suspend.o
+	/bin/rm -f suspend.o
+Making all in vt subsystem
+	cc -c -O -I/usr/include -I../inc fits.c
+	ar rv libvt.a fits.o
+ar: creating libvt.a
+a - fits.o
+	/bin/rm -f fits.o
+	cc -c -O -I/usr/include -I../inc hide.c
+	ar rv libvt.a hide.o
+a - hide.o
+	/bin/rm -f hide.o
+	cc -c -O -I/usr/include -I../inc highlight.c
+	ar rv libvt.a highlight.o
+a - highlight.o
+	/bin/rm -f highlight.o
+	cc -c -O -I/usr/include -I../inc indicator.c
+	ar rv libvt.a indicator.o
+a - indicator.o
+	/bin/rm -f indicator.o
+	cc -c -O -I/usr/include -I../inc lp.c
+	ar rv libvt.a lp.o
+a - lp.o
+	/bin/rm -f lp.o
+	cc -c -O -I/usr/include -I../inc makebox.c
+	ar rv libvt.a makebox.o
+a - makebox.o
+	/bin/rm -f makebox.o
+	cc -c -O -I/usr/include -I../inc message.c
+	ar rv libvt.a message.o
+a - message.o
+	/bin/rm -f message.o
+	cc -c -O -I/usr/include -I../inc move.c
+	ar rv libvt.a move.o
+a - move.o
+	/bin/rm -f move.o
+	cc -c -O -I/usr/include -I../inc offscreen.c
+	ar rv libvt.a offscreen.o
+a - offscreen.o
+	/bin/rm -f offscreen.o
+	cc -c -O -I/usr/include -I../inc physical.c
+	ar rv libvt.a physical.o
+a - physical.o
+	/bin/rm -f physical.o
+	cc -c -O -I/usr/include -I../inc redraw.c
+	ar rv libvt.a redraw.o
+a - redraw.o
+	/bin/rm -f redraw.o
+	cc -c -O -I/usr/include -I../inc system.c
+	ar rv libvt.a system.o
+a - system.o
+	/bin/rm -f system.o
+	cc -c -O -I/usr/include -I../inc vclose.c
+	ar rv libvt.a vclose.o
+a - vclose.o
+	/bin/rm -f vclose.o
+	cc -c -O -I/usr/include -I../inc vcolor.c
+	ar rv libvt.a vcolor.o
+a - vcolor.o
+	/bin/rm -f vcolor.o
+	cc -c -O -I/usr/include -I../inc vcreate.c
+"vcreate.c", line 103: warning: illegal types: pointer = integer
+	ar rv libvt.a vcreate.o
+a - vcreate.o
+	/bin/rm -f vcreate.o
+	cc -c -O -I/usr/include -I../inc vctl.c
+	ar rv libvt.a vctl.o
+a - vctl.o
+	/bin/rm -f vctl.o
+	cc -c -O -I/usr/include -I../inc vcurrent.c
+	ar rv libvt.a vcurrent.o
+a - vcurrent.o
+	/bin/rm -f vcurrent.o
+	cc -c -O -I/usr/include -I../inc vdebug.c
+	ar rv libvt.a vdebug.o
+a - vdebug.o
+	/bin/rm -f vdebug.o
+	cc -c -O -I/usr/include -I../inc vflush.c
+	ar rv libvt.a vflush.o
+a - vflush.o
+	/bin/rm -f vflush.o
+	cc -c -O -I/usr/include -I../inc vfork.c
+	ar rv libvt.a vfork.o
+a - vfork.o
+	/bin/rm -f vfork.o
+	cc -c -O -I/usr/include -I../inc vinit.c
+	ar rv libvt.a vinit.o
+a - vinit.o
+	/bin/rm -f vinit.o
+	cc -c -O -I/usr/include -I../inc vmark.c
+	ar rv libvt.a vmark.o
+a - vmark.o
+	/bin/rm -f vmark.o
+	cc -c -O -I/usr/include -I../inc vreshape.c
+"vreshape.c", line 53: warning: illegal types: pointer = integer
+	ar rv libvt.a vreshape.o
+a - vreshape.o
+	/bin/rm -f vreshape.o
+	cc -c -O -I/usr/include -I../inc wclrwin.c
+	ar rv libvt.a wclrwin.o
+a - wclrwin.o
+	/bin/rm -f wclrwin.o
+	cc -c -O -I/usr/include -I../inc wdelchar.c
+	ar rv libvt.a wdelchar.o
+a - wdelchar.o
+	/bin/rm -f wdelchar.o
+	cc -c -O -I/usr/include -I../inc wgetchar.c
+	ar rv libvt.a wgetchar.o
+a - wgetchar.o
+	/bin/rm -f wgetchar.o
+	cc -c -O -I/usr/include -I../inc wgo.c
+	ar rv libvt.a wgo.o
+a - wgo.o
+	/bin/rm -f wgo.o
+	cc -c -O -I/usr/include -I../inc winschar.c
+	ar rv libvt.a winschar.o
+a - winschar.o
+	/bin/rm -f winschar.o
+	cc -c -O -I/usr/include -I../inc wprintf.c
+	ar rv libvt.a wprintf.o
+a - wprintf.o
+	/bin/rm -f wprintf.o
+	cc -c -O -I/usr/include -I../inc wputchar.c
+	ar rv libvt.a wputchar.o
+a - wputchar.o
+	/bin/rm -f wputchar.o
+	cc -c -O -I/usr/include -I../inc wputs.c
+	ar rv libvt.a wputs.o
+a - wputs.o
+	/bin/rm -f wputs.o
+	cc -c -O -I/usr/include -I../inc wreadchar.c
+	ar rv libvt.a wreadchar.o
+a - wreadchar.o
+	/bin/rm -f wreadchar.o
+	cc -c -O -I/usr/include -I../inc wscrollwin.c
+	ar rv libvt.a wscrollwin.o
+a - wscrollwin.o
+	/bin/rm -f wscrollwin.o
+	cc -c -O -I/usr/include -I../inc showmail.c
+	ar rv libvt.a showmail.o
+a - showmail.o
+	/bin/rm -f showmail.o
+	cc -c -O -I/usr/include -I../inc showdate.c
+	ar rv libvt.a showdate.o
+a - showdate.o
+	/bin/rm -f showdate.o
+	cc -c -O -I/usr/include -I../inc status.c
+	ar rv libvt.a status.o
+a - status.o
+	/bin/rm -f status.o
+	cc -c -O -I/usr/include -I../inc working.c
+	ar rv libvt.a working.o
+a - working.o
+	/bin/rm -f working.o
+Making all in menu subsystem
+	cc -c -O -I../inc mclose.c
+	ar rv libmenu.a mclose.o
+ar: creating libmenu.a
+a - mclose.o
+	/bin/rm -f mclose.o
+	cc -c -O -I../inc mctl.c
+	ar rv libmenu.a mctl.o
+a - mctl.o
+	/bin/rm -f mctl.o
+	cc -c -O -I../inc mcurrent.c
+	ar rv libmenu.a mcurrent.o
+a - mcurrent.o
+	/bin/rm -f mcurrent.o
+	cc -c -O -I../inc mcustom.c
+	ar rv libmenu.a mcustom.o
+a - mcustom.o
+	/bin/rm -f mcustom.o
+	cc -c -O -I../inc mdefault.c
+	ar rv libmenu.a mdefault.o
+a - mdefault.o
+	/bin/rm -f mdefault.o
+	cc -c -O -I../inc mreshape.c
+	ar rv libmenu.a mreshape.o
+a - mreshape.o
+	/bin/rm -f mreshape.o
+	cc -c -O -I../inc stmenu.c
+"stmenu.c", line 257: warning: expression not used!
+	ar rv libmenu.a stmenu.o
+a - stmenu.o
+	/bin/rm -f stmenu.o
+Making all in qued subsystem
+	cc -c -O -I/usr/include -I../inc arrows.c
+	ar rv libqued.a arrows.o
+ar: creating libqued.a
+a - arrows.o
+	/bin/rm -f arrows.o
+	cc -c -O -I/usr/include -I../inc copyfield.c
+	ar rv libqued.a copyfield.o
+a - copyfield.o
+	/bin/rm -f copyfield.o
+	cc -c -O -I/usr/include -I../inc fclear.c
+	ar rv libqued.a fclear.o
+a - fclear.o
+	/bin/rm -f fclear.o
+	cc -c -O -I/usr/include -I../inc fgo.c
+	ar rv libqued.a fgo.o
+a - fgo.o
+	/bin/rm -f fgo.o
+	cc -c -O -I/usr/include -I../inc fstream.c
+	ar rv libqued.a fstream.o
+a - fstream.o
+	/bin/rm -f fstream.o
+	cc -c -O -I/usr/include -I../inc fput.c
+	ar rv libqued.a fput.o
+a - fput.o
+	/bin/rm -f fput.o
+	cc -c -O -I/usr/include -I../inc fread.c
+	ar rv libqued.a fread.o
+a - fread.o
+	/bin/rm -f fread.o
+	cc -c -O -I/usr/include -I../inc initfield.c
+	ar rv libqued.a initfield.o
+a - initfield.o
+	/bin/rm -f initfield.o
+	cc -c -O -I/usr/include -I../inc editmulti.c
+	ar rv libqued.a editmulti.o
+a - editmulti.o
+	/bin/rm -f editmulti.o
+	cc -c -O -I/usr/include -I../inc editsingle.c
+	ar rv libqued.a editsingle.o
+a - editsingle.o
+	/bin/rm -f editsingle.o
+	cc -c -O -I/usr/include -I../inc getfield.c
+	ar rv libqued.a getfield.o
+a - getfield.o
+	/bin/rm -f getfield.o
+	cc -c -O -I/usr/include -I../inc mfuncs.c
+	ar rv libqued.a mfuncs.o
+a - mfuncs.o
+	/bin/rm -f mfuncs.o
+	cc -c -O -I/usr/include -I../inc multiline.c
+	ar rv libqued.a multiline.o
+a - multiline.o
+	/bin/rm -f multiline.o
+	cc -c -O -I/usr/include -I../inc putfield.c
+	ar rv libqued.a putfield.o
+a - putfield.o
+	/bin/rm -f putfield.o
+	cc -c -O -I/usr/include -I../inc setfield.c
+	ar rv libqued.a setfield.o
+a - setfield.o
+	/bin/rm -f setfield.o
+	cc -c -O -I/usr/include -I../inc scrollbuf.c
+	ar rv libqued.a scrollbuf.o
+a - scrollbuf.o
+	/bin/rm -f scrollbuf.o
+	cc -c -O -I/usr/include -I../inc sfuncs.c
+	ar rv libqued.a sfuncs.o
+a - sfuncs.o
+	/bin/rm -f sfuncs.o
+	cc -c -O -I/usr/include -I../inc singleline.c
+	ar rv libqued.a singleline.o
+a - singleline.o
+	/bin/rm -f singleline.o
+	cc -c -O -I/usr/include -I../inc vfuncs.c
+	ar rv libqued.a vfuncs.o
+a - vfuncs.o
+	/bin/rm -f vfuncs.o
+	cc -c -O -I/usr/include -I../inc wrap.c
+	ar rv libqued.a wrap.o
+a - wrap.o
+	/bin/rm -f wrap.o
+Making all in form subsystem
+	cc -c -O -I../inc fcheck.c
+	ar rv libform.a fcheck.o
+ar: creating libform.a
+a - fcheck.o
+	/bin/rm -f fcheck.o
+	cc -c -O -I../inc fclose.c
+	ar rv libform.a fclose.o
+a - fclose.o
+	/bin/rm -f fclose.o
+	cc -c -O -I../inc fctl.c
+	ar rv libform.a fctl.o
+a - fctl.o
+	/bin/rm -f fctl.o
+	cc -c -O -I../inc fcurrent.c
+	ar rv libform.a fcurrent.o
+a - fcurrent.o
+	/bin/rm -f fcurrent.o
+	cc -c -O -I../inc fcustom.c
+	ar rv libform.a fcustom.o
+a - fcustom.o
+	/bin/rm -f fcustom.o
+	cc -c -O -I../inc fdefault.c
+	ar rv libform.a fdefault.o
+a - fdefault.o
+	/bin/rm -f fdefault.o
+	cc -c -O -I../inc frefresh.c
+	ar rv libform.a frefresh.o
+a - frefresh.o
+	/bin/rm -f frefresh.o
+Making all in oh subsystem
+	/usr/bin/cc -c -O -DWISH -I../inc action.c
+	ar rv liboh.a action.o
+ar: creating liboh.a
+a - action.o
+	/bin/rm -f action.o
+	/usr/bin/cc -c -O -DWISH -I../inc alias.c
+	ar rv liboh.a alias.o
+a - alias.o
+	/bin/rm -f alias.o
+	/usr/bin/cc -c -O -DWISH -I../inc cmd.c
+	ar rv liboh.a cmd.o
+a - cmd.o
+	/bin/rm -f cmd.o
+	/usr/bin/cc -c -O -DWISH -I../inc detab.c
+	ar rv liboh.a detab.o
+a - detab.o
+	/bin/rm -f detab.o
+	/usr/bin/cc -c -O -DWISH -I../inc detect.c
+	ar rv liboh.a detect.o
+a - detect.o
+	/bin/rm -f detect.o
+	/usr/bin/cc -c -O -DWISH -I../inc dispfuncs.c
+	ar rv liboh.a dispfuncs.o
+a - dispfuncs.o
+	/bin/rm -f dispfuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc evstr.c
+	ar rv liboh.a evstr.o
+a - evstr.o
+	/bin/rm -f evstr.o
+	/usr/bin/cc -c -O -DWISH -I../inc externoot.c
+	ar rv liboh.a externoot.o
+a - externoot.o
+	/bin/rm -f externoot.o
+	/usr/bin/cc -c -O -DWISH -I../inc fm_mn_par.c
+	ar rv liboh.a fm_mn_par.o
+a - fm_mn_par.o
+	/bin/rm -f fm_mn_par.o
+	/usr/bin/cc -c -O -DWISH -I../inc getval.c
+	ar rv liboh.a getval.o
+a - getval.o
+	/bin/rm -f getval.o
+	/usr/bin/cc -c -O -DWISH -I../inc helptext.c
+	ar rv liboh.a helptext.o
+a - helptext.o
+	/bin/rm -f helptext.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_ascii.c
+	ar rv liboh.a if_ascii.o
+a - if_ascii.o
+	/bin/rm -f if_ascii.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_dir.c
+	ar rv liboh.a if_dir.o
+a - if_dir.o
+	/bin/rm -f if_dir.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_init.c
+	ar rv liboh.a if_init.o
+a - if_init.o
+	/bin/rm -f if_init.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_exec.c
+	ar rv liboh.a if_exec.o
+a - if_exec.o
+	/bin/rm -f if_exec.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_form.c
+	ar rv liboh.a if_form.o
+a - if_form.o
+	/bin/rm -f if_form.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_help.c
+	ar rv liboh.a if_help.o
+a - if_help.o
+	/bin/rm -f if_help.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_menu.c
+	ar rv liboh.a if_menu.o
+a - if_menu.o
+	/bin/rm -f if_menu.o
+	/usr/bin/cc -c -O -DWISH -I../inc ifuncs.c
+	ar rv liboh.a ifuncs.o
+a - ifuncs.o
+	/bin/rm -f ifuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc is_objtype.c
+	ar rv liboh.a is_objtype.o
+a - is_objtype.o
+	/bin/rm -f is_objtype.o
+	/usr/bin/cc -c -O -DWISH -I../inc misc.c
+	ar rv liboh.a misc.o
+a - misc.o
+	/bin/rm -f misc.o
+	/usr/bin/cc -c -O -DWISH -I../inc namecheck.c
+	ar rv liboh.a namecheck.o
+a - namecheck.o
+	/bin/rm -f namecheck.o
+	/usr/bin/cc -c -O -DWISH -I../inc nextpart.c
+	ar rv liboh.a nextpart.o
+a - nextpart.o
+	/bin/rm -f nextpart.o
+	/usr/bin/cc -c -O -DWISH -I../inc obj_to_opt.c
+	ar rv liboh.a obj_to_opt.o
+a - obj_to_opt.o
+	/bin/rm -f obj_to_opt.o
+	/usr/bin/cc -c -O -DWISH -I../inc obj_to_par.c
+	ar rv liboh.a obj_to_par.o
+a - obj_to_par.o
+	/bin/rm -f obj_to_par.o
+	/usr/bin/cc -c -O -DWISH -I../inc odftread.c
+	ar rv liboh.a odftread.o
+a - odftread.o
+	/bin/rm -f odftread.o
+	/usr/bin/cc -c -O -DWISH -I../inc odikey.c
+	ar rv liboh.a odikey.o
+a - odikey.o
+	/bin/rm -f odikey.o
+	/usr/bin/cc -c -O -DWISH -I../inc oh_init.c
+	ar rv liboh.a oh_init.o
+a - oh_init.o
+	/bin/rm -f oh_init.o
+	/usr/bin/cc -c -O -DWISH -I../inc ootpart.c
+	ar rv liboh.a ootpart.o
+a - ootpart.o
+	/bin/rm -f ootpart.o
+	/usr/bin/cc -c -O -DWISH -I../inc ootread.c
+	ar rv liboh.a ootread.o
+a - ootread.o
+	/bin/rm -f ootread.o
+	/usr/bin/cc -c -O -DWISH -I../inc opt_rename.c
+	ar rv liboh.a opt_rename.o
+a - opt_rename.o
+	/bin/rm -f opt_rename.o
+	/usr/bin/cc -c -O -DWISH -I../inc optab.c
+	ar rv liboh.a optab.o
+a - optab.o
+	/bin/rm -f optab.o
+	/usr/bin/cc -c -O -DWISH -I../inc optabfuncs.c
+	ar rv liboh.a optabfuncs.o
+a - optabfuncs.o
+	/bin/rm -f optabfuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc ott_mv.c
+	ar rv liboh.a ott_mv.o
+a - ott_mv.o
+	/bin/rm -f ott_mv.o
+	/usr/bin/cc -c -O -DWISH -I../inc partab.c
+	ar rv liboh.a partab.o
+a - partab.o
+	/bin/rm -f partab.o
+	/usr/bin/cc -c -O -DWISH -I../inc partabfunc.c
+	ar rv liboh.a partabfunc.o
+a - partabfunc.o
+	/bin/rm -f partabfunc.o
+	/usr/bin/cc -c -O -DWISH -I../inc pathtitle.c
+	ar rv liboh.a pathtitle.o
+a - pathtitle.o
+	/bin/rm -f pathtitle.o
+	/usr/bin/cc -c -O -DWISH -I../inc path_to_vp.c
+	ar rv liboh.a path_to_vp.o
+a - path_to_vp.o
+	/bin/rm -f path_to_vp.o
+	/usr/bin/cc -c -O -DWISH -I../inc pathott.c
+	ar rv liboh.a pathott.o
+a - pathott.o
+	/bin/rm -f pathott.o
+	/usr/bin/cc -c -O -DWISH -I../inc scram.c
+	ar rv liboh.a scram.o
+a - scram.o
+	/bin/rm -f scram.o
+	/usr/bin/cc -c -O -DWISH -I../inc slk.c
+	ar rv liboh.a slk.o
+a - slk.o
+	/bin/rm -f slk.o
+	/usr/bin/cc -c -O -DWISH -I../inc suffuncs.c
+	ar rv liboh.a suffuncs.o
+a - suffuncs.o
+	/bin/rm -f suffuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc typefuncs.c
+	ar rv liboh.a typefuncs.o
+a - typefuncs.o
+	/bin/rm -f typefuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc typetab.c
+	ar rv liboh.a typetab.o
+a - typetab.o
+	/bin/rm -f typetab.o
+Making all in oeu subsystem
+	cc -c -O -I../inc oeu.c
+	ar rv liboeu.a oeu.o
+ar: creating liboeu.a
+a - oeu.o
+	/bin/rm -f oeu.o
+	/bin/cp oeu.c oeucheck.c
+	cc -c -O -I../inc -DJUSTCHECK oeucheck.c
+	ar rv liboeu.a oeucheck.o
+a - oeucheck.o
+	/bin/rm -f oeucheck.o
+	/bin/rm -f oeucheck.c
+	cc -c -O -I../inc oeupack.c
+	ar rv liboeu.a oeupack.o
+a - oeupack.o
+	/bin/rm -f oeupack.o
+	cc -c -O -I../inc rm_atob.c
+	ar rv liboeu.a rm_atob.o
+a - rm_atob.o
+	/bin/rm -f rm_atob.o
+	cc -c -O -I../inc genparse.c
+	ar rv liboeu.a genparse.o
+a - genparse.o
+	/bin/rm -f genparse.o
+Making all in wish subsystem
+	cc -c -O -I../inc  browse.c
+	ar rv libwish.a browse.o	 
+ar: creating libwish.a
+a - browse.o
+	/bin/rm -f browse.o
+	cc -c -O -I../inc  display.c
+	ar rv libwish.a display.o	 
+a - display.o
+	/bin/rm -f display.o
+	cc -c -O -I../inc  error.c
+	ar rv libwish.a error.o	 
+a - error.o
+	/bin/rm -f error.o
+	cc -c -O -I../inc  flush.c
+	ar rv libwish.a flush.o	 
+a - flush.o
+	/bin/rm -f flush.o
+	cc -c -O -I../inc  getstring.c
+	ar rv libwish.a getstring.o	 
+a - getstring.o
+	/bin/rm -f getstring.o
+	cc -c -O -I../inc  -DRELEASE='"fmli R1.1 L9.6"' global.c
+"global.c", line 202: warning: variable i is used before set
+	ar rv libwish.a global.o	 
+a - global.o
+	/bin/rm -f global.o
+	cc -c -O -I../inc  mudge.c
+	ar rv libwish.a mudge.o	 
+a - mudge.o
+	/bin/rm -f mudge.o
+	cc -c -O -I../inc  objop.c
+	ar rv libwish.a objop.o	 
+a - objop.o
+	/bin/rm -f objop.o
+	cc -c -O -I../inc  stubs.c
+	ar rv libwish.a stubs.o	 
+a - stubs.o
+	/bin/rm -f stubs.o
+	cc -c -O -I../inc  virtual.c
+	ar rv libwish.a virtual.o	 
+a - virtual.o
+	/bin/rm -f virtual.o
+	cc -c -O -I../inc  wdwcreate.c
+	ar rv libwish.a wdwcreate.o	 
+a - wdwcreate.o
+	/bin/rm -f wdwcreate.o
+	cc -c -O -I../inc  wdwlist.c
+	ar rv libwish.a wdwlist.o	 
+a - wdwlist.o
+	/bin/rm -f wdwlist.o
+	cc -c -O -I../inc  wdwmgmt.c
+	ar rv libwish.a wdwmgmt.o	 
+a - wdwmgmt.o
+	/bin/rm -f wdwmgmt.o
+Making all in xx subsystem
+	cc -O -I../inc -c main.c
+	cc -s -o fmli main.o ../wish/libwish.a ../oh/liboh.a ../oeu/liboeu.a ../form/libform.a ../qued/libqued.a ../menu/libmenu.a ../proc/libproc.a ../vt/libvt.a ../sys/libsys.a /usr/lib/libcurses.a -lPW
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to fmli
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f fmli.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+
+Making clean in sys subsystem
+
+	/bin/rm -f *.o
+
+Making clean in proc subsystem
+
+	/bin/rm -f *.o
+
+Making clean in vt subsystem
+
+	/bin/rm -f *.o
+
+Making clean in menu subsystem
+
+	/bin/rm -f *.o
+
+Making clean in qued subsystem
+
+	/bin/rm -f *.o
+
+Making clean in form subsystem
+
+	/bin/rm -f *.o
+
+Making clean in oh subsystem
+
+	/bin/rm -f *.o
+
+Making clean in oeu subsystem
+
+	/bin/rm -f *.o
+
+Making clean in wish subsystem
+
+	/bin/rm -f *.o
+
+Making clean in xx subsystem
+
+
+Making clobber in sys subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libsys.a
+
+Making clobber in proc subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libproc.a
+
+Making clobber in vt subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libvt.a
+
+Making clobber in menu subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libmenu.a
+
+Making clobber in qued subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libqued.a
+
+Making clobber in form subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libform.a
+
+Making clobber in oh subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f liboh.a
+
+Making clobber in oeu subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f liboeu.a
+
+Making clobber in wish subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libwish.a
+
+Making clobber in xx subsystem
+
+**** Build of fmli failed (make)
+
+======== help
+cd help
+make -b -f help.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -n -s -o interact interact.c -lcurses
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to interact
+*** Error code 13
+
+Stop.
+make -b -f help.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f help display fetch interact keysrch helpadm glossary \
+		admgloss admstart checklen defnlen editcmd locking
+	rm -rf *.o
+	rm -f ./replace
+**** Build of help failed (make)
+
+======== lp
+cd lp
+make -b -f lp.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cd ./lib; make FUNCDCL=""
+	for dir in ./access  ./class  ./filters  ./forms  ./fs  ./lp  ./msgs  ./oam  ./requests  ./printers  ./users; do cd $dir; make; cd ..; done
+	cc  -I../../include -I/usr/include -O -c allowed.c
+	cc  -I../../include -I/usr/include -O -c change.c
+	cc  -I../../include -I/usr/include -O -c dumpaccess.c
+	cc  -I../../include -I/usr/include -O -c files.c
+	cc  -I../../include -I/usr/include -O -c loadaccess.c
+	ar rv liblpacc.a allowed.o change.o dumpaccess.o files.o loadaccess.o
+ar: creating liblpacc.a
+a - allowed.o
+a - change.o
+a - dumpaccess.o
+a - files.o
+a - loadaccess.o
+	if [ -n "" ]; then  allowed.c  change.c  dumpaccess.c  files.c  loadaccess.c >llib-llpacc; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpacc | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpacc.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c delclass.c
+	cc  -I../../include -I/usr/include -O -c freeclass.c
+	cc  -I../../include -I/usr/include -O -c getclass.c
+	cc  -I../../include -I/usr/include -O -c putclass.c
+	ar rv liblpcls.a delclass.o freeclass.o getclass.o putclass.o
+ar: creating liblpcls.a
+a - delclass.o
+a - freeclass.o
+a - getclass.o
+a - putclass.o
+	if [ -n "" ]; then  delclass.c  freeclass.c  getclass.c  putclass.c >llib-llpcls; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpcls | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpcls.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c conv.c
+	cc  -I../../include -I/usr/include -O -c delfilter.c
+	cc  -I../../include -I/usr/include -O -c dumpfilters.c
+	cc  -I../../include -I/usr/include -O -c freefilter.c
+	cc  -I../../include -I/usr/include -O -c getfilter.c
+	cc  -I../../include -I/usr/include -O -c filtertable.c
+	cc  -I../../include -I/usr/include -O -c insfilter.c
+	cc  -I../../include -I/usr/include -O -c loadfilters.c
+	cc  -I../../include -I/usr/include -O -c putfilter.c
+	cc  -I../../include -I/usr/include -O -c search.c
+	cc  -I../../include -I/usr/include -O -c trash.c
+	ar rv liblpflt.a conv.o delfilter.o dumpfilters.o freefilter.o getfilter.o filtertable.o insfilter.o loadfilters.o putfilter.o search.o trash.o
+ar: creating liblpflt.a
+a - conv.o
+a - delfilter.o
+a - dumpfilters.o
+a - freefilter.o
+a - getfilter.o
+a - filtertable.o
+a - insfilter.o
+a - loadfilters.o
+a - putfilter.o
+a - search.o
+a - trash.o
+	if [ -n "" ]; then  conv.c  delfilter.c  dumpfilters.c  freefilter.c  getfilter.c  filtertable.c  insfilter.c  loadfilters.c  putfilter.c  search.c  trash.c >llib-llpflt; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpflt | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpflt.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c delform.c
+	cc  -I../../include -I/usr/include -O -c fspec.c
+	cc  -I../../include -I/usr/include -O -c getform.c
+	cc  -I../../include -I/usr/include -O -c putform.c
+	cc  -I../../include -I/usr/include -O -c rdform.c
+	cc  -I../../include -I/usr/include -O -c wrform.c
+	ar rv liblpfrm.a delform.o fspec.o getform.o putform.o rdform.o wrform.o
+ar: creating liblpfrm.a
+a - delform.o
+a - fspec.o
+a - getform.o
+a - putform.o
+a - rdform.o
+a - wrform.o
+	if [ -n "" ]; then  delform.c  fspec.c getform.c  putform.c  rdform.c  wrform.c >llib-llpfrm; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpfrm | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpfrm.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O  -c Mkdir.c
+	cc  -I../../include -I/usr/include -O  -c Readdir.c
+	cc  -I../../include -I/usr/include -O  -c Rmdir.c
+	cc  -I../../include -I/usr/include -O  -c next.c
+	cc  -I../../include -I/usr/include -O  -c s5getdents.c
+	cc  -I../../include -I/usr/include -O  -c s5mkdir.c
+	cc  -I../../include -I/usr/include -O  -c s5readdir.c
+	cc  -I../../include -I/usr/include -O  -c s5rmdir.c
+	cc  -I../../include -I/usr/include -O  -c see_if_SVR3.c
+	ar rv liblpfs.a Mkdir.o Readdir.o Rmdir.o next.o s5getdents.o s5mkdir.o s5readdir.o s5rmdir.o see_if_SVR3.o
+ar: creating liblpfs.a
+a - Mkdir.o
+a - Readdir.o
+a - Rmdir.o
+a - next.o
+a - s5getdents.o
+a - s5mkdir.o
+a - s5readdir.o
+a - s5rmdir.o
+a - see_if_SVR3.o
+	if [ -n "" ]; then  Mkdir.c  Readdir.c  Rmdir.c  next.c  s5getdents.c  s5mkdir.c  s5readdir.c  s5rmdir.c  see_if_SVR3.c >llib-llpfs; fi
+	cc -E -C  -I../../include -I/usr/include -O  -Dlint llib-llpfs | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpfs.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c Syscalls.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c addlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c appendlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c alerts.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c charset.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c cs_strcmp.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c cs_strncmp.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c curdir.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dellist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dashos.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dirs.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c duplist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c files.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c freelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getname.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getpaths.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getspooldir.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c isterminfo.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c lenlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c lp_errno.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c makepath.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c makestr.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c mergelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c printlist.c
+"printlist.c", line 108: warning: expression not used!
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sdn.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sprintlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c searchlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_charset.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_pitch.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_size.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sop.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c strip.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c syntax.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c tidbit.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c tinames.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c wherelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c which.c
+	ar rv liblp.a Syscalls.o addlist.o appendlist.o alerts.o charset.o cs_strcmp.o cs_strncmp.o curdir.o dellist.o dashos.o dirs.o duplist.o files.o freelist.o getlist.o getname.o getpaths.o getspooldir.o isterminfo.o lenlist.o lp_errno.o makepath.o makestr.o mergelist.o printlist.o sdn.o sprintlist.o searchlist.o set_charset.o set_pitch.o set_size.o sop.o strip.o syntax.o tidbit.o tinames.o wherelist.o which.o
+ar: creating liblp.a
+a - Syscalls.o
+a - addlist.o
+a - appendlist.o
+a - alerts.o
+a - charset.o
+a - cs_strcmp.o
+a - cs_strncmp.o
+a - curdir.o
+a - dellist.o
+a - dashos.o
+a - dirs.o
+a - duplist.o
+a - files.o
+a - freelist.o
+a - getlist.o
+a - getname.o
+a - getpaths.o
+a - getspooldir.o
+a - isterminfo.o
+a - lenlist.o
+a - lp_errno.o
+a - makepath.o
+a - makestr.o
+a - mergelist.o
+a - printlist.o
+a - sdn.o
+a - sprintlist.o
+a - searchlist.o
+a - set_charset.o
+a - set_pitch.o
+a - set_size.o
+a - sop.o
+a - strip.o
+a - syntax.o
+a - tidbit.o
+a - tinames.o
+a - wherelist.o
+a - which.o
+	if [ -n "" ]; then  Syscalls.c  addlist.c  appendlist.c  alerts.c  charset.c  cs_strcmp.c  cs_strncmp.c  curdir.c  dellist.c  dashos.c  dirs.c  duplist.c  files.c  freelist.c  getlist.c  getname.c  getpaths.c  getspooldir.c  isterminfo.c  lenlist.c  lp_errno.c makepath.c  makestr.c  mergelist.c  printlist.c  sdn.c  sprintlist.c  searchlist.c  set_charset.c  set_pitch.c  set_size.c  sop.c  strip.c  syntax.c  tidbit.c  tinames.c  wherelist.c  which.c >llib-llp; fi
+	cc -E -C  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -Dlint llib-llp | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llp.ln
+Can't open llib-llp for input
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c _getmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c _putmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c getmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c hslconv.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c putmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c msgfmts.c
+	make COMPONENT=mclose concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mclose.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mneeds.c
+	make COMPONENT=mopen concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mopen.c
+	make COMPONENT=mrecv concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mrecv.c
+	make COMPONENT=msend concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c msend.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c read_fifo.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c write_fifo.c
+	ar rv liblpmsg.a _getmessage.o _putmessage.o getmessage.o hslconv.o putmessage.o msgfmts.o mclose.o mneeds.o mopen.o mrecv.o msend.o read_fifo.o write_fifo.o
+ar: creating liblpmsg.a
+a - _getmessage.o
+a - _putmessage.o
+a - getmessage.o
+a - hslconv.o
+a - putmessage.o
+a - msgfmts.o
+a - mclose.o
+a - mneeds.o
+a - mopen.o
+a - mrecv.o
+a - msend.o
+a - read_fifo.o
+a - write_fifo.o
+	if [ -n "" ]; then  _getmessage.c  _putmessage.c  getmessage.c  hslconv.c  putmessage.c  msgfmts.c  mclose.c  mneeds.c  mopen.c  mrecv.c  msend.c  read_fifo.c  write_fifo.c >llib-llpmsg; fi
+	cc -E -C  -I../../include -I/usr/include -O -DUSE_FIFOS -Dlint llib-llpmsg | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpmsg.ln
+	/bin/rm -f ./LINT_WORK
+	sh gen-defs >../../include/oam_def.h
+	sh gen-text
+generating e_lp__msgs.c
+generating e_fl__msgs.c
+generating e_can__msgs.c
+generating e_cmb__msgs.c
+generating e_mov__msgs.c
+generating e_lpu__msgs.c
+generating e_lpp__msgs.c
+generating e_sht__msgs.c
+generating e_adm__msgs.c
+generating e_for__msgs.c
+generating e_stat__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c agettxt.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c buffers.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c fmtmsg.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_adm__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_can__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_cmb__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_fl__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_for__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lp__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lpp__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lpu__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_mov__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_sht__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_stat__msgs.c
+	ar rv liblpoam.a agettxt.o buffers.o fmtmsg.o e_adm__msgs.o e_can__msgs.o e_cmb__msgs.o e_fl__msgs.o e_for__msgs.o e_lp__msgs.o e_lpp__msgs.o e_lpu__msgs.o e_mov__msgs.o e_sht__msgs.o e_stat__msgs.o
+ar: creating liblpoam.a
+a - agettxt.o
+a - buffers.o
+a - fmtmsg.o
+a - e_adm__msgs.o
+a - e_can__msgs.o
+a - e_cmb__msgs.o
+a - e_fl__msgs.o
+a - e_for__msgs.o
+a - e_lp__msgs.o
+a - e_lpp__msgs.o
+a - e_lpu__msgs.o
+a - e_mov__msgs.o
+a - e_sht__msgs.o
+a - e_stat__msgs.o
+	if [ -n "" ]; then  agettxt.c  buffers.c  fmtmsg.c >llib-llpoam; fi
+	cc -E -C  -I../../include -I/usr/include -DSMART_WRAP -O -Dlint llib-llpoam | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpoam.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c anyrequests.c
+	cc  -I../../include -I/usr/include -O -c freerequest.c
+	cc  -I../../include -I/usr/include -O -c getrequest.c
+	cc  -I../../include -I/usr/include -O -c headings.c
+	cc  -I../../include -I/usr/include -O -c putrequest.c
+	ar rv liblpreq.a anyrequests.o freerequest.o getrequest.o headings.o putrequest.o
+ar: creating liblpreq.a
+a - anyrequests.o
+a - freerequest.o
+a - getrequest.o
+a - headings.o
+a - putrequest.o
+	if [ -n "" ]; then  anyrequests.c  freerequest.c  getrequest.c  headings.c  putrequest.c >llib-llpreq; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpreq | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpreq.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c chkprinter.c
+	cc  -I../../include -I/usr/include -O -c default.c
+	cc  -I../../include -I/usr/include -O -c delprinter.c
+	cc  -I../../include -I/usr/include -O -c freeprinter.c
+	cc  -I../../include -I/usr/include -O -c getprinter.c
+	cc  -I../../include -I/usr/include -O -c headings.c
+	cc  -I../../include -I/usr/include -O -c okprinter.c
+	cc  -I../../include -I/usr/include -O -c printwheels.c
+	cc  -I../../include -I/usr/include -O -c putprinter.c
+	ar rv liblpprt.a chkprinter.o default.o delprinter.o freeprinter.o getprinter.o headings.o okprinter.o printwheels.o putprinter.o
+ar: creating liblpprt.a
+a - chkprinter.o
+a - default.o
+a - delprinter.o
+a - freeprinter.o
+a - getprinter.o
+a - headings.o
+a - okprinter.o
+a - printwheels.o
+a - putprinter.o
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpprt | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpprt.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c usermgmt.c
+	cc  -I../../include -I/usr/include -O -c loadpri.c
+	cc  -I../../include -I/usr/include -O -c storepri.c
+	ar rv liblpusr.a usermgmt.o loadpri.o storepri.o
+ar: creating liblpusr.a
+a - usermgmt.o
+a - loadpri.o
+a - storepri.o
+	if [ -n "" ]; then  usermgmt.c  loadpri.c  storepri.c >llib-llpusr; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpusr | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpusr.ln
+	/bin/rm -f ./LINT_WORK
+	cd ./cmd; make
+	cd ./lpadmin; make
+	cc  -I. -I../../include -I/usr/include -O -c chkopts.c
+	cc  -I. -I../../include -I/usr/include -O -c default.c
+	cc  -I. -I../../include -I/usr/include -O -c do_align.c
+	cc  -I. -I../../include -I/usr/include -O -c do_fault.c
+	cc  -I. -I../../include -I/usr/include -O -c do_mount.c
+	cc  -I. -I../../include -I/usr/include -O -c do_printer.c
+	cc  -I. -I../../include -I/usr/include -O -c do_pwheel.c
+	cc  -I. -I../../include -I/usr/include -O -c done.c
+	cc  -I. -I../../include -I/usr/include -O -c fromclass.c
+	cc  -I. -I../../include -I/usr/include -O -c ismodel.c
+	cc  -I. -I../../include -I/usr/include -O -c lpadmin.c
+	cc  -I. -I../../include -I/usr/include -O -c options.c
+	cc  -I. -I../../include -I/usr/include -O -c output.c
+	cc  -I. -I../../include -I/usr/include -O -c rmdest.c
+	cc  -I. -I../../include -I/usr/include -O -c send_message.c
+	cc  -I. -I../../include -I/usr/include -O -c signals.c
+	cc  -I. -I../../include -I/usr/include -O -c startup.c
+	cc  -I. -I../../include -I/usr/include -O -c usage.c
+	cc -o lpadmin chkopts.o  default.o  do_align.o  do_fault.o  do_mount.o  do_printer.o  do_pwheel.o  done.o  fromclass.o  ismodel.o  lpadmin.o  options.o  output.o  rmdest.o  send_message.o  signals.o  startup.o  usage.o  \
+			../../lib/access/liblpacc.a \
+			../../lib/class/liblpcls.a \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/requests/liblpreq.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lcurses
+	cd ./lpsched; make
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c alerts.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c cancel.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c checkchild.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c daisyforms.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c dial.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disena.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp1.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp2.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp3.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp4.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disptab.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c dowait.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c exec.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c faults.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c files.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c flt.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c fncs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c getkey.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c getpwent.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c init.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c log.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c logmsg.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c lpsched.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c msgs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c notify.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c pickfilter.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c ports.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c requeue.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c rstatus.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c schedule.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c secure.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c status.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c terminate.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c validate.c
+	cc -o lpsched alerts.o  cancel.o  checkchild.o  daisyforms.o  dial.o  disena.o  disp1.o  disp2.o  disp3.o  disp4.o  disptab.o  dowait.o  exec.o  faults.o  files.o  flt.o  fncs.o  getkey.o  getpwent.o  init.o  log.o  logmsg.o  lpsched.o  msgs.o  notify.o  pickfilter.o  ports.o  requeue.o  rstatus.o  schedule.o  secure.o  status.o  terminate.o  validate.o  \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/requests/liblpreq.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/class/liblpcls.a \
+			../../lib/access/liblpacc.a \
+			../../lib/filters/liblpflt.a \
+			../../lib/users/liblpusr.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lcurses \
+					-lomalloc \
+					
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c exec.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c msgs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c log.c
+	cc -o lpsched.jr exec.j  msgs.j  log.j  \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/lp/liblp.a \
+				
+	cd ./lpstat; make
+	cc  -I. -I../../include -I/usr/include -O -c accept.c
+	cc  -I. -I../../include -I/usr/include -O -c add_mounted.c
+	cc  -I. -I../../include -I/usr/include -O -c charset.c
+	cc  -I. -I../../include -I/usr/include -O -c class.c
+	cc  -I. -I../../include -I/usr/include -O -c device.c
+	cc  -I. -I../../include -I/usr/include -O -c done.c
+	cc  -I. -I../../include -I/usr/include -O -c form.c
+	cc  -I. -I../../include -I/usr/include -O -c lpstat.c
+	cc  -I. -I../../include -I/usr/include -O -c output.c
+	cc  -I. -I../../include -I/usr/include -O -c parse.c
+	cc  -I. -I../../include -I/usr/include -O -c printer.c
+	cc  -I. -I../../include -I/usr/include -O -c request.c
+	cc  -I. -I../../include -I/usr/include -O -c send_message.c
+	cc -o lpstat accept.o  add_mounted.o  charset.o  class.o  device.o  done.o  form.o  lpstat.o  output.o  parse.o  printer.o  request.o  send_message.o  \
+			../../lib/access/liblpacc.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/class/liblpcls.a \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lPW -lcurses
+	cc  -I../include -I/usr/include -O -c comb.c
+	cc -o accept comb.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c cancel.c
+	cc -o cancel cancel.o  \
+			../lib/requests/liblpreq.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	/bin/cp accept disable
+	/bin/ln disable enable
+	cc  -I../include -I/usr/include -O -c lp.c
+	cc -o lp lp.o  \
+			../lib/printers/liblpprt.a \
+			../lib/requests/liblpreq.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpfilter.c
+	cc -o lpfilter lpfilter.o  \
+			../lib/filters/liblpflt.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpforms.c
+	cc -o lpforms lpforms.o  \
+			../lib/forms/liblpfrm.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/requests/liblpreq.a \
+			../lib/oam/liblpoam.a \
+			../lib/access/liblpacc.a \
+			../lib/lp/liblp.a \
+			../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpmove.c
+	cc -o lpmove lpmove.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpshut.c
+	cc -o lpshut lpshut.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpusers.c
+	cc -o lpusers lpusers.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/users/liblpusr.a \
+			../lib/lp/liblp.a \
+			../lib/fs/liblpfs.a
+	/bin/ln accept reject
+	cc  -I../include -I/usr/include -O -c dumpolp.c
+	cc -o dumpolp dumpolp.o  \
+			../lib/lp/liblp.a
+	cd ./etc; make
+	cd ./model; make
+	cc  -I../include -I/usr/include -O -c lp.set.c
+	cc -o lp.set lp.set.o  \
+			../lib/lp/liblp.a \
+			-lcurses
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to lp.set
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f lp.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd ./lib; make clobber
+	for dir in ./access  ./class  ./filters  ./forms  ./fs  ./lp  ./msgs  ./oam  ./requests  ./printers  ./users; do cd $dir; make clobber; cd ..; done
+	/bin/rm -f allowed.o  change.o  dumpaccess.o  files.o  loadaccess.o allowed.p  change.p  dumpaccess.p  files.p  loadaccess.p allowed.q  change.q  dumpaccess.q  files.q  loadaccess.q
+	/bin/rm -f liblpacc.a pliblpacc.a qliblpacc.a llib-llpacc.ln
+	/bin/rm -f delclass.o  freeclass.o  getclass.o  putclass.o delclass.p  freeclass.p  getclass.p  putclass.p delclass.q  freeclass.q  getclass.q  putclass.q
+	/bin/rm -f liblpcls.a pliblpcls.a qliblpcls.a llib-llpcls.ln
+	/bin/rm -f conv.o  delfilter.o  dumpfilters.o  freefilter.o  getfilter.o  filtertable.o  insfilter.o  loadfilters.o  putfilter.o  search.o  trash.o conv.p  delfilter.p  dumpfilters.p  freefilter.p  getfilter.p  filtertable.p  insfilter.p  loadfilters.p  putfilter.p  search.p  trash.p conv.q  delfilter.q  dumpfilters.q  freefilter.q  getfilter.q  filtertable.q  insfilter.q  loadfilters.q  putfilter.q  search.q  trash.q
+	/bin/rm -f liblpflt.a pliblpflt.a qliblpflt.a llib-llpflt.ln
+	/bin/rm -f delform.o  fspec.o getform.o  putform.o  rdform.o  wrform.o delform.p  fspec.p getform.p  putform.p  rdform.p  wrform.p delform.q  fspec.q getform.q  putform.q  rdform.q  wrform.q
+	/bin/rm -f liblpfrm.a pliblpfrm.a qliblpfrm.a llib-llpfrm.ln
+	/bin/rm -f Mkdir.o  Readdir.o  Rmdir.o  next.o  s5getdents.o  s5mkdir.o  s5readdir.o  s5rmdir.o  see_if_SVR3.o Mkdir.p  Readdir.p  Rmdir.p  next.p  s5getdents.p  s5mkdir.p  s5readdir.p  s5rmdir.p  see_if_SVR3.p Mkdir.q  Readdir.q  Rmdir.q  next.q  s5getdents.q  s5mkdir.q  s5readdir.q  s5rmdir.q  see_if_SVR3.q
+	/bin/rm -f liblpfs.a pliblpfs.a qliblpfs.a llib-llpfs.ln
+reelist.q  getlist.q  getname.q  getpaths.q  getspooldir.q  isterminfo.q  lenlist.q  lp_errno.q makepath.q  makestr.q  mergelist.q  printlist.q  sdn.q  sprintlist.q  searchlist.q  set_charset.q  set_pitch.q  set_size.q  sop.q  strip.q  syntax.q  tidbit.q  tinames.q  wherelist.q  which.q
+	/bin/rm -f liblp.a pliblp.a qliblp.a llib-llp.ln
+	/bin/rm -f _getmessage.o  _putmessage.o  getmessage.o  hslconv.o  putmessage.o  msgfmts.o  mclose.o  mneeds.o  mopen.o  mrecv.o  msend.o  read_fifo.o  write_fifo.o _getmessage.p  _putmessage.p  getmessage.p  hslconv.p  putmessage.p  msgfmts.p  mclose.p  mneeds.p  mopen.p  mrecv.p  msend.p  read_fifo.p  write_fifo.p _getmessage.q  _putmessage.q  getmessage.q  hslconv.q  putmessage.q  msgfmts.q  mclose.q  mneeds.q  mopen.q  mrecv.q  msend.q  read_fifo.q  write_fifo.q mopen.c mclose.c mrecv.c msend.c
+	/bin/rm -f liblpmsg.a pliblpmsg.a qliblpmsg.a llib-llpmsg.ln
+	/bin/rm -f agettxt.o  buffers.o  fmtmsg.o e_adm__msgs.o  e_can__msgs.o  e_cmb__msgs.o  e_fl__msgs.o  e_for__msgs.o  e_lp__msgs.o  e_lpp__msgs.o  e_lpu__msgs.o  e_mov__msgs.o  e_sht__msgs.o  e_stat__msgs.o agettxt.p  buffers.p  fmtmsg.p e_adm__msgs.p  e_can__msgs.p  e_cmb__msgs.p  e_fl__msgs.p  e_for__msgs.p  e_lp__msgs.p  e_lpp__msgs.p  e_lpu__msgs.p  e_mov__msgs.p  e_sht__msgs.p  e_stat__msgs.p agettxt.q  buffers.q  fmtmsg.q e_adm__msgs.q  e_can__msgs.q  e_cmb__msgs.q  e_fl__msgs.q  e_for__msgs.q  e_lp__msgs.q  e_lpp__msgs.q  e_lpu__msgs.q  e_mov__msgs.q  e_sht__msgs.q  e_stat__msgs.q e_adm__msgs.c  e_can__msgs.c  e_cmb__msgs.c  e_fl__msgs.c  e_for__msgs.c  e_lp__msgs.c  e_lpp__msgs.c  e_lpu__msgs.c  e_mov__msgs.c  e_sht__msgs.c  e_stat__msgs.c ../../include/oam_def.h xx??
+	/bin/rm -f liblpoam.a pliblpoam.a qliblpoam.a llib-llpoam.ln
+	/bin/rm -f anyrequests.o  freerequest.o  getrequest.o  headings.o  putrequest.o anyrequests.p  freerequest.p  getrequest.p  headings.p  putrequest.p anyrequests.q  freerequest.q  getrequest.q  headings.q  putrequest.q
+	/bin/rm -f liblpreq.a pliblpreq.a qliblpreq.a llib-llpreq.ln
+	/bin/rm -f chkprinter.o  default.o  delprinter.o  freeprinter.o  getprinter.o  headings.o  okprinter.o  printwheels.o  putprinter.o chkprinter.p  default.p  delprinter.p  freeprinter.p  getprinter.p  headings.p  okprinter.p  printwheels.p  putprinter.p chkprinter.q  default.q  delprinter.q  freeprinter.q  getprinter.q  headings.q  okprinter.q  printwheels.q  putprinter.q
+	/bin/rm -f liblpprt.a pliblpprt.a qliblpprt.a llib-llpprt.ln
+	/bin/rm -f usermgmt.o  loadpri.o  storepri.o usermgmt.p  loadpri.p  storepri.p usermgmt.q  loadpri.q  storepri.q
+	/bin/rm -f liblpusr.a pliblpusr.a qliblpusr.a llib-llpusr.ln
+	cd ./cmd; make clobber
+	/bin/rm -f cancel.o  comb.o  lp.o  lpfilter.o  lpforms.o  lpmove.o  lpshut.o  lpusers.o
+	/bin/rm -f accept  cancel  disable  enable  lp  lpfilter  lpforms  lpmove  lpshut  lpusers  reject
+	for cmd in lpadmin  lpsched  lpstat; do cd ./$cmd; make clobber; cd ..; done
+	/bin/rm -f chkopts.o  default.o  do_align.o  do_fault.o  do_mount.o  do_printer.o  do_pwheel.o  done.o  fromclass.o  ismodel.o  lpadmin.o  options.o  output.o  rmdest.o  send_message.o  signals.o  startup.o  usage.o
+	/bin/rm -f lpadmin
+.q  validate.q msgs.c exec.j  msgs.j  log.j
+	/bin/rm -f lpsched plpsched qlpsched lpsched.jr
+	/bin/rm -f accept.o  add_mounted.o  charset.o  class.o  device.o  done.o  form.o  lpstat.o  output.o  parse.o  printer.o  request.o  send_message.o
+	/bin/rm -f lpstat
+	/bin/rm -f dumpolp.o
+	/bin/rm -f dumpolp
+	cd ./model; make clobber
+	/bin/rm -f lp.set.o  lp.cat.o  lp.page.o  lp.tell.o  drain.output.o
+	/bin/rm -f lp.set  lp.cat  lp.page  lp.tell  drain.output
+	cd ./filter; make clobber
+	/bin/rm -f 5310.o  hp2631a.o  pprx.o  prx.o
+	/bin/rm -f 5310  hp2631a  pprx  prx
+	cd ./terminfo; make clobber
+**** Build of lp failed (make)
+
+======== m4
+cd m4
+make -b -f m4.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -I/usr/include -c m4.c
+"m4.c", line 39: identifier _ctype not declared
+*** Error code 1
+
+Stop.
+make -b -f m4.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f *.o
+	rm -f y.tab.c 
+	rm -f ./m4
+**** Build of m4 failed (make)
+
+======== net.admin
+cd net.admin
+**** Build of net.admin failed (no makefile found in directory)
+
+======== pg
+cd pg
+make -b -f pg.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -DSINGLE -O -s -o ./pg pg.c -lcurses
+"/usr/include/regexp.h", line 508: warning: Constant out of range ==
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to ./pg
+*** Error code 13
+
+Stop.
+make -b -f pg.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f pg.o
+	rm -f ./pg
+**** Build of pg failed (make)
+
+======== tail
+cd tail
+make -b -f tail.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -I/usr/include -c tail.c
+	cc -O -I/usr/include -o tail tail.o -s 
+	cpset tail /bin
+cpset: Couldn't unlink '/bin/tail'
+*** Error code 1
+
+Stop.
+make -b -f tail.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f tail.o tail
+**** Build of tail failed (make)
+
+======== vi
+cd vi
+make -b -f vi.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+
+	>Making commands.
+	cd misc; make ROOT= all; cd ..
+	cc -O -I/usr/include -c ctags.c
+	cc -O -I/usr/include  -o ctags  ctags.o   -s
+	cc -O -I/usr/include -c fold.c
+	cc -O -I/usr/include  -o fold  fold.o   -s
+	cc -O mkstr.c -o mkstr -s
+	cc -O xstr.c -o xstr  -s
+	cp cxref.sh cxref; chmod 0777 cxref
+	if ( u370 || pdp11 ) ;\
+	then \
+		if [ "x`uname -m`" = "xc70" ] ;\
+		then \
+			make -f MKFILE=makefile.c70 ROOT=  DIR=/usr/bin ;\
+		elif [ "x`uname -m`" = "xpdp11-70" ] ;\
+		then \
+			make -f MKFILE=pdp11 ROOT=  DIR=/usr/bin ;\
+		elif [ "x`uname -m`" = "x370" ] ;\
+		then \
+			make -f MKFILE=makefile.370 ROOT=  DIR=/usr/bin ;\
+		fi \
+	fi
+	cd port ; make -f makefile.usg          ROOT=  DIR=/usr/bin all ; cd ..
+	cc -c -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit bcopy.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_addr.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmds.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmds2.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmdsub.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_data.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_extern.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_get.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_io.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_put.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_re.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_set.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_subr.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_temp.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_tty.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_unix.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_v.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vadj.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vget.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vmain.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_voper.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops2.c
+"ex_vops2.c", line 222: warning: Constant out of range ==
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops3.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vput.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vwind.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c printf.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -o ex \
+	bcopy.o ex.o ex_addr.o ex_cmds.o ex_cmds2.o \
+	ex_cmdsub.o ex_data.o ex_extern.o ex_get.o \
+	ex_io.o ex_put.o ex_re.o ex_set.o ex_subr.o \
+	ex_temp.o ex_tty.o ex_unix.o ex_v.o ex_vadj.o \
+	ex_vget.o ex_vmain.o ex_voper.o ex_vops.o \
+	ex_vops2.o ex_vops3.o ex_vput.o ex_vwind.o \
+	printf.o -n -s -lcurses -lcrypt -lgen
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to ex
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f vi.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd misc ; make ROOT= clobber ; cd ..
+	rm -f ctags.o fold.o mkstr.o xstr.o ctags fold mkstr xstr cxref
+	if pdp11; \
+	then \
+		cd pdp11; \
+		make -f makefile.usg clobber ;\
+	else \
+		cd port; \
+		make -f makefile.usg          ROOT=  DIR=/usr/bin clobber ;\
+	fi
+	rm -f bcopy.o ex.o ex_addr.o ex_cmds.o ex_cmds2.o  ex_cmdsub.o ex_data.o ex_extern.o ex_get.o  ex_io.o ex_put.o ex_re.o ex_set.o ex_subr.o  ex_temp.o ex_tty.o ex_unix.o ex_v.o ex_vadj.o  ex_vget.o ex_vmain.o ex_voper.o ex_vops.o  ex_vops2.o ex_vops3.o ex_vput.o ex_vwind.o  printf.o expreserve.o exrecover.o ex expreserve exrecover  exstrings x.c xs.c strings
+**** Build of vi failed (make)
+
+======== Mail
+cd Mail
+**** Build of Mail failed (no makefile found in directory)
+
+======== assist
+cd assist
+make -b -f assist.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cd ./src/forms; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin FFLAG= INS=/etc/install INCLUDE= CURSES=-lcurses -f forms.mk install
+	cc  -c fill_out.c
+	cc  -c muse.c
+	cc  -c menu.c
+	cc  -c support.c
+	cc  -c read_in.c
+	cc  -c popup.c
+	cc  -c command.c
+	cc  -c update.c
+	cc  -c msupport.c
+	cc  -c valid.c
+"/usr/include/regexp.h", line 508: warning: Constant out of range ==
+	cc  -c expand.c
+	cc  -s  -o mforms fill_out.o muse.o menu.o support.o read_in.o popup.o command.o update.o msupport.o valid.o expand.o -lcurses -lm
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to mforms
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f assist.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd ./src/forms; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f forms.mk clobber
+	rm -f fill_out.o muse.o menu.o support.o read_in.o popup.o command.o update.o msupport.o valid.o expand.o
+	rm -f mforms mecho
+	cd ./src/scripts; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f mscript.mk clobber
+	rm -f mscript.o do_line.o utilities.o callout.o mkscript.o
+	rm -f mscript
+	cd ./src/search; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f msearch.mk clobber
+	rm -f msearch.o format.o syn.o
+	rm -f msearch
+	cd ./src/setup; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f setup.mk clobber
+	rm -f msetup.o intro.o term.o update.o
+	rm -f tsetup
+	rm -f msetup
+	cd ./src/astgen; make -e LIBDIR=/usr/lib/assist/lib BINDIR=/usr/lib/assist/bin -f tools.mk clobber
+	rm -f bottom.o show_cap.o get_path.o m_field.o m_global.o vsupport.o cf_global.o  dhelp.o err_mess.o move.o cf_field.o pick_val.o util.o editval.o  select.o control.o writefile.o perm_chk.o  ../forms/read_in.o field_type.o ../forms/support.o
+	rm -f tforms
+	rm -f assist astgen
+**** Build of assist failed (make)
+
+======== fmli
+cd fmli
+make -b -f fmli.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+Making all in sys subsystem
+	cc -c -O -I../inc  actrec.c
+"actrec.c", line 125: warning: expression not used!
+	ar rv libsys.a actrec.o
+ar: creating libsys.a
+a - actrec.o
+	/bin/rm -f actrec.o
+	cc -c -O -I../inc  ar_mfuncs.c
+	ar rv libsys.a ar_mfuncs.o
+a - ar_mfuncs.o
+	/bin/rm -f ar_mfuncs.o
+	cc -c -O -I../inc  backslash.c
+	ar rv libsys.a backslash.o
+a - backslash.o
+	/bin/rm -f backslash.o
+	cc -c -O -I../inc  chgenv.c
+	ar rv libsys.a chgenv.o
+a - chgenv.o
+	/bin/rm -f chgenv.o
+	cc -c -O -I../inc  chgepenv.c
+	ar rv libsys.a chgepenv.o
+a - chgepenv.o
+	/bin/rm -f chgepenv.o
+	cc -c -O -I../inc  coproc.c
+"coproc.c", line 69: warning: illegal types: pointer = pointer
+	ar rv libsys.a coproc.o
+a - coproc.o
+	/bin/rm -f coproc.o
+	cc -c -O -I../inc  copyfile.c
+	ar rv libsys.a copyfile.o
+a - copyfile.o
+	/bin/rm -f copyfile.o
+	cc -c -O -I../inc  estrtok.c
+	ar rv libsys.a estrtok.o
+a - estrtok.o
+	/bin/rm -f estrtok.o
+	cc -c -O -I../inc  evfuncs.c
+	ar rv libsys.a evfuncs.o
+a - evfuncs.o
+	/bin/rm -f evfuncs.o
+	cc -c -O -I../inc  eval.c
+	ar rv libsys.a eval.o
+a - eval.o
+	/bin/rm -f eval.o
+	cc -c -O -I../inc  evstr.c
+	ar rv libsys.a evstr.o
+a - evstr.o
+	/bin/rm -f evstr.o
+	cc -c -O -I../inc  exit.c
+	ar rv libsys.a exit.o
+a - exit.o
+	/bin/rm -f exit.o
+	cc -c -O -I../inc  expand.c
+	ar rv libsys.a expand.o
+a - expand.o
+	/bin/rm -f expand.o
+	cc -c -O -I../inc  filename.c
+	ar rv libsys.a filename.o
+a - filename.o
+	/bin/rm -f filename.o
+	cc -O -I../inc  -c genfind.c
+	ar rv libsys.a genfind.o
+a - genfind.o
+	/bin/rm -f genfind.o
+	cc -c -O -I../inc  getaltenv.c
+	ar rv libsys.a getaltenv.o
+a - getaltenv.o
+	/bin/rm -f getaltenv.o
+	cc -c -O -I../inc  getepenv.c
+	ar rv libsys.a getepenv.o
+a - getepenv.o
+	/bin/rm -f getepenv.o
+	cc -c -O -I../inc  io.c
+	ar rv libsys.a io.o
+a - io.o
+	/bin/rm -f io.o
+	cc -c -O -I../inc  itoa.c
+	ar rv libsys.a itoa.o
+a - itoa.o
+	/bin/rm -f itoa.o
+	cc -c -O -I../inc  memshift.c
+	ar rv libsys.a memshift.o
+a - memshift.o
+	/bin/rm -f memshift.o
+	cc -O -I../inc  -c mencmds.c
+	ar rv libsys.a mencmds.o
+a - mencmds.o
+	/bin/rm -f mencmds.o
+	cc -c -O -I../inc  nstrcat.c
+	ar rv libsys.a nstrcat.o
+a - nstrcat.o
+	/bin/rm -f nstrcat.o
+	cc -c -O -I../inc  onexit.c
+	ar rv libsys.a onexit.o
+a - onexit.o
+	/bin/rm -f onexit.o
+	cc -c -O -I../inc  parent.c
+	ar rv libsys.a parent.o
+a - parent.o
+	/bin/rm -f parent.o
+	cc -c -O -I../inc  putaltenv.c
+	ar rv libsys.a putaltenv.o
+a - putaltenv.o
+	/bin/rm -f putaltenv.o
+	cc -c -O -I../inc  readfile.c
+	ar rv libsys.a readfile.o
+a - readfile.o
+	/bin/rm -f readfile.o
+	cc -c -O -I../inc  scrclean.c
+	ar rv libsys.a scrclean.o
+a - scrclean.o
+	/bin/rm -f scrclean.o
+	cc -c -O -I../inc  spawn.c
+	ar rv libsys.a spawn.o
+a - spawn.o
+	/bin/rm -f spawn.o
+	cc -c -O -I../inc  strappend.c
+	ar rv libsys.a strappend.o
+a - strappend.o
+	/bin/rm -f strappend.o
+	cc -c -O -I../inc  strCcmp.c
+	ar rv libsys.a strCcmp.o
+a - strCcmp.o
+	/bin/rm -f strCcmp.o
+	cc -c -O -I../inc  stream.c
+	ar rv libsys.a stream.o
+a - stream.o
+	/bin/rm -f stream.o
+	cc -c -O -I../inc  strsave.c
+	ar rv libsys.a strsave.o
+a - strsave.o
+	/bin/rm -f strsave.o
+	cc -c -O -I../inc  tempfiles.c
+	ar rv libsys.a tempfiles.o
+a - tempfiles.o
+	/bin/rm -f tempfiles.o
+	cc -c -O -I../inc  terrmess.c
+	ar rv libsys.a terrmess.o
+a - terrmess.o
+	/bin/rm -f terrmess.o
+	cc -c -O -I../inc  terror.c
+	ar rv libsys.a terror.o
+a - terror.o
+	/bin/rm -f terror.o
+	cc -c -O -I../inc  varappend.c
+	ar rv libsys.a varappend.o
+a - varappend.o
+	/bin/rm -f varappend.o
+	cc -c -O -I../inc  varchkapnd.c
+	ar rv libsys.a varchkapnd.o
+a - varchkapnd.o
+	/bin/rm -f varchkapnd.o
+	cc -c -O -I../inc  varcreate.c
+	ar rv libsys.a varcreate.o
+a - varcreate.o
+	/bin/rm -f varcreate.o
+	cc -c -O -I../inc  vardelete.c
+	ar rv libsys.a vardelete.o
+a - vardelete.o
+	/bin/rm -f vardelete.o
+	cc -c -O -I../inc  vargrow.c
+	ar rv libsys.a vargrow.o
+a - vargrow.o
+	/bin/rm -f vargrow.o
+	cc -c -O -I../inc  varinsert.c
+	ar rv libsys.a varinsert.o
+a - varinsert.o
+	/bin/rm -f varinsert.o
+	cc -c -O -I../inc  varshrink.c
+	ar rv libsys.a varshrink.o
+a - varshrink.o
+	/bin/rm -f varshrink.o
+	cc -c -O -I../inc  watch.c
+	ar rv libsys.a watch.o
+a - watch.o
+	/bin/rm -f watch.o
+Making all in proc subsystem
+	cc -c -O  -I../inc pclose.c
+	ar rv libproc.a pclose.o
+ar: creating libproc.a
+a - pclose.o
+	/bin/rm -f pclose.o
+	cc -c -O  -I../inc pcurrent.c
+"pcurrent.c", line 67: warning: illegal types: pointer = pointer
+"pcurrent.c", line 68: warning: illegal types: pointer = pointer
+	ar rv libproc.a pcurrent.o
+a - pcurrent.o
+	/bin/rm -f pcurrent.o
+	cc -c -O  -I../inc pctl.c
+	ar rv libproc.a pctl.o
+a - pctl.o
+	/bin/rm -f pctl.o
+	cc -c -O  -I../inc pdefault.c
+	ar rv libproc.a pdefault.o
+a - pdefault.o
+	/bin/rm -f pdefault.o
+	cc -c -O  -I../inc list.c
+	ar rv libproc.a list.o
+a - list.o
+	/bin/rm -f list.o
+	cc -c -O  -I../inc pnoncur.c
+	ar rv libproc.a pnoncur.o
+a - pnoncur.o
+	/bin/rm -f pnoncur.o
+	cc -c -O  -I../inc open.c
+	ar rv libproc.a open.o
+a - open.o
+	/bin/rm -f open.o
+	cc -c -O  -I../inc suspend.c
+	ar rv libproc.a suspend.o
+a - suspend.o
+	/bin/rm -f suspend.o
+Making all in vt subsystem
+	cc -c -O -I/usr/include -I../inc fits.c
+	ar rv libvt.a fits.o
+ar: creating libvt.a
+a - fits.o
+	/bin/rm -f fits.o
+	cc -c -O -I/usr/include -I../inc hide.c
+	ar rv libvt.a hide.o
+a - hide.o
+	/bin/rm -f hide.o
+	cc -c -O -I/usr/include -I../inc highlight.c
+	ar rv libvt.a highlight.o
+a - highlight.o
+	/bin/rm -f highlight.o
+	cc -c -O -I/usr/include -I../inc indicator.c
+	ar rv libvt.a indicator.o
+a - indicator.o
+	/bin/rm -f indicator.o
+	cc -c -O -I/usr/include -I../inc lp.c
+	ar rv libvt.a lp.o
+a - lp.o
+	/bin/rm -f lp.o
+	cc -c -O -I/usr/include -I../inc makebox.c
+	ar rv libvt.a makebox.o
+a - makebox.o
+	/bin/rm -f makebox.o
+	cc -c -O -I/usr/include -I../inc message.c
+	ar rv libvt.a message.o
+a - message.o
+	/bin/rm -f message.o
+	cc -c -O -I/usr/include -I../inc move.c
+	ar rv libvt.a move.o
+a - move.o
+	/bin/rm -f move.o
+	cc -c -O -I/usr/include -I../inc offscreen.c
+	ar rv libvt.a offscreen.o
+a - offscreen.o
+	/bin/rm -f offscreen.o
+	cc -c -O -I/usr/include -I../inc physical.c
+	ar rv libvt.a physical.o
+a - physical.o
+	/bin/rm -f physical.o
+	cc -c -O -I/usr/include -I../inc redraw.c
+	ar rv libvt.a redraw.o
+a - redraw.o
+	/bin/rm -f redraw.o
+	cc -c -O -I/usr/include -I../inc system.c
+	ar rv libvt.a system.o
+a - system.o
+	/bin/rm -f system.o
+	cc -c -O -I/usr/include -I../inc vclose.c
+	ar rv libvt.a vclose.o
+a - vclose.o
+	/bin/rm -f vclose.o
+	cc -c -O -I/usr/include -I../inc vcolor.c
+	ar rv libvt.a vcolor.o
+a - vcolor.o
+	/bin/rm -f vcolor.o
+	cc -c -O -I/usr/include -I../inc vcreate.c
+"vcreate.c", line 103: warning: illegal types: pointer = integer
+	ar rv libvt.a vcreate.o
+a - vcreate.o
+	/bin/rm -f vcreate.o
+	cc -c -O -I/usr/include -I../inc vctl.c
+	ar rv libvt.a vctl.o
+a - vctl.o
+	/bin/rm -f vctl.o
+	cc -c -O -I/usr/include -I../inc vcurrent.c
+	ar rv libvt.a vcurrent.o
+a - vcurrent.o
+	/bin/rm -f vcurrent.o
+	cc -c -O -I/usr/include -I../inc vdebug.c
+	ar rv libvt.a vdebug.o
+a - vdebug.o
+	/bin/rm -f vdebug.o
+	cc -c -O -I/usr/include -I../inc vflush.c
+	ar rv libvt.a vflush.o
+a - vflush.o
+	/bin/rm -f vflush.o
+	cc -c -O -I/usr/include -I../inc vfork.c
+	ar rv libvt.a vfork.o
+a - vfork.o
+	/bin/rm -f vfork.o
+	cc -c -O -I/usr/include -I../inc vinit.c
+	ar rv libvt.a vinit.o
+a - vinit.o
+	/bin/rm -f vinit.o
+	cc -c -O -I/usr/include -I../inc vmark.c
+	ar rv libvt.a vmark.o
+a - vmark.o
+	/bin/rm -f vmark.o
+	cc -c -O -I/usr/include -I../inc vreshape.c
+"vreshape.c", line 53: warning: illegal types: pointer = integer
+	ar rv libvt.a vreshape.o
+a - vreshape.o
+	/bin/rm -f vreshape.o
+	cc -c -O -I/usr/include -I../inc wclrwin.c
+	ar rv libvt.a wclrwin.o
+a - wclrwin.o
+	/bin/rm -f wclrwin.o
+	cc -c -O -I/usr/include -I../inc wdelchar.c
+	ar rv libvt.a wdelchar.o
+a - wdelchar.o
+	/bin/rm -f wdelchar.o
+	cc -c -O -I/usr/include -I../inc wgetchar.c
+	ar rv libvt.a wgetchar.o
+a - wgetchar.o
+	/bin/rm -f wgetchar.o
+	cc -c -O -I/usr/include -I../inc wgo.c
+	ar rv libvt.a wgo.o
+a - wgo.o
+	/bin/rm -f wgo.o
+	cc -c -O -I/usr/include -I../inc winschar.c
+	ar rv libvt.a winschar.o
+a - winschar.o
+	/bin/rm -f winschar.o
+	cc -c -O -I/usr/include -I../inc wprintf.c
+	ar rv libvt.a wprintf.o
+a - wprintf.o
+	/bin/rm -f wprintf.o
+	cc -c -O -I/usr/include -I../inc wputchar.c
+	ar rv libvt.a wputchar.o
+a - wputchar.o
+	/bin/rm -f wputchar.o
+	cc -c -O -I/usr/include -I../inc wputs.c
+	ar rv libvt.a wputs.o
+a - wputs.o
+	/bin/rm -f wputs.o
+	cc -c -O -I/usr/include -I../inc wreadchar.c
+	ar rv libvt.a wreadchar.o
+a - wreadchar.o
+	/bin/rm -f wreadchar.o
+	cc -c -O -I/usr/include -I../inc wscrollwin.c
+	ar rv libvt.a wscrollwin.o
+a - wscrollwin.o
+	/bin/rm -f wscrollwin.o
+	cc -c -O -I/usr/include -I../inc showmail.c
+	ar rv libvt.a showmail.o
+a - showmail.o
+	/bin/rm -f showmail.o
+	cc -c -O -I/usr/include -I../inc showdate.c
+	ar rv libvt.a showdate.o
+a - showdate.o
+	/bin/rm -f showdate.o
+	cc -c -O -I/usr/include -I../inc status.c
+	ar rv libvt.a status.o
+a - status.o
+	/bin/rm -f status.o
+	cc -c -O -I/usr/include -I../inc working.c
+	ar rv libvt.a working.o
+a - working.o
+	/bin/rm -f working.o
+Making all in menu subsystem
+	cc -c -O -I../inc mclose.c
+	ar rv libmenu.a mclose.o
+ar: creating libmenu.a
+a - mclose.o
+	/bin/rm -f mclose.o
+	cc -c -O -I../inc mctl.c
+	ar rv libmenu.a mctl.o
+a - mctl.o
+	/bin/rm -f mctl.o
+	cc -c -O -I../inc mcurrent.c
+	ar rv libmenu.a mcurrent.o
+a - mcurrent.o
+	/bin/rm -f mcurrent.o
+	cc -c -O -I../inc mcustom.c
+	ar rv libmenu.a mcustom.o
+a - mcustom.o
+	/bin/rm -f mcustom.o
+	cc -c -O -I../inc mdefault.c
+	ar rv libmenu.a mdefault.o
+a - mdefault.o
+	/bin/rm -f mdefault.o
+	cc -c -O -I../inc mreshape.c
+	ar rv libmenu.a mreshape.o
+a - mreshape.o
+	/bin/rm -f mreshape.o
+	cc -c -O -I../inc stmenu.c
+"stmenu.c", line 257: warning: expression not used!
+	ar rv libmenu.a stmenu.o
+a - stmenu.o
+	/bin/rm -f stmenu.o
+Making all in qued subsystem
+	cc -c -O -I/usr/include -I../inc arrows.c
+	ar rv libqued.a arrows.o
+ar: creating libqued.a
+a - arrows.o
+	/bin/rm -f arrows.o
+	cc -c -O -I/usr/include -I../inc copyfield.c
+	ar rv libqued.a copyfield.o
+a - copyfield.o
+	/bin/rm -f copyfield.o
+	cc -c -O -I/usr/include -I../inc fclear.c
+	ar rv libqued.a fclear.o
+a - fclear.o
+	/bin/rm -f fclear.o
+	cc -c -O -I/usr/include -I../inc fgo.c
+	ar rv libqued.a fgo.o
+a - fgo.o
+	/bin/rm -f fgo.o
+	cc -c -O -I/usr/include -I../inc fstream.c
+	ar rv libqued.a fstream.o
+a - fstream.o
+	/bin/rm -f fstream.o
+	cc -c -O -I/usr/include -I../inc fput.c
+	ar rv libqued.a fput.o
+a - fput.o
+	/bin/rm -f fput.o
+	cc -c -O -I/usr/include -I../inc fread.c
+	ar rv libqued.a fread.o
+a - fread.o
+	/bin/rm -f fread.o
+	cc -c -O -I/usr/include -I../inc initfield.c
+	ar rv libqued.a initfield.o
+a - initfield.o
+	/bin/rm -f initfield.o
+	cc -c -O -I/usr/include -I../inc editmulti.c
+	ar rv libqued.a editmulti.o
+a - editmulti.o
+	/bin/rm -f editmulti.o
+	cc -c -O -I/usr/include -I../inc editsingle.c
+	ar rv libqued.a editsingle.o
+a - editsingle.o
+	/bin/rm -f editsingle.o
+	cc -c -O -I/usr/include -I../inc getfield.c
+	ar rv libqued.a getfield.o
+a - getfield.o
+	/bin/rm -f getfield.o
+	cc -c -O -I/usr/include -I../inc mfuncs.c
+	ar rv libqued.a mfuncs.o
+a - mfuncs.o
+	/bin/rm -f mfuncs.o
+	cc -c -O -I/usr/include -I../inc multiline.c
+	ar rv libqued.a multiline.o
+a - multiline.o
+	/bin/rm -f multiline.o
+	cc -c -O -I/usr/include -I../inc putfield.c
+	ar rv libqued.a putfield.o
+a - putfield.o
+	/bin/rm -f putfield.o
+	cc -c -O -I/usr/include -I../inc setfield.c
+	ar rv libqued.a setfield.o
+a - setfield.o
+	/bin/rm -f setfield.o
+	cc -c -O -I/usr/include -I../inc scrollbuf.c
+	ar rv libqued.a scrollbuf.o
+a - scrollbuf.o
+	/bin/rm -f scrollbuf.o
+	cc -c -O -I/usr/include -I../inc sfuncs.c
+	ar rv libqued.a sfuncs.o
+a - sfuncs.o
+	/bin/rm -f sfuncs.o
+	cc -c -O -I/usr/include -I../inc singleline.c
+	ar rv libqued.a singleline.o
+a - singleline.o
+	/bin/rm -f singleline.o
+	cc -c -O -I/usr/include -I../inc vfuncs.c
+	ar rv libqued.a vfuncs.o
+a - vfuncs.o
+	/bin/rm -f vfuncs.o
+	cc -c -O -I/usr/include -I../inc wrap.c
+	ar rv libqued.a wrap.o
+a - wrap.o
+	/bin/rm -f wrap.o
+Making all in form subsystem
+	cc -c -O -I../inc fcheck.c
+	ar rv libform.a fcheck.o
+ar: creating libform.a
+a - fcheck.o
+	/bin/rm -f fcheck.o
+	cc -c -O -I../inc fclose.c
+	ar rv libform.a fclose.o
+a - fclose.o
+	/bin/rm -f fclose.o
+	cc -c -O -I../inc fctl.c
+	ar rv libform.a fctl.o
+a - fctl.o
+	/bin/rm -f fctl.o
+	cc -c -O -I../inc fcurrent.c
+	ar rv libform.a fcurrent.o
+a - fcurrent.o
+	/bin/rm -f fcurrent.o
+	cc -c -O -I../inc fcustom.c
+	ar rv libform.a fcustom.o
+a - fcustom.o
+	/bin/rm -f fcustom.o
+	cc -c -O -I../inc fdefault.c
+	ar rv libform.a fdefault.o
+a - fdefault.o
+	/bin/rm -f fdefault.o
+	cc -c -O -I../inc frefresh.c
+	ar rv libform.a frefresh.o
+a - frefresh.o
+	/bin/rm -f frefresh.o
+Making all in oh subsystem
+	/usr/bin/cc -c -O -DWISH -I../inc action.c
+	ar rv liboh.a action.o
+ar: creating liboh.a
+a - action.o
+	/bin/rm -f action.o
+	/usr/bin/cc -c -O -DWISH -I../inc alias.c
+	ar rv liboh.a alias.o
+a - alias.o
+	/bin/rm -f alias.o
+	/usr/bin/cc -c -O -DWISH -I../inc cmd.c
+	ar rv liboh.a cmd.o
+a - cmd.o
+	/bin/rm -f cmd.o
+	/usr/bin/cc -c -O -DWISH -I../inc detab.c
+	ar rv liboh.a detab.o
+a - detab.o
+	/bin/rm -f detab.o
+	/usr/bin/cc -c -O -DWISH -I../inc detect.c
+	ar rv liboh.a detect.o
+a - detect.o
+	/bin/rm -f detect.o
+	/usr/bin/cc -c -O -DWISH -I../inc dispfuncs.c
+	ar rv liboh.a dispfuncs.o
+a - dispfuncs.o
+	/bin/rm -f dispfuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc evstr.c
+	ar rv liboh.a evstr.o
+a - evstr.o
+	/bin/rm -f evstr.o
+	/usr/bin/cc -c -O -DWISH -I../inc externoot.c
+	ar rv liboh.a externoot.o
+a - externoot.o
+	/bin/rm -f externoot.o
+	/usr/bin/cc -c -O -DWISH -I../inc fm_mn_par.c
+	ar rv liboh.a fm_mn_par.o
+a - fm_mn_par.o
+	/bin/rm -f fm_mn_par.o
+	/usr/bin/cc -c -O -DWISH -I../inc getval.c
+	ar rv liboh.a getval.o
+a - getval.o
+	/bin/rm -f getval.o
+	/usr/bin/cc -c -O -DWISH -I../inc helptext.c
+	ar rv liboh.a helptext.o
+a - helptext.o
+	/bin/rm -f helptext.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_ascii.c
+	ar rv liboh.a if_ascii.o
+a - if_ascii.o
+	/bin/rm -f if_ascii.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_dir.c
+	ar rv liboh.a if_dir.o
+a - if_dir.o
+	/bin/rm -f if_dir.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_init.c
+	ar rv liboh.a if_init.o
+a - if_init.o
+	/bin/rm -f if_init.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_exec.c
+	ar rv liboh.a if_exec.o
+a - if_exec.o
+	/bin/rm -f if_exec.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_form.c
+	ar rv liboh.a if_form.o
+a - if_form.o
+	/bin/rm -f if_form.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_help.c
+	ar rv liboh.a if_help.o
+a - if_help.o
+	/bin/rm -f if_help.o
+	/usr/bin/cc -c -O -DWISH -I../inc if_menu.c
+	ar rv liboh.a if_menu.o
+a - if_menu.o
+	/bin/rm -f if_menu.o
+	/usr/bin/cc -c -O -DWISH -I../inc ifuncs.c
+	ar rv liboh.a ifuncs.o
+a - ifuncs.o
+	/bin/rm -f ifuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc is_objtype.c
+	ar rv liboh.a is_objtype.o
+a - is_objtype.o
+	/bin/rm -f is_objtype.o
+	/usr/bin/cc -c -O -DWISH -I../inc misc.c
+	ar rv liboh.a misc.o
+a - misc.o
+	/bin/rm -f misc.o
+	/usr/bin/cc -c -O -DWISH -I../inc namecheck.c
+	ar rv liboh.a namecheck.o
+a - namecheck.o
+	/bin/rm -f namecheck.o
+	/usr/bin/cc -c -O -DWISH -I../inc nextpart.c
+	ar rv liboh.a nextpart.o
+a - nextpart.o
+	/bin/rm -f nextpart.o
+	/usr/bin/cc -c -O -DWISH -I../inc obj_to_opt.c
+	ar rv liboh.a obj_to_opt.o
+a - obj_to_opt.o
+	/bin/rm -f obj_to_opt.o
+	/usr/bin/cc -c -O -DWISH -I../inc obj_to_par.c
+	ar rv liboh.a obj_to_par.o
+a - obj_to_par.o
+	/bin/rm -f obj_to_par.o
+	/usr/bin/cc -c -O -DWISH -I../inc odftread.c
+	ar rv liboh.a odftread.o
+a - odftread.o
+	/bin/rm -f odftread.o
+	/usr/bin/cc -c -O -DWISH -I../inc odikey.c
+	ar rv liboh.a odikey.o
+a - odikey.o
+	/bin/rm -f odikey.o
+	/usr/bin/cc -c -O -DWISH -I../inc oh_init.c
+	ar rv liboh.a oh_init.o
+a - oh_init.o
+	/bin/rm -f oh_init.o
+	/usr/bin/cc -c -O -DWISH -I../inc ootpart.c
+	ar rv liboh.a ootpart.o
+a - ootpart.o
+	/bin/rm -f ootpart.o
+	/usr/bin/cc -c -O -DWISH -I../inc ootread.c
+	ar rv liboh.a ootread.o
+a - ootread.o
+	/bin/rm -f ootread.o
+	/usr/bin/cc -c -O -DWISH -I../inc opt_rename.c
+	ar rv liboh.a opt_rename.o
+a - opt_rename.o
+	/bin/rm -f opt_rename.o
+	/usr/bin/cc -c -O -DWISH -I../inc optab.c
+	ar rv liboh.a optab.o
+a - optab.o
+	/bin/rm -f optab.o
+	/usr/bin/cc -c -O -DWISH -I../inc optabfuncs.c
+	ar rv liboh.a optabfuncs.o
+a - optabfuncs.o
+	/bin/rm -f optabfuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc ott_mv.c
+	ar rv liboh.a ott_mv.o
+a - ott_mv.o
+	/bin/rm -f ott_mv.o
+	/usr/bin/cc -c -O -DWISH -I../inc partab.c
+	ar rv liboh.a partab.o
+a - partab.o
+	/bin/rm -f partab.o
+	/usr/bin/cc -c -O -DWISH -I../inc partabfunc.c
+	ar rv liboh.a partabfunc.o
+a - partabfunc.o
+	/bin/rm -f partabfunc.o
+	/usr/bin/cc -c -O -DWISH -I../inc pathtitle.c
+	ar rv liboh.a pathtitle.o
+a - pathtitle.o
+	/bin/rm -f pathtitle.o
+	/usr/bin/cc -c -O -DWISH -I../inc path_to_vp.c
+	ar rv liboh.a path_to_vp.o
+a - path_to_vp.o
+	/bin/rm -f path_to_vp.o
+	/usr/bin/cc -c -O -DWISH -I../inc pathott.c
+	ar rv liboh.a pathott.o
+a - pathott.o
+	/bin/rm -f pathott.o
+	/usr/bin/cc -c -O -DWISH -I../inc scram.c
+	ar rv liboh.a scram.o
+a - scram.o
+	/bin/rm -f scram.o
+	/usr/bin/cc -c -O -DWISH -I../inc slk.c
+	ar rv liboh.a slk.o
+a - slk.o
+	/bin/rm -f slk.o
+	/usr/bin/cc -c -O -DWISH -I../inc suffuncs.c
+	ar rv liboh.a suffuncs.o
+a - suffuncs.o
+	/bin/rm -f suffuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc typefuncs.c
+	ar rv liboh.a typefuncs.o
+a - typefuncs.o
+	/bin/rm -f typefuncs.o
+	/usr/bin/cc -c -O -DWISH -I../inc typetab.c
+	ar rv liboh.a typetab.o
+a - typetab.o
+	/bin/rm -f typetab.o
+Making all in oeu subsystem
+	cc -c -O -I../inc oeu.c
+	ar rv liboeu.a oeu.o
+ar: creating liboeu.a
+a - oeu.o
+	/bin/rm -f oeu.o
+	/bin/cp oeu.c oeucheck.c
+	cc -c -O -I../inc -DJUSTCHECK oeucheck.c
+	ar rv liboeu.a oeucheck.o
+a - oeucheck.o
+	/bin/rm -f oeucheck.o
+	/bin/rm -f oeucheck.c
+	cc -c -O -I../inc oeupack.c
+	ar rv liboeu.a oeupack.o
+a - oeupack.o
+	/bin/rm -f oeupack.o
+	cc -c -O -I../inc rm_atob.c
+	ar rv liboeu.a rm_atob.o
+a - rm_atob.o
+	/bin/rm -f rm_atob.o
+	cc -c -O -I../inc genparse.c
+	ar rv liboeu.a genparse.o
+a - genparse.o
+	/bin/rm -f genparse.o
+Making all in wish subsystem
+	cc -c -O -I../inc  browse.c
+	ar rv libwish.a browse.o	 
+ar: creating libwish.a
+a - browse.o
+	/bin/rm -f browse.o
+	cc -c -O -I../inc  display.c
+	ar rv libwish.a display.o	 
+a - display.o
+	/bin/rm -f display.o
+	cc -c -O -I../inc  error.c
+	ar rv libwish.a error.o	 
+a - error.o
+	/bin/rm -f error.o
+	cc -c -O -I../inc  flush.c
+	ar rv libwish.a flush.o	 
+a - flush.o
+	/bin/rm -f flush.o
+	cc -c -O -I../inc  getstring.c
+	ar rv libwish.a getstring.o	 
+a - getstring.o
+	/bin/rm -f getstring.o
+	cc -c -O -I../inc  -DRELEASE='"fmli R1.1 L9.6"' global.c
+"global.c", line 202: warning: variable i is used before set
+	ar rv libwish.a global.o	 
+a - global.o
+	/bin/rm -f global.o
+	cc -c -O -I../inc  mudge.c
+	ar rv libwish.a mudge.o	 
+a - mudge.o
+	/bin/rm -f mudge.o
+	cc -c -O -I../inc  objop.c
+	ar rv libwish.a objop.o	 
+a - objop.o
+	/bin/rm -f objop.o
+	cc -c -O -I../inc  stubs.c
+	ar rv libwish.a stubs.o	 
+a - stubs.o
+	/bin/rm -f stubs.o
+	cc -c -O -I../inc  virtual.c
+	ar rv libwish.a virtual.o	 
+a - virtual.o
+	/bin/rm -f virtual.o
+	cc -c -O -I../inc  wdwcreate.c
+	ar rv libwish.a wdwcreate.o	 
+a - wdwcreate.o
+	/bin/rm -f wdwcreate.o
+	cc -c -O -I../inc  wdwlist.c
+	ar rv libwish.a wdwlist.o	 
+a - wdwlist.o
+	/bin/rm -f wdwlist.o
+	cc -c -O -I../inc  wdwmgmt.c
+	ar rv libwish.a wdwmgmt.o	 
+a - wdwmgmt.o
+	/bin/rm -f wdwmgmt.o
+Making all in xx subsystem
+	cc -O -I../inc -c main.c
+	cc -s -o fmli main.o ../wish/libwish.a ../oh/liboh.a ../oeu/liboeu.a ../form/libform.a ../qued/libqued.a ../menu/libmenu.a ../proc/libproc.a ../vt/libvt.a ../sys/libsys.a /usr/lib/libcurses.a -lPW
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to fmli
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f fmli.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+
+Making clean in sys subsystem
+
+	/bin/rm -f *.o
+
+Making clean in proc subsystem
+
+	/bin/rm -f *.o
+
+Making clean in vt subsystem
+
+	/bin/rm -f *.o
+
+Making clean in menu subsystem
+
+	/bin/rm -f *.o
+
+Making clean in qued subsystem
+
+	/bin/rm -f *.o
+
+Making clean in form subsystem
+
+	/bin/rm -f *.o
+
+Making clean in oh subsystem
+
+	/bin/rm -f *.o
+
+Making clean in oeu subsystem
+
+	/bin/rm -f *.o
+
+Making clean in wish subsystem
+
+	/bin/rm -f *.o
+
+Making clean in xx subsystem
+
+
+Making clobber in sys subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libsys.a
+
+Making clobber in proc subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libproc.a
+
+Making clobber in vt subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libvt.a
+
+Making clobber in menu subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libmenu.a
+
+Making clobber in qued subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libqued.a
+
+Making clobber in form subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libform.a
+
+Making clobber in oh subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f liboh.a
+
+Making clobber in oeu subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f liboeu.a
+
+Making clobber in wish subsystem
+
+	/bin/rm -f *.o
+	/bin/rm -f libwish.a
+
+Making clobber in xx subsystem
+
+**** Build of fmli failed (make)
+
+======== help
+cd help
+make -b -f help.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -n -s -o interact interact.c -lcurses
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to interact
+*** Error code 13
+
+Stop.
+make -b -f help.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f help display fetch interact keysrch helpadm glossary \
+		admgloss admstart checklen defnlen editcmd locking
+	rm -rf *.o
+	rm -f ./replace
+**** Build of help failed (make)
+
+======== lp
+cd lp
+make -b -f lp.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cd ./lib; make FUNCDCL=""
+	for dir in ./access  ./class  ./filters  ./forms  ./fs  ./lp  ./msgs  ./oam  ./requests  ./printers  ./users; do cd $dir; make; cd ..; done
+	cc  -I../../include -I/usr/include -O -c allowed.c
+	cc  -I../../include -I/usr/include -O -c change.c
+	cc  -I../../include -I/usr/include -O -c dumpaccess.c
+	cc  -I../../include -I/usr/include -O -c files.c
+	cc  -I../../include -I/usr/include -O -c loadaccess.c
+	ar rv liblpacc.a allowed.o change.o dumpaccess.o files.o loadaccess.o
+ar: creating liblpacc.a
+a - allowed.o
+a - change.o
+a - dumpaccess.o
+a - files.o
+a - loadaccess.o
+	if [ -n "" ]; then  allowed.c  change.c  dumpaccess.c  files.c  loadaccess.c >llib-llpacc; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpacc | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpacc.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c delclass.c
+	cc  -I../../include -I/usr/include -O -c freeclass.c
+	cc  -I../../include -I/usr/include -O -c getclass.c
+	cc  -I../../include -I/usr/include -O -c putclass.c
+	ar rv liblpcls.a delclass.o freeclass.o getclass.o putclass.o
+ar: creating liblpcls.a
+a - delclass.o
+a - freeclass.o
+a - getclass.o
+a - putclass.o
+	if [ -n "" ]; then  delclass.c  freeclass.c  getclass.c  putclass.c >llib-llpcls; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpcls | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpcls.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c conv.c
+	cc  -I../../include -I/usr/include -O -c delfilter.c
+	cc  -I../../include -I/usr/include -O -c dumpfilters.c
+	cc  -I../../include -I/usr/include -O -c freefilter.c
+	cc  -I../../include -I/usr/include -O -c getfilter.c
+	cc  -I../../include -I/usr/include -O -c filtertable.c
+	cc  -I../../include -I/usr/include -O -c insfilter.c
+	cc  -I../../include -I/usr/include -O -c loadfilters.c
+	cc  -I../../include -I/usr/include -O -c putfilter.c
+	cc  -I../../include -I/usr/include -O -c search.c
+	cc  -I../../include -I/usr/include -O -c trash.c
+	ar rv liblpflt.a conv.o delfilter.o dumpfilters.o freefilter.o getfilter.o filtertable.o insfilter.o loadfilters.o putfilter.o search.o trash.o
+ar: creating liblpflt.a
+a - conv.o
+a - delfilter.o
+a - dumpfilters.o
+a - freefilter.o
+a - getfilter.o
+a - filtertable.o
+a - insfilter.o
+a - loadfilters.o
+a - putfilter.o
+a - search.o
+a - trash.o
+	if [ -n "" ]; then  conv.c  delfilter.c  dumpfilters.c  freefilter.c  getfilter.c  filtertable.c  insfilter.c  loadfilters.c  putfilter.c  search.c  trash.c >llib-llpflt; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpflt | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpflt.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c delform.c
+	cc  -I../../include -I/usr/include -O -c fspec.c
+	cc  -I../../include -I/usr/include -O -c getform.c
+	cc  -I../../include -I/usr/include -O -c putform.c
+	cc  -I../../include -I/usr/include -O -c rdform.c
+	cc  -I../../include -I/usr/include -O -c wrform.c
+	ar rv liblpfrm.a delform.o fspec.o getform.o putform.o rdform.o wrform.o
+ar: creating liblpfrm.a
+a - delform.o
+a - fspec.o
+a - getform.o
+a - putform.o
+a - rdform.o
+a - wrform.o
+	if [ -n "" ]; then  delform.c  fspec.c getform.c  putform.c  rdform.c  wrform.c >llib-llpfrm; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpfrm | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpfrm.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O  -c Mkdir.c
+	cc  -I../../include -I/usr/include -O  -c Readdir.c
+	cc  -I../../include -I/usr/include -O  -c Rmdir.c
+	cc  -I../../include -I/usr/include -O  -c next.c
+	cc  -I../../include -I/usr/include -O  -c s5getdents.c
+	cc  -I../../include -I/usr/include -O  -c s5mkdir.c
+	cc  -I../../include -I/usr/include -O  -c s5readdir.c
+	cc  -I../../include -I/usr/include -O  -c s5rmdir.c
+	cc  -I../../include -I/usr/include -O  -c see_if_SVR3.c
+	ar rv liblpfs.a Mkdir.o Readdir.o Rmdir.o next.o s5getdents.o s5mkdir.o s5readdir.o s5rmdir.o see_if_SVR3.o
+ar: creating liblpfs.a
+a - Mkdir.o
+a - Readdir.o
+a - Rmdir.o
+a - next.o
+a - s5getdents.o
+a - s5mkdir.o
+a - s5readdir.o
+a - s5rmdir.o
+a - see_if_SVR3.o
+	if [ -n "" ]; then  Mkdir.c  Readdir.c  Rmdir.c  next.c  s5getdents.c  s5mkdir.c  s5readdir.c  s5rmdir.c  see_if_SVR3.c >llib-llpfs; fi
+	cc -E -C  -I../../include -I/usr/include -O  -Dlint llib-llpfs | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpfs.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c Syscalls.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c addlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c appendlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c alerts.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c charset.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c cs_strcmp.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c cs_strncmp.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c curdir.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dellist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dashos.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c dirs.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c duplist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c files.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c freelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getname.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getpaths.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c getspooldir.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c isterminfo.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c lenlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c lp_errno.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c makepath.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c makestr.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c mergelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c printlist.c
+"printlist.c", line 108: warning: expression not used!
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sdn.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sprintlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c searchlist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_charset.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_pitch.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c set_size.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c sop.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c strip.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c syntax.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c tidbit.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c tinames.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c wherelist.c
+	cc  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -c which.c
+	ar rv liblp.a Syscalls.o addlist.o appendlist.o alerts.o charset.o cs_strcmp.o cs_strncmp.o curdir.o dellist.o dashos.o dirs.o duplist.o files.o freelist.o getlist.o getname.o getpaths.o getspooldir.o isterminfo.o lenlist.o lp_errno.o makepath.o makestr.o mergelist.o printlist.o sdn.o sprintlist.o searchlist.o set_charset.o set_pitch.o set_size.o sop.o strip.o syntax.o tidbit.o tinames.o wherelist.o which.o
+ar: creating liblp.a
+a - Syscalls.o
+a - addlist.o
+a - appendlist.o
+a - alerts.o
+a - charset.o
+a - cs_strcmp.o
+a - cs_strncmp.o
+a - curdir.o
+a - dellist.o
+a - dashos.o
+a - dirs.o
+a - duplist.o
+a - files.o
+a - freelist.o
+a - getlist.o
+a - getname.o
+a - getpaths.o
+a - getspooldir.o
+a - isterminfo.o
+a - lenlist.o
+a - lp_errno.o
+a - makepath.o
+a - makestr.o
+a - mergelist.o
+a - printlist.o
+a - sdn.o
+a - sprintlist.o
+a - searchlist.o
+a - set_charset.o
+a - set_pitch.o
+a - set_size.o
+a - sop.o
+a - strip.o
+a - syntax.o
+a - tidbit.o
+a - tinames.o
+a - wherelist.o
+a - which.o
+	if [ -n "" ]; then  Syscalls.c  addlist.c  appendlist.c  alerts.c  charset.c  cs_strcmp.c  cs_strncmp.c  curdir.c  dellist.c  dashos.c  dirs.c  duplist.c  files.c  freelist.c  getlist.c  getname.c  getpaths.c  getspooldir.c  isterminfo.c  lenlist.c  lp_errno.c makepath.c  makestr.c  mergelist.c  printlist.c  sdn.c  sprintlist.c  searchlist.c  set_charset.c  set_pitch.c  set_size.c  sop.c  strip.c  syntax.c  tidbit.c  tinames.c  wherelist.c  which.c >llib-llp; fi
+	cc -E -C  -I../../include -I/usr/include  -DSPOOLDIR_FROM_ENV -O -Dlint llib-llp | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llp.ln
+Can't open llib-llp for input
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c _getmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c _putmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c getmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c hslconv.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c putmessage.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c msgfmts.c
+	make COMPONENT=mclose concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mclose.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mneeds.c
+	make COMPONENT=mopen concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mopen.c
+	make COMPONENT=mrecv concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c mrecv.c
+	make COMPONENT=msend concat
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c msend.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c read_fifo.c
+	cc  -I../../include -I/usr/include -O -DUSE_FIFOS -c write_fifo.c
+	ar rv liblpmsg.a _getmessage.o _putmessage.o getmessage.o hslconv.o putmessage.o msgfmts.o mclose.o mneeds.o mopen.o mrecv.o msend.o read_fifo.o write_fifo.o
+ar: creating liblpmsg.a
+a - _getmessage.o
+a - _putmessage.o
+a - getmessage.o
+a - hslconv.o
+a - putmessage.o
+a - msgfmts.o
+a - mclose.o
+a - mneeds.o
+a - mopen.o
+a - mrecv.o
+a - msend.o
+a - read_fifo.o
+a - write_fifo.o
+	if [ -n "" ]; then  _getmessage.c  _putmessage.c  getmessage.c  hslconv.c  putmessage.c  msgfmts.c  mclose.c  mneeds.c  mopen.c  mrecv.c  msend.c  read_fifo.c  write_fifo.c >llib-llpmsg; fi
+	cc -E -C  -I../../include -I/usr/include -O -DUSE_FIFOS -Dlint llib-llpmsg | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpmsg.ln
+	/bin/rm -f ./LINT_WORK
+	sh gen-defs >../../include/oam_def.h
+	sh gen-text
+generating e_lp__msgs.c
+generating e_fl__msgs.c
+generating e_can__msgs.c
+generating e_cmb__msgs.c
+generating e_mov__msgs.c
+generating e_lpu__msgs.c
+generating e_lpp__msgs.c
+generating e_sht__msgs.c
+generating e_adm__msgs.c
+generating e_for__msgs.c
+generating e_stat__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c agettxt.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c buffers.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c fmtmsg.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_adm__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_can__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_cmb__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_fl__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_for__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lp__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lpp__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_lpu__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_mov__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_sht__msgs.c
+	cc  -I../../include -I/usr/include -DSMART_WRAP -O -c e_stat__msgs.c
+	ar rv liblpoam.a agettxt.o buffers.o fmtmsg.o e_adm__msgs.o e_can__msgs.o e_cmb__msgs.o e_fl__msgs.o e_for__msgs.o e_lp__msgs.o e_lpp__msgs.o e_lpu__msgs.o e_mov__msgs.o e_sht__msgs.o e_stat__msgs.o
+ar: creating liblpoam.a
+a - agettxt.o
+a - buffers.o
+a - fmtmsg.o
+a - e_adm__msgs.o
+a - e_can__msgs.o
+a - e_cmb__msgs.o
+a - e_fl__msgs.o
+a - e_for__msgs.o
+a - e_lp__msgs.o
+a - e_lpp__msgs.o
+a - e_lpu__msgs.o
+a - e_mov__msgs.o
+a - e_sht__msgs.o
+a - e_stat__msgs.o
+	if [ -n "" ]; then  agettxt.c  buffers.c  fmtmsg.c >llib-llpoam; fi
+	cc -E -C  -I../../include -I/usr/include -DSMART_WRAP -O -Dlint llib-llpoam | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpoam.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c anyrequests.c
+	cc  -I../../include -I/usr/include -O -c freerequest.c
+	cc  -I../../include -I/usr/include -O -c getrequest.c
+	cc  -I../../include -I/usr/include -O -c headings.c
+	cc  -I../../include -I/usr/include -O -c putrequest.c
+	ar rv liblpreq.a anyrequests.o freerequest.o getrequest.o headings.o putrequest.o
+ar: creating liblpreq.a
+a - anyrequests.o
+a - freerequest.o
+a - getrequest.o
+a - headings.o
+a - putrequest.o
+	if [ -n "" ]; then  anyrequests.c  freerequest.c  getrequest.c  headings.c  putrequest.c >llib-llpreq; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpreq | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpreq.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c chkprinter.c
+	cc  -I../../include -I/usr/include -O -c default.c
+	cc  -I../../include -I/usr/include -O -c delprinter.c
+	cc  -I../../include -I/usr/include -O -c freeprinter.c
+	cc  -I../../include -I/usr/include -O -c getprinter.c
+	cc  -I../../include -I/usr/include -O -c headings.c
+	cc  -I../../include -I/usr/include -O -c okprinter.c
+	cc  -I../../include -I/usr/include -O -c printwheels.c
+	cc  -I../../include -I/usr/include -O -c putprinter.c
+	ar rv liblpprt.a chkprinter.o default.o delprinter.o freeprinter.o getprinter.o headings.o okprinter.o printwheels.o putprinter.o
+ar: creating liblpprt.a
+a - chkprinter.o
+a - default.o
+a - delprinter.o
+a - freeprinter.o
+a - getprinter.o
+a - headings.o
+a - okprinter.o
+a - printwheels.o
+a - putprinter.o
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpprt | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpprt.ln
+	/bin/rm -f ./LINT_WORK
+	cc  -I../../include -I/usr/include -O -c usermgmt.c
+	cc  -I../../include -I/usr/include -O -c loadpri.c
+	cc  -I../../include -I/usr/include -O -c storepri.c
+	ar rv liblpusr.a usermgmt.o loadpri.o storepri.o
+ar: creating liblpusr.a
+a - usermgmt.o
+a - loadpri.o
+a - storepri.o
+	if [ -n "" ]; then  usermgmt.c  loadpri.c  storepri.c >llib-llpusr; fi
+	cc -E -C  -I../../include -I/usr/include -O -Dlint llib-llpusr | /usr/lib/lint1 -vx -H./LINT_WORK > llib-llpusr.ln
+	/bin/rm -f ./LINT_WORK
+	cd ./cmd; make
+	cd ./lpadmin; make
+	cc  -I. -I../../include -I/usr/include -O -c chkopts.c
+	cc  -I. -I../../include -I/usr/include -O -c default.c
+	cc  -I. -I../../include -I/usr/include -O -c do_align.c
+	cc  -I. -I../../include -I/usr/include -O -c do_fault.c
+	cc  -I. -I../../include -I/usr/include -O -c do_mount.c
+	cc  -I. -I../../include -I/usr/include -O -c do_printer.c
+	cc  -I. -I../../include -I/usr/include -O -c do_pwheel.c
+	cc  -I. -I../../include -I/usr/include -O -c done.c
+	cc  -I. -I../../include -I/usr/include -O -c fromclass.c
+	cc  -I. -I../../include -I/usr/include -O -c ismodel.c
+	cc  -I. -I../../include -I/usr/include -O -c lpadmin.c
+	cc  -I. -I../../include -I/usr/include -O -c options.c
+	cc  -I. -I../../include -I/usr/include -O -c output.c
+	cc  -I. -I../../include -I/usr/include -O -c rmdest.c
+	cc  -I. -I../../include -I/usr/include -O -c send_message.c
+	cc  -I. -I../../include -I/usr/include -O -c signals.c
+	cc  -I. -I../../include -I/usr/include -O -c startup.c
+	cc  -I. -I../../include -I/usr/include -O -c usage.c
+	cc -o lpadmin chkopts.o  default.o  do_align.o  do_fault.o  do_mount.o  do_printer.o  do_pwheel.o  done.o  fromclass.o  ismodel.o  lpadmin.o  options.o  output.o  rmdest.o  send_message.o  signals.o  startup.o  usage.o  \
+			../../lib/access/liblpacc.a \
+			../../lib/class/liblpcls.a \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/requests/liblpreq.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lcurses
+	cd ./lpsched; make
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c alerts.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c cancel.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c checkchild.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c daisyforms.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c dial.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disena.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp1.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp2.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp3.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disp4.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c disptab.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c dowait.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c exec.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c faults.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c files.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c flt.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c fncs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c getkey.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c getpwent.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c init.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c log.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c logmsg.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c lpsched.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c msgs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c notify.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c pickfilter.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c ports.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c requeue.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c rstatus.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c schedule.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c secure.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c status.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c terminate.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -c validate.c
+	cc -o lpsched alerts.o  cancel.o  checkchild.o  daisyforms.o  dial.o  disena.o  disp1.o  disp2.o  disp3.o  disp4.o  disptab.o  dowait.o  exec.o  faults.o  files.o  flt.o  fncs.o  getkey.o  getpwent.o  init.o  log.o  logmsg.o  lpsched.o  msgs.o  notify.o  pickfilter.o  ports.o  requeue.o  rstatus.o  schedule.o  secure.o  status.o  terminate.o  validate.o  \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/requests/liblpreq.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/class/liblpcls.a \
+			../../lib/access/liblpacc.a \
+			../../lib/filters/liblpflt.a \
+			../../lib/users/liblpusr.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lcurses \
+					-lomalloc \
+					
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c exec.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c msgs.c
+	cc -I. -I../../include -I/usr/include    -DCHECK_CHILDREN  -DUSE_FIFOS  -DLOST_LOCK   -DI_AM_LPSCHED_JR -c log.c
+	cc -o lpsched.jr exec.j  msgs.j  log.j  \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/lp/liblp.a \
+				
+	cd ./lpstat; make
+	cc  -I. -I../../include -I/usr/include -O -c accept.c
+	cc  -I. -I../../include -I/usr/include -O -c add_mounted.c
+	cc  -I. -I../../include -I/usr/include -O -c charset.c
+	cc  -I. -I../../include -I/usr/include -O -c class.c
+	cc  -I. -I../../include -I/usr/include -O -c device.c
+	cc  -I. -I../../include -I/usr/include -O -c done.c
+	cc  -I. -I../../include -I/usr/include -O -c form.c
+	cc  -I. -I../../include -I/usr/include -O -c lpstat.c
+	cc  -I. -I../../include -I/usr/include -O -c output.c
+	cc  -I. -I../../include -I/usr/include -O -c parse.c
+	cc  -I. -I../../include -I/usr/include -O -c printer.c
+	cc  -I. -I../../include -I/usr/include -O -c request.c
+	cc  -I. -I../../include -I/usr/include -O -c send_message.c
+	cc -o lpstat accept.o  add_mounted.o  charset.o  class.o  device.o  done.o  form.o  lpstat.o  output.o  parse.o  printer.o  request.o  send_message.o  \
+			../../lib/access/liblpacc.a \
+			../../lib/forms/liblpfrm.a \
+			../../lib/class/liblpcls.a \
+			../../lib/msgs/liblpmsg.a \
+			../../lib/printers/liblpprt.a \
+			../../lib/oam/liblpoam.a \
+			../../lib/lp/liblp.a \
+			../../lib/fs/liblpfs.a \
+				-lPW -lcurses
+	cc  -I../include -I/usr/include -O -c comb.c
+	cc -o accept comb.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c cancel.c
+	cc -o cancel cancel.o  \
+			../lib/requests/liblpreq.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	/bin/cp accept disable
+	/bin/ln disable enable
+	cc  -I../include -I/usr/include -O -c lp.c
+	cc -o lp lp.o  \
+			../lib/printers/liblpprt.a \
+			../lib/requests/liblpreq.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpfilter.c
+	cc -o lpfilter lpfilter.o  \
+			../lib/filters/liblpflt.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpforms.c
+	cc -o lpforms lpforms.o  \
+			../lib/forms/liblpfrm.a \
+			../lib/msgs/liblpmsg.a \
+			../lib/requests/liblpreq.a \
+			../lib/oam/liblpoam.a \
+			../lib/access/liblpacc.a \
+			../lib/lp/liblp.a \
+			../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpmove.c
+	cc -o lpmove lpmove.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpshut.c
+	cc -o lpshut lpshut.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/oam/liblpoam.a \
+			../lib/lp/liblp.a \
+		../lib/fs/liblpfs.a
+	cc  -I../include -I/usr/include -O -c lpusers.c
+	cc -o lpusers lpusers.o  \
+			../lib/msgs/liblpmsg.a \
+			../lib/access/liblpacc.a \
+			../lib/oam/liblpoam.a \
+			../lib/users/liblpusr.a \
+			../lib/lp/liblp.a \
+			../lib/fs/liblpfs.a
+	/bin/ln accept reject
+	cc  -I../include -I/usr/include -O -c dumpolp.c
+	cc -o dumpolp dumpolp.o  \
+			../lib/lp/liblp.a
+	cd ./etc; make
+	cd ./model; make
+	cc  -I../include -I/usr/include -O -c lp.set.c
+	cc -o lp.set lp.set.o  \
+			../lib/lp/liblp.a \
+			-lcurses
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to lp.set
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f lp.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd ./lib; make clobber
+	for dir in ./access  ./class  ./filters  ./forms  ./fs  ./lp  ./msgs  ./oam  ./requests  ./printers  ./users; do cd $dir; make clobber; cd ..; done
+	/bin/rm -f allowed.o  change.o  dumpaccess.o  files.o  loadaccess.o allowed.p  change.p  dumpaccess.p  files.p  loadaccess.p allowed.q  change.q  dumpaccess.q  files.q  loadaccess.q
+	/bin/rm -f liblpacc.a pliblpacc.a qliblpacc.a llib-llpacc.ln
+	/bin/rm -f delclass.o  freeclass.o  getclass.o  putclass.o delclass.p  freeclass.p  getclass.p  putclass.p delclass.q  freeclass.q  getclass.q  putclass.q
+	/bin/rm -f liblpcls.a pliblpcls.a qliblpcls.a llib-llpcls.ln
+	/bin/rm -f conv.o  delfilter.o  dumpfilters.o  freefilter.o  getfilter.o  filtertable.o  insfilter.o  loadfilters.o  putfilter.o  search.o  trash.o conv.p  delfilter.p  dumpfilters.p  freefilter.p  getfilter.p  filtertable.p  insfilter.p  loadfilters.p  putfilter.p  search.p  trash.p conv.q  delfilter.q  dumpfilters.q  freefilter.q  getfilter.q  filtertable.q  insfilter.q  loadfilters.q  putfilter.q  search.q  trash.q
+	/bin/rm -f liblpflt.a pliblpflt.a qliblpflt.a llib-llpflt.ln
+	/bin/rm -f delform.o  fspec.o getform.o  putform.o  rdform.o  wrform.o delform.p  fspec.p getform.p  putform.p  rdform.p  wrform.p delform.q  fspec.q getform.q  putform.q  rdform.q  wrform.q
+	/bin/rm -f liblpfrm.a pliblpfrm.a qliblpfrm.a llib-llpfrm.ln
+	/bin/rm -f Mkdir.o  Readdir.o  Rmdir.o  next.o  s5getdents.o  s5mkdir.o  s5readdir.o  s5rmdir.o  see_if_SVR3.o Mkdir.p  Readdir.p  Rmdir.p  next.p  s5getdents.p  s5mkdir.p  s5readdir.p  s5rmdir.p  see_if_SVR3.p Mkdir.q  Readdir.q  Rmdir.q  next.q  s5getdents.q  s5mkdir.q  s5readdir.q  s5rmdir.q  see_if_SVR3.q
+	/bin/rm -f liblpfs.a pliblpfs.a qliblpfs.a llib-llpfs.ln
+reelist.q  getlist.q  getname.q  getpaths.q  getspooldir.q  isterminfo.q  lenlist.q  lp_errno.q makepath.q  makestr.q  mergelist.q  printlist.q  sdn.q  sprintlist.q  searchlist.q  set_charset.q  set_pitch.q  set_size.q  sop.q  strip.q  syntax.q  tidbit.q  tinames.q  wherelist.q  which.q
+	/bin/rm -f liblp.a pliblp.a qliblp.a llib-llp.ln
+	/bin/rm -f _getmessage.o  _putmessage.o  getmessage.o  hslconv.o  putmessage.o  msgfmts.o  mclose.o  mneeds.o  mopen.o  mrecv.o  msend.o  read_fifo.o  write_fifo.o _getmessage.p  _putmessage.p  getmessage.p  hslconv.p  putmessage.p  msgfmts.p  mclose.p  mneeds.p  mopen.p  mrecv.p  msend.p  read_fifo.p  write_fifo.p _getmessage.q  _putmessage.q  getmessage.q  hslconv.q  putmessage.q  msgfmts.q  mclose.q  mneeds.q  mopen.q  mrecv.q  msend.q  read_fifo.q  write_fifo.q mopen.c mclose.c mrecv.c msend.c
+	/bin/rm -f liblpmsg.a pliblpmsg.a qliblpmsg.a llib-llpmsg.ln
+	/bin/rm -f agettxt.o  buffers.o  fmtmsg.o e_adm__msgs.o  e_can__msgs.o  e_cmb__msgs.o  e_fl__msgs.o  e_for__msgs.o  e_lp__msgs.o  e_lpp__msgs.o  e_lpu__msgs.o  e_mov__msgs.o  e_sht__msgs.o  e_stat__msgs.o agettxt.p  buffers.p  fmtmsg.p e_adm__msgs.p  e_can__msgs.p  e_cmb__msgs.p  e_fl__msgs.p  e_for__msgs.p  e_lp__msgs.p  e_lpp__msgs.p  e_lpu__msgs.p  e_mov__msgs.p  e_sht__msgs.p  e_stat__msgs.p agettxt.q  buffers.q  fmtmsg.q e_adm__msgs.q  e_can__msgs.q  e_cmb__msgs.q  e_fl__msgs.q  e_for__msgs.q  e_lp__msgs.q  e_lpp__msgs.q  e_lpu__msgs.q  e_mov__msgs.q  e_sht__msgs.q  e_stat__msgs.q e_adm__msgs.c  e_can__msgs.c  e_cmb__msgs.c  e_fl__msgs.c  e_for__msgs.c  e_lp__msgs.c  e_lpp__msgs.c  e_lpu__msgs.c  e_mov__msgs.c  e_sht__msgs.c  e_stat__msgs.c ../../include/oam_def.h xx??
+	/bin/rm -f liblpoam.a pliblpoam.a qliblpoam.a llib-llpoam.ln
+	/bin/rm -f anyrequests.o  freerequest.o  getrequest.o  headings.o  putrequest.o anyrequests.p  freerequest.p  getrequest.p  headings.p  putrequest.p anyrequests.q  freerequest.q  getrequest.q  headings.q  putrequest.q
+	/bin/rm -f liblpreq.a pliblpreq.a qliblpreq.a llib-llpreq.ln
+	/bin/rm -f chkprinter.o  default.o  delprinter.o  freeprinter.o  getprinter.o  headings.o  okprinter.o  printwheels.o  putprinter.o chkprinter.p  default.p  delprinter.p  freeprinter.p  getprinter.p  headings.p  okprinter.p  printwheels.p  putprinter.p chkprinter.q  default.q  delprinter.q  freeprinter.q  getprinter.q  headings.q  okprinter.q  printwheels.q  putprinter.q
+	/bin/rm -f liblpprt.a pliblpprt.a qliblpprt.a llib-llpprt.ln
+	/bin/rm -f usermgmt.o  loadpri.o  storepri.o usermgmt.p  loadpri.p  storepri.p usermgmt.q  loadpri.q  storepri.q
+	/bin/rm -f liblpusr.a pliblpusr.a qliblpusr.a llib-llpusr.ln
+	cd ./cmd; make clobber
+	/bin/rm -f cancel.o  comb.o  lp.o  lpfilter.o  lpforms.o  lpmove.o  lpshut.o  lpusers.o
+	/bin/rm -f accept  cancel  disable  enable  lp  lpfilter  lpforms  lpmove  lpshut  lpusers  reject
+	for cmd in lpadmin  lpsched  lpstat; do cd ./$cmd; make clobber; cd ..; done
+	/bin/rm -f chkopts.o  default.o  do_align.o  do_fault.o  do_mount.o  do_printer.o  do_pwheel.o  done.o  fromclass.o  ismodel.o  lpadmin.o  options.o  output.o  rmdest.o  send_message.o  signals.o  startup.o  usage.o
+	/bin/rm -f lpadmin
+.q  validate.q msgs.c exec.j  msgs.j  log.j
+	/bin/rm -f lpsched plpsched qlpsched lpsched.jr
+	/bin/rm -f accept.o  add_mounted.o  charset.o  class.o  device.o  done.o  form.o  lpstat.o  output.o  parse.o  printer.o  request.o  send_message.o
+	/bin/rm -f lpstat
+	/bin/rm -f dumpolp.o
+	/bin/rm -f dumpolp
+	cd ./model; make clobber
+	/bin/rm -f lp.set.o  lp.cat.o  lp.page.o  lp.tell.o  drain.output.o
+	/bin/rm -f lp.set  lp.cat  lp.page  lp.tell  drain.output
+	cd ./filter; make clobber
+	/bin/rm -f 5310.o  hp2631a.o  pprx.o  prx.o
+	/bin/rm -f 5310  hp2631a  pprx  prx
+	cd ./terminfo; make clobber
+**** Build of lp failed (make)
+
+======== m4
+cd m4
+make -b -f m4.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -I/usr/include -c m4.c
+"m4.c", line 39: identifier _ctype not declared
+*** Error code 1
+
+Stop.
+make -b -f m4.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f *.o
+	rm -f y.tab.c 
+	rm -f ./m4
+**** Build of m4 failed (make)
+
+======== net.admin
+cd net.admin
+**** Build of net.admin failed (no makefile found in directory)
+
+======== pg
+cd pg
+make -b -f pg.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -DSINGLE -O -s -o ./pg pg.c -lcurses
+"/usr/include/regexp.h", line 508: warning: Constant out of range ==
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to ./pg
+*** Error code 13
+
+Stop.
+make -b -f pg.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f pg.o
+	rm -f ./pg
+**** Build of pg failed (make)
+
+======== tail
+cd tail
+make -b -f tail.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+	cc -O -I/usr/include -c tail.c
+	cc -O -I/usr/include -o tail tail.o -s 
+	cpset tail /bin
+cpset: Couldn't unlink '/bin/tail'
+*** Error code 1
+
+Stop.
+make -b -f tail.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	rm -f tail.o tail
+**** Build of tail failed (make)
+
+======== vi
+cd vi
+make -b -f vi.mk ARGS="" LDLIBS='' IFLAG="" FFLAG="" CPU="pm400" install
+
+	>Making commands.
+	cd misc; make ROOT= all; cd ..
+	cc -O -I/usr/include -c ctags.c
+	cc -O -I/usr/include  -o ctags  ctags.o   -s
+	cc -O -I/usr/include -c fold.c
+	cc -O -I/usr/include  -o fold  fold.o   -s
+	cc -O mkstr.c -o mkstr -s
+	cc -O xstr.c -o xstr  -s
+	cp cxref.sh cxref; chmod 0777 cxref
+	if ( u370 || pdp11 ) ;\
+	then \
+		if [ "x`uname -m`" = "xc70" ] ;\
+		then \
+			make -f MKFILE=makefile.c70 ROOT=  DIR=/usr/bin ;\
+		elif [ "x`uname -m`" = "xpdp11-70" ] ;\
+		then \
+			make -f MKFILE=pdp11 ROOT=  DIR=/usr/bin ;\
+		elif [ "x`uname -m`" = "x370" ] ;\
+		then \
+			make -f MKFILE=makefile.370 ROOT=  DIR=/usr/bin ;\
+		fi \
+	fi
+	cd port ; make -f makefile.usg          ROOT=  DIR=/usr/bin all ; cd ..
+	cc -c -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit bcopy.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_addr.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmds.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmds2.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_cmdsub.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_data.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_extern.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_get.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_io.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_put.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_re.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_set.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_subr.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_temp.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_tty.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_unix.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_v.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vadj.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vget.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vmain.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_voper.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops2.c
+"ex_vops2.c", line 222: warning: Constant out of range ==
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vops3.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vput.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c ex_vwind.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -c printf.c
+	cc -O -I/usr/include -I../local -DUSG -DSTDIO -DVMUNIX -DTABS=8 -DSINGLE -Dexit=mkexit -o ex \
+	bcopy.o ex.o ex_addr.o ex_cmds.o ex_cmds2.o \
+	ex_cmdsub.o ex_data.o ex_extern.o ex_get.o \
+	ex_io.o ex_put.o ex_re.o ex_set.o ex_subr.o \
+	ex_temp.o ex_tty.o ex_unix.o ex_v.o ex_vadj.o \
+	ex_vget.o ex_vmain.o ex_voper.o ex_vops.o \
+	ex_vops2.o ex_vops3.o ex_vput.o ex_vwind.o \
+	printf.o -n -s -lcurses -lcrypt -lgen
+undefined			first referenced
+ symbol  			    in file
+__ctype                             /usr/lib/libcurses.a
+ld fatal: Symbol referencing errors. No output written to ex
+*** Error code 13
+
+Stop.
+*** Error code 1
+
+Stop.
+make -b -f vi.mk LDLIBS='' IFLAG="" FFLAG="" CPU="pm400"  clobber
+	cd misc ; make ROOT= clobber ; cd ..
+	rm -f ctags.o fold.o mkstr.o xstr.o ctags fold mkstr xstr cxref
+	if pdp11; \
+	then \
+		cd pdp11; \
+		make -f makefile.usg clobber ;\
+	else \
+		cd port; \
+		make -f makefile.usg          ROOT=  DIR=/usr/bin clobber ;\
+	fi
+	rm -f bcopy.o ex.o ex_addr.o ex_cmds.o ex_cmds2.o  ex_cmdsub.o ex_data.o ex_extern.o ex_get.o  ex_io.o ex_put.o ex_re.o ex_set.o ex_subr.o  ex_temp.o ex_tty.o ex_unix.o ex_v.o ex_vadj.o  ex_vget.o ex_vmain.o ex_voper.o ex_vops.o  ex_vops2.o ex_vops3.o ex_vput.o ex_vwind.o  printf.o expreserve.o exrecover.o ex expreserve exrecover  exstrings x.c xs.c strings
+**** Build of vi failed (make)
+

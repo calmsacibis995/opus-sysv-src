@@ -1,0 +1,78 @@
+
+#ident	"@(#)mk::mksyshead	1.15"
+#
+#	Install UNIX System 'sys' header files
+#
+SRCDIR=${SRC:-$ROOT/usr/src}/uts
+TARGDIR=$ROOT/usr/include/sys
+trap "rm -fr $TARGDIR/[a-m]* ; rm -fr $TARGDIR/* ; exit 1" 1 2 3 15
+if vax
+then
+	MACH=vax/sys
+elif pdp11
+then
+	MACH=pdp11/sys
+elif u3b
+then
+	MACH=3b/sys
+elif u3b2
+then
+	MACH=3b2/sys
+elif u3b5
+then
+	MACH=3b5/sys
+elif clipper
+then
+	MACH=clipper/sys
+	CPU=pm300
+elif ns32000
+then
+	MACH=ns32000/sys
+	CPU=pm100
+elif m88k
+then
+	MACH=m88k/sys
+	CPU=pm400
+fi
+# Echo type of build to log file to avoid confusion
+TYPE=$MACH
+if ns32332
+then
+	TYPE=ns32332/sys
+	CPU=pm200
+fi
+echo "--------------- Doing :mksyshead for : `echo $TYPE | sed 's/\/sys//'` ---------------"
+#
+rm -fr $TARGDIR/[a-m]* ; rm -fr $TARGDIR/*
+for DIR in sys $MACH
+do
+	if [ -d $SRCDIR/$DIR ]
+	then (
+		cd $SRCDIR/$DIR
+		echo "Installing $SRCDIR/$DIR into $TARGDIR:"; ls -Rx
+		find ./ -type f -print | cpio -pdu $TARGDIR
+	) fi
+done
+#	Set file and directory permissions
+DIRS=`find $TARGDIR -type d -print`
+chmod 755 $DIRS
+FILES=`find $TARGDIR -type f -print`
+for i in $FILES
+do
+	chmod 664 $i
+done
+#	If native build then set owner and group
+if [ "$ROOT" = "" ]
+then
+	for i in $FILES
+	do
+		chgrp bin $i
+		chown bin $i
+	done
+	for i in $DIRS
+	do
+		chgrp bin $i
+		chown bin $i
+	done
+fi
+exit 0

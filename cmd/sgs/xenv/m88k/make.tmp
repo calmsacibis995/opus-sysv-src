@@ -1,0 +1,24 @@
+#ident	"@(#)xenv:m32/make-m32	1.7"
+#
+#	Front end script to "make" for use in cross compilation of
+#	3b15/3b5/3b2 SGS
+#
+
+MAKECMD=//m88k/bin/m88kmake
+INCSYS=/usr/m88kinclude/sys
+INC=/usr/m88kinclude
+
+
+MAKEOPTS="MAKE=make AS=m88kas CC=m88kcc LD=m88kld AR=m88kar TESTDIR=. \
+	OL=$ROOT/ SL=$ROOT/usr/src/cmd \
+	ROOT=$ROOT INCSYS=$INCSYS INC=$INC \
+	SIZE=m88ksize LORDER=m88klorder STRIP=m88kstrip PFX=m88k \
+	LST=m88klist DIS=m88kdis NM=m88knm CONV=m88kconv"
+
+echo m88k-make
+if [ $# = 0 ]
+then
+	exec $MAKECMD $MAKEOPTS
+else
+	exec $MAKECMD $MAKEOPTS "$@"
+fi

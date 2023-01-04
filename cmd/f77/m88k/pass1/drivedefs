@@ -1,0 +1,40 @@
+/*	@(#)drivedefs	1.3	*/
+
+/* Definitions for FORTRAN 77 Compiler driver for the OPUS */
+
+#if HERE!=OPUS || TARGET!=OPUS || FAMILY!=PCC
+	Wrong Definitions File!
+#endif
+
+#define PASS1NAME	"/usr/lib/f77pass1"
+#define PASS2NAME	"/usr/lib/f77pass2"
+#define PASS2OPT	"/usr/lib/optim"
+#define ASMNAME		"/bin/as"
+#define LDNAME		"/bin/ld"
+#define FOOTNAME	"/usr/lib/crt0.o"
+#define PROFFOOT	"/usr/lib/mcrt0.o"
+#define SORTNAME	"/bin/sort"
+#define MACRONAME	"/usr/bin/m4"
+#define CCNAME		"/bin/cc"
+#define CCNAME1		"/usr/bin/cc"
+#define EFLNAME		"/usr/bin/efl"
+#define RATNAME		"/usr/bin/ratfor"
+
+static char *liblist [ ]  = {
+	"/usr/lib/libF77.a",
+        "/usr/lib/libI77.a",
+	"/usr/lib/libm.a",
+	"/usr/lib/libc.a",
+	NULL
+	};
+static char *pliblist [ ] = {
+	"/usr/lib/libF77.a",
+        "/usr/lib/libI77.a",
+	"/usr/lib/libm.a",
+	"/usr/lib/libc.a",
+	/* "/usr/lib/libp/libF77.a",*/
+        /* "/usr/lib/libp/libI77.a",*/
+	/* "/usr/lib/libp/libm.a",*/
+	/* "/usr/lib/libp/libc.a",*/
+	NULL
+	};

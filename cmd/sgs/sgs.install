@@ -1,0 +1,59 @@
+#ident	"@(#)sgs:sgs.install	1.2"
+#
+#	combine ln, chmod, chgrp, and chown
+#	used instead of /etc/install
+#
+USAGE="Usage: $0 <chmod-string> <owner> <group> <new-file> <old-file>"
+if [ $# -ne 5 ]
+then
+	echo $USAGE
+	exit 2
+fi
+CHMOD="$1"
+CHOWN="$2"
+CHGRP="$3"
+NFILE="$4"
+OFILE="$5"
+#
+if test -f /bin/chown
+then
+	CHOWNBIN=/bin/chown
+fi
+if test -f /etc/chown
+then
+	CHOWNBIN=/etc/chown
+fi
+if test -f /bin/chmod
+then
+	CHMODBIN=/bin/chmod
+fi
+if test -f /etc/chmod
+then
+	CHMODBIN=/etc/chmod
+fi
+if test -f /bin/chgrp
+then
+	CHGRPBIN=/bin/chgrp
+fi
+if test -f /etc/chgrp
+then
+	CHGRPBIN=/etc/chgrp
+fi
+
+rm -f "$NFILE"
+if ln "$OFILE" "$NFILE" \
+	&& $CHMODBIN "$CHMOD" "$NFILE" \
+	&& $CHGRPBIN "$CHGRP" "$NFILE" \
+	&& $CHOWNBIN "$CHOWN" "$NFILE"
+then
+	exit 0
+elif cp "$OFILE" "$NFILE" \
+	&& $CHMODBIN "$CHMOD" "$NFILE" \
+	&& $CHGRPBIN "$CHGRP" "$NFILE" \
+	&& $CHOWNBIN "$CHOWN" "$NFILE"
+then
+	exit 0
+else
+	echo "install of "$OFILE" failed"
+	exit 2
+fi

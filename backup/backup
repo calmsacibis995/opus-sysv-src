@@ -1,0 +1,67 @@
+UNBOLD="\033[0m"; export UNBOLD
+trap "echo \$UNBOLD; sleep 1; exit" 1 2 3 12 15
+PWD=/usr/src/backup; export PWD
+BOLD="\033[1m"; export BOLD
+CLEAR="\033[2J"; export CLEAR
+REVERSE="\033[7m"; export REVERSE
+UNBOLD="\033[0m"; export UNBOLD
+cd $PWD
+LOG=${PWD}/backup.log; export LOG
+
+#  This is the main menu for the duplication scripts.
+#  This version is invoked by the .profile of the user 'dup'.
+
+FIRSTTIME=Y
+while :; do
+	LOGEXIST="`wc -l $LOG 2> /dev/null | awk '{ print $1 }' `"
+	if [ "$LOGEXIST" = 0 -o "$LOGEXIST" = "" ]; then
+		LOGSTAT=EMPTY
+	else
+		LOGSTAT=NOT_EMPTY
+	fi
+	echo $CLEAR
+	echo "${REVERSE}\n\n  ==========Source Backup Menu==========  \n\n"
+	echo "${UNBOLD}0) ${REVERSE} Exit \n"
+	echo "${UNBOLD}1) ${REVERSE} Backup /usr/src (minus local)         ${UNBOLD}\n"
+	echo "${UNBOLD}2) ${REVERSE} Backup /usr/src/local                 ${UNBOLD}\n"
+	if [ "$LOGSTAT" = "EMPTY" ]; then
+		echo "\n${REVERSE} Enter [0-2]: ${UNBOLD} \c"
+	else
+		echo "${UNBOLD}3) ${REVERSE} View LOG of the most recent operation \n\n"
+		echo "\n${REVERSE} Enter [0-3]: ${UNBOLD} \c"
+	fi
+	read ANS
+	case $ANS in
+		0) 
+			exit;;
+		1) 
+			trap : 0 1 2 3 12 15
+			if [ "$FIRSTTIME" = Y ]; then
+				echo 
+				check.date
+				DAY=`date | awk '{ print $1 }'`
+				DAY=`grep "^$DAY" DAYLIST | awk '{ print $2 }'`; export DAY
+			fi
+			back.nolocal
+			trap "sync; exit" 0 1 2 3 12 15;;
+		2) 
+			trap : 0 1 2 3 12 15
+			if [ "$FIRSTTIME" = Y ]; then
+				echo 
+				check.date
+				DAY=`date | awk '{ print $1 }'`
+				DAY=`grep "^$DAY" DAYLIST | awk '{ print $2 }'`; export DAY
+			fi
+			back.local
+			trap "sync; exit" 0 1 2 3 12 15;;
+		3) 
+			trap : 0 1 2 3 12 15
+ 			echo $CLEAR		
+			pg -p"===LOG file=== (page %d)  press RETURN to continue: " $LOG
+			echo $CLEAR
+			trap "sync; exit" 0 1 2 3 12 15;;
+		*)
+		    echo "\n\nInvalid response";;
+	esac
+	FIRSTTIME=N
+done

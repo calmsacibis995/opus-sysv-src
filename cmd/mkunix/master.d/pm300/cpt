@@ -1,0 +1,10 @@
+/* CPT driver */
+#include "/etc/system"
+
+/* No configurable parameters */
+
+#ifndef CPT
+cptopen() { nodev(); }
+cptclose() { nodev(); }
+cptioctl() { nodev(); }
+#endif

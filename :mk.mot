@@ -1,0 +1,274 @@
+
+FLIST="300.c 300s.c 4014.c 450.c acct adv asa.c assist awk banner.c
+basename.sh bbh bc bdiff bfs bnu.admin cal.c calendar cat cb.c
+cflow checkeq.c chgrp chmod chown chroot chrtbl ckauto ckbupscd clri
+cmp col.c comm.c cpio cpset.c crash cron csplit.c ct ctrace
+cu cut cxref date dbfconv dc dcopy dd deroff dev
+devinfo df dfsck diff diff3 dircmp.sh dirname.sh disks dname drvinstal
+dsconfig du echo ed edittbl efl egrep env.c errdump expr
+f77 factor false false.sh ff fgrep file finc.c finc.mk find
+fltboot fmli fmtflop fmthard format frec.c frec.mk fsba.c fsba.mk fsck
+fsdb fsinfo fsplit.c fsstat fstyp fumount fusage fuser getedt getmajor
+getopt getty gettype graf graph greek.sh grep grpck help hp.c
+hpio id idload init initpkg install.sh ipc join.c kill killall
+labelit layers led lex libpt libsec libxedt line link.c lint
+listen login logname.c lp lp.admin ls m4 mail mailx make
+makekey man mcs mesg mkboot mkdir mkfs mknod mkopmon mkunix
+mount mv mvdir.sh ncheck newboot newform.c newgrp news nice.c nl.c
+nlsadmin nohup.c nserve nsquery oawk od.c opus pack passmgmt passwd
+paste.c pckd pg ports pr prof profiler prtconf prtvtoc ps
+pump pwck pwconv pwd pwunconv ramdisk ratfor regcmp rfadmin rfpasswd
+rm rmdir rmntstat rmount
+sa sa_3.2 sadmin sccs sdb sdiff.c sed setclk setmnt setpgrp
+sh shl sleep sort spell spline split.c streams stty su
+sum.c swap sync sysdef tabs tail tar.c tee time touch
+tplot tr.c true true.sh tsort tty.c uadmin umount unadv uname
+uniq.c units unlink.c unpack uucp vi vm vmkfs volcopy wall
+wc who whodo write xargs yacc"
+
+mk_fast()
+{
+
+	#ident	"@(#)adm::mk	1.5scp"
+	#
+	#	Shell script for rebuilding the UNIX System
+	#
+	#-----------------------------------------------------------#
+	
+	CROSS=FALSE; export CROSS
+	cd /usr/src
+	
+	#-----------------------------------------------------------#
+	
+	#  Set PATH
+	
+	if [ "$ROOT" = "" ]
+	then
+		PATH=/bin:/etc:/usr/bin; export PATH
+	fi
+	
+	#-----------------------------------------------------------#
+	
+	#  Report start time
+	date
+	
+	
+	#-----------------------------------------------------------#
+	
+	#  Clobber everything to insure a clean start
+	
+	echo "\n=======$0  Clobbering source tree\n"
+	./:clobber > /dev/null 2>&1
+	
+	#-----------------------------------------------------------#
+	
+	# set up sgs
+	echo "\n========$0  Setting up sgs.\n"
+	OPATH=$PATH
+	PATH=.:$PATH
+	PROC=m88k
+	cd /usr/src/cmd/sgs/xenv/$PROC
+sh pathedit <<!
+$PROC
+y
+y
+n
+y
+!
+	PATH=$OPATH
+	cd /usr/src
+	
+	#-----------------------------------------------------------#
+	
+	#	install /usr/include and /usr/include/sys header files
+	
+	echo "\n========$0  Installing the header files.\n"
+	./:mkhead
+	echo "\n========$0  Installing the sys header files.\n"
+	./:mksyshead
+	
+	#-----------------------------------------------------------#
+	
+	#	build and install the C library
+	
+	echo "\n========$0  Building the C library.\n"
+	echo "======== libc"
+	cd /usr/src/lib/libc_m88k
+	make -f libc_bsd.mk clobber
+	make -f libc_bsd.mk install PROF=#
+	make -f libc_bsd.mk clobber
+	cd /usr/src
+	
+	#-----------------------------------------------------------#
+	
+	#	build the C compilation tools
+	
+	echo "\nBuilding SGS.\n"
+	./:mkcmd sgs 
+	cp /user/dc/COMP/bin/ld /bin/ld
+	cp /user/dc/COMP/lib/as /bin/as
+	
+	#-----------------------------------------------------------#
+	
+	#  Build the other libraries
+	
+	echo "========$0  Building the other libraries.\n"
+	echo "======== libc"
+	cd /usr/src/lib/libc_m88k
+	make -f libc_bsd.mk clobber
+	make -f libc_bsd.mk install PROF=#
+	make -f libc_bsd.mk clobber
+	cd /usr/src
+	./:mklib libF77 libI77 libPW libcrypt libcurses libg libgen libl libm libmalloc libomalloc libplot libpt libsec libxedt liby terminfo
+	
+	#-----------------------------------------------------------#
+	
+	# reset sgs parameters
+echo "\n========$0  Resetting up sgs.\n"
+OPATH=$PATH
+PATH=.:$PATH
+PROC=m88k
+	cd /usr/src/cmd/sgs/xenv/$PROC
+sh pathedit <<!
+$PROC
+y
+y
+n
+y
+!
+		PATH=$OPATH
+		cd /usr/src
+		
+		#-----------------------------------------------------------#
+		
+		#  Build the system administration tools
+		
+		echo "\n========$0  Building the system administration tools.\n"
+		./:mkcmd .adm
+		
+		#-----------------------------------------------------------#
+		
+		#  Build .cmd
+		
+		echo "\n========$0  Building .cmd.\n"
+		./:mkcmd .cmd
+		
+		#-----------------------------------------------------------#
+	
+		#	build the C compilation tools
+		
+		echo "\nBuilding SGS.\n"
+		./:mkcmd sgs 
+		cp /user/dc/COMP/bin/ld /bin/ld
+		cp /user/dc/COMP/lib/as /bin/as
+	
+		#-----------------------------------------------------------#
+		
+		#  Build all the commands
+		
+		echo "\n========$0:  Building all the other commands.\n"
+		./:mkcmd $FLIST
+	
+	#-----------------------------------------------------------#
+
+	#  Build the OS itself
+
+	if ns32000; then
+		trap "cp /bin/cc.ctp /bin/cc; sync; exit" 1 2 3 15
+	fi
+	echo "\n========$0  Making a kernel.\n"
+	if ns32000; then
+		cp /bin/cc.pcc /bin/cc
+	fi
+	if m88k ; then
+		cd /usr/src/uts/m88k/cf/m88k
+		make
+		#make install
+	elif clipper ; then
+		cd /usr/src/uts/clipper
+		make install
+	elif ns32332 ; then
+		cd /usr/src/uts/ns32000
+		./makeunix pm200 install
+	else
+		cd /usr/src/uts/ns32000
+		./makeunix pm100 install
+	fi
+	if ns32000; then
+		cp /bin/cc.ctp /bin/cc
+		trap 1 2 3 15
+	fi
+	
+	#-----------------------------------------------------------#
+	
+	# report finish time
+	echo "\n========$0  DONE.\n"
+	date
+}
+
+mk_pcc()
+{
+	echo "\n======== Starting a pcc make ========\n"
+	rm -f /bin/cc
+	mk_fast
+}
+
+mk_dcc()
+{
+	echo "\n======== Starting a dcc make ========\n"
+	cp /bin/dcc /bin/cc
+	mk_fast
+}
+
+cd /usr/src
+
+usage()
+{
+	echo "usage: $0 dcc pcc dcc..."
+	exit 1
+}
+
+if [ $# = 0 ]; then
+	usage
+fi
+
+COUNT=0
+LIST=""
+while [ $1 ]; do
+	case $1 in
+		dcc|DCC)
+			COUNT=`expr $COUNT + 1`
+			LIST="$LIST DCC"
+			;;
+		pcc|PCC)
+			COUNT=`expr $COUNT + 1`
+			LIST="$LIST PCC"
+			;;
+	esac
+	shift
+done
+
+if [ "$COUNT" -eq 0 ]; then
+	usage
+fi
+
+echo "\n======== Starting $COUNT make(s) in the following sequence:"
+echo "$LIST"
+echo "==========================================="
+
+for i in $LIST; do
+	case $i in
+		DCC)
+			mk_dcc
+			;;
+		PCC)
+			mk_pcc
+			;;
+	
+	esac
+done
+
+echo
+date
+echo "\n========Done with $COUNT make(s) ========\n"
+exit 0

@@ -1,0 +1,58 @@
+/* NSU driver - Network Services Utilities including Streams */
+/*		linked with clone.o, log.o, timod.o, tirdwr.o */
+
+#include "/etc/system"
+#include <sys/types.h>
+#include <sys/stream.h>
+#include <sys/log.h>
+#include <sys/timodx.h>
+#include <sys/tirwx.h>
+#include <sys/sp.h>
+
+/* configuration definitions */
+/* CLONE module */
+#define	CLN_0		1
+
+/* LOG module */
+#define	LOG_0		2
+#define	LBSIZE		20
+
+/* TIMOD */
+#define	TIMOD_0		16
+
+/* TIRDWR */
+#define TIRDWR_0	16
+
+/* SP */
+#define	SP_0 32
+#ifdef NSU
+/* CLN */
+int	cln_cnt = 1;
+/* LOG module */
+struct	log	log_log[LOG_0];
+int	log_bsz = LBSIZE;
+int	log_cnt = 2;
+/* TIMOD module */
+struct	tim_tim	tim_tim[TIMOD_0];
+int	tim_cnt = TIMOD_0;
+/* TIRDWR */
+struct	trw_trw	trw_trw[TIRDWR_0];
+int	trw_cnt = TIRDWR_0;
+/* SP */
+struct	sp sp_sp[SP_0];
+int	spcnt =	SP_0;
+int	sp_cnt = 32;
+#else
+#define DUMMY	1
+struct streamtab clninfo[DUMMY];
+struct streamtab loginfo[DUMMY];
+struct streamtab timinfo[DUMMY];
+struct streamtab trwinfo[DUMMY];
+struct streamtab spinfo[DUMMY];
+
+loginit() {}
+logopen() { nodev(); }
+logclose() { nodev(); }
+strlog() { nodev(); }
+logrsrv() { nodev(); }
+#endif

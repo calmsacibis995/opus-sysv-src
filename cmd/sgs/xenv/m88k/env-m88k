@@ -1,0 +1,36 @@
+#ident	"@(#)xenv:m32/env-m32	1.6"
+#
+#
+#	Template for the 3b15/3b5/3b2 cross environment setup script
+#	The purpose of this shell script is to put the user's cross bin
+#	first in the user's path and to define environment variables used
+#	when building the cross-libraries.
+#
+PATH=//m88k/bin:$PATH
+ROOT=/
+SHELL=/bin/sh
+PS1="m88kcrossenv: "
+export PATH ROOT SHELL PS1
+VARIANT=
+CFLAGS=
+PCFLAGS=
+PFX=
+CC=
+AR=
+STRIP=
+LORDER=
+LIB=
+LIBP=
+PROF=
+DONE=
+DEFLIST=
+INC=//m88k/usr/include
+INCSYS=//m88k/usr/include/sys
+CH='#'
+export VARIANT CFLAGS PCFLAGS PFX CC AR STRIP LORDER LIB LIBP PROF DONE DEFLIST INC INCSYS CH
+if [ $# = 0 ]
+then
+	exec /bin/sh
+else
+	exec "$@"
+fi

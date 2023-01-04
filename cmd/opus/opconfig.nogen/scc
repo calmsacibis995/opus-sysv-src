@@ -1,0 +1,19 @@
+
+#	@(#)scc.sh	1.2
+LIB="-l2A"
+ERR="scc: bad conf lib"
+LDFILE="/usr/lib/ld.file"
+CC="/usr/bin/cc"
+
+case $1 in
++B)	eval "$CASEB";;
++A)	shift;;
++)	shift; case $1 in
+	B)	eval "$CASEB";;
+	A)	shift;;
+	*)	LIB=;;
+	esac;;
++*)	echo $ERR; exit;;
+esac
+
+/usr/bin/cc -DSTANDALONE -e start $LDFILE -Z2 -x $* $LIB

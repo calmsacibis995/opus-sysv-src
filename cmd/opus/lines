@@ -1,0 +1,4 @@
+/dev/ttyp2:MODEM:root:opus-pc:ASK:comment
+/dev/ttyp*:TTYP:usr1:opus-pc::comment
+:TTYP:usr2:opus-pc::comment
+:MODEM:usr2:opus-pc-ic::comment

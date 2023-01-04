@@ -1,0 +1,24 @@
+	@cd ./screen ; $(MAKE) llib-lcurses.ln
+./libcurses.mk
+all: date $(SLIB) llib-lcurses.ln tools
+	rm -rf captoinfo chgtinfo dumpti infocmp show llib-lcurses.ln tic tput 
+llib-lcurses.ln: llib-lcurses
+	$(CC) -E -C -I. -Dlint llib-lcurses | ${LPASS1} -vx -H$(TMP)/hlint > llib-lcurses.ln
+	cp llib-lcurses llib-lcurses.ln $(USRLIB)
+./screen/makefile
+all: $(SLIB) llib-lcurses.ln tools
+llib-lcurses.ln: llib-lcurses
+	-(/lib/cpp -C -I. -Dlint llib-lcurses | ${LPASS1} > llib-lcurses.ln ) 2>&1 | grep -v warning
+	cp llib-lcurses llib-lcurses.ln ${DESTDIR}/usr/lib/lint
+./screen/makefile.bsd
+	@cd ./screen ; $(MAKE) llib-lcurses.ln
+all: date $(SLIB) llib-lcurses.ln tools
+	rm -rf captoinfo chgtinfo dumpti infocmp show llib-lcurses.ln tic tput 
+llib-lcurses.ln: llib-lcurses
+	$(CC) -E -C -I. -Dlint llib-lcurses | ${LPASS1} -vx -H$(TMP)/hlint > llib-lcurses.ln
+	cp llib-lcurses llib-lcurses.ln $(USRLIB)
+all: $(SLIB) llib-lcurses.ln tools
+llib-lcurses.ln: llib-lcurses
+	-(/lib/cpp -C -I. -Dlint llib-lcurses | ${LPASS1} > llib-lcurses.ln ) 2>&1 | grep -v warning
+	cp llib-lcurses llib-lcurses.ln ${DESTDIR}/usr/lib/lint
+./results

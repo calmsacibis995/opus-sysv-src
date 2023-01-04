@@ -1,0 +1,283 @@
+
+
+#	Copyright (c) 1990 OPUS Systems
+#	  All Rights Reserved
+
+#ident	"@(#)Xsetupmgmt	1.1"
+
+#menu#  choose the X server, window manager, and font defaults
+#help#
+#help#	This subcommand creates links to the default X server /usr/bin/X11/X,
+#help#	to the default window manager /usr/bin/X11/Xwm, and allows you to pick
+#help#  default fonts in /usr/lib/X11/fonts/misc/fonts.alias  
+
+#	/usr/admin/menu/packagemgmt/Xsetupmgmt
+#
+#	get default server /usr/bin/X11/X
+#	get default window manager to /usr/bin/X11/Xwm
+#	pick default fonts in /usr/lib/X11/fonts/misc/fonts.alias
+#
+
+XNET="-local"
+XBIN=/usr/bin/X11
+MBIN=/usr/bin/MOTIF
+XLIB=/usr/lib/X11
+XFONT=$XLIB/fonts/misc
+XALIAS=$XFONT/fonts.alias
+
+# Don't do this for ev-235
+# tput clear	# clear screen
+
+if [ ! -d $XBIN ]; then
+	echo
+	echo "X bin directory $XBIN not found."
+	exit 1
+fi
+
+
+#	LINK DEFAULT SERVER TO /usr/bin/X11/X
+
+XFLAG=BAD
+while [ $XFLAG != OK ]; do
+
+	if [ -x $XBIN/X ]; then
+		set -- `ls -i $XBIN/X`
+		iX=$1
+	else
+		iX=NONE
+
+	fi
+	XLIST=" "
+	for S in mfb cfb4 cfb8 age; do
+		if [ -x $XBIN/Xopus$S ]; then
+			set -- `ls -i $XBIN/Xopus$S`
+			eval iX$S=$1
+			XLIST="$XLIST$S "
+		else
+			eval iX$S=""
+		fi
+	done
+
+	SERVERmfb="\ \ \ \ \ mfb\ \ -- monochrome frame buffer"
+	SERVERcfb4="\ \ \ \ \ cfb4 -- color frame buffer"
+	SERVERage="\ \ \ \ \ AGE\ \ -- high resolution, TMS340 graphics processors\n"
+
+	if [ "$XLIST" = " " ]; then
+		echo "No servers available; install X first."
+		exit 1
+	else
+		echo "\nX servers available:"
+		for S in $XLIST; do
+			eval eval echo "\$SERVER$S"
+		done
+		echo
+	fi
+
+	XFLAG=OK
+	case $iX in
+		$iXmfb)
+			echo "Current default X server: mfb";;
+		$iXcfb4)
+			echo "Current default X server: cfb4";;
+		$iXcfb8)
+			echo "Current default X server: cfb8";;
+		$iXage)
+			echo "Current default X server: age";;
+		*)
+			XFLAG=BAD; echo "No default X server";;
+	esac
+
+	if [ $XFLAG = OK ]; then
+		echo "\nChoose new default X server [${XLIST}CR q ]: \c"
+	else
+		echo "   Choose default X server [${XLIST}q ]: \c"
+	fi
+	read ANS
+	case "$ANS" in
+		"")	if [ $XFLAG != OK ]; then
+				echo Must choose a default X server
+			fi;;
+
+		q|Q)	exit 0;;
+
+		mfb | cfb4 | cfb8)
+			if [ -x $XBIN/Xopus$ANS ]; then
+				rm -f $XBIN/X
+				ln $XBIN/Xopus$ANS $XBIN/X
+				XFLAG=OK
+			else
+				echo X $ANS server not available
+				XFLAG=BAD
+			fi;;
+
+		age)
+			if [ -x $XBIN/Xopus$ANS ]; then
+				rm -f $XBIN/X
+				ln $XBIN/Xopus$ANS $XBIN/X
+				XFLAG=OK
+				XFONT=$XLIB/fonts/age
+				XALIAS=$XFONT/fonts.alias
+			else
+				echo X $ANS server not available
+				XFLAG=BAD
+			fi;;
+
+		*)
+			echo "Must choose from [$XLIST]"
+			XFLAG=BAD;;
+	esac
+done
+
+#	LINK DEFAULT WINDOW MANAGER
+#
+echo
+XFLAG=BAD
+while [ $XFLAG != OK ]; do
+
+	if [ -x $XBIN/Xwm ]; then
+		set -- `ls -i $XBIN/Xwm`;	iXwm=$1
+	else
+		iXwm=NONE
+
+	fi
+	XLIST=" "
+	for WM in uwm twm mwm ; do
+		if [ -x $XBIN/$WM ]; then
+			set -- `ls -i $XBIN/$WM`
+			eval i$WM=$1
+			XLIST="$XLIST$WM "
+		elif [ -x $MBIN/$WM ]; then
+			set -- `ls -i $MBIN/$WM`
+			eval i$WM=$1
+			XLIST="$XLIST$WM "
+		else
+			eval i$WM=""
+		fi
+	done
+
+	if [ "$XLIST" = " " ]; then
+		echo "No window managers available; install X first."
+		exit 1
+	fi
+
+	XFLAG=OK
+	case $iXwm in
+		$iuwm)
+			echo "Current default X window manager: uwm";;
+		$imwm)
+			echo "Current default X window manager: mwm";;
+		$itwm)
+			echo "Current default X window manager: twm";;
+		NONE)
+			XFLAG=BAD; echo "No default X window manager";;
+		*)
+			echo "Current default X window manager is unknown";;
+	esac
+
+	if [ $XFLAG = OK ]; then
+		echo "\nChoose new default window manager [${XLIST}CR q ]: \c"
+	else
+		echo "   Choose default window manager [${XLIST}q ]: \c"
+	fi
+	read ANS
+	case "$ANS" in
+		"")	if [ $XFLAG != OK ]; then
+				echo Must choose a default window manager
+			fi;;
+
+		q|Q)	exit 0;;
+
+		uwm | mwm | twm)
+			if [ -x $XBIN/$ANS ]; then
+				rm -f $XBIN/Xwm
+				ln $XBIN/$ANS $XBIN/Xwm
+				XFLAG=OK
+			elif [ -x $MBIN/$ANS ]; then
+				rm -f $XBIN/Xwm
+				ln $MBIN/$ANS $XBIN/Xwm
+				XFLAG=OK
+			else
+				echo $ANS not available
+				XFLAG=BAD
+			fi;;
+
+		*)
+			echo "Must choose from [$XLIST]"
+			XFLAG=BAD;;
+	esac
+done
+
+
+#	PICK DEFAULT FIXED & VARIABLE FONTS
+#
+if [ ! -d $XFONT ]; then
+	echo
+	echo "X font directory $XFONT not found."
+	exit 1
+fi
+
+XFLAG=BAD
+while [ $XFLAG != OK ]; do
+echo
+if [ -s $XALIAS ]; then
+	echo Current default fonts:
+	XFIXED=`grep fixed $XFONT/fonts.alias`
+	XVARIABLE=`grep variable $XFONT/fonts.alias`
+	if [ "$XFIXED" ]; then
+		echo "     $XFIXED"
+	fi
+	if [ "$XVARIABLE" ]; then
+		echo "     $XVARIABLE"
+	fi
+else
+	echo No default fonts.
+	XFIXED=""
+	XVARIABLE=""
+	> $XALIAS
+fi
+
+echo "\n     Choose font size [ 6x10 6x12 6x13 8x13 8x13bold 9x15 ]"
+echo "                      [ 8 10 12 14 18 24 CR q ]: \c"
+read ANS
+
+XFLAG=OK
+case "$ANS" in
+	"")	if [ ! "$XFIXED" -o ! "XVARIABLE" ]; then
+			echo Must select a default font size.
+			XFLAG=BAD
+		fi;;
+	q|Q)	exit 0;;
+	8)	XFIXED="fixed    *-courier-medium-r-normal--8-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--8-*";;
+	10)	XFIXED="fixed    *-courier-medium-r-normal--10-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--10-*";;
+	12)	XFIXED="fixed    *-courier-medium-r-normal--12-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--12-*";;
+	14)	XFIXED="fixed    *-courier-medium-r-normal--14-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--14-*";;
+	18)	XFIXED="fixed    *-courier-medium-r-normal--18-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--18-*";;
+	24)	XFIXED="fixed    *-courier-medium-r-normal--24-*"
+		XVARIABLE="variable *-helvetica-medium-r-normal--24-*";;
+	6x10)	XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-medium-r-normal--10-*";;
+	6x12)	XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-medium-r-normal--12-*";;
+	6x13)	XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-medium-r-normal--12-*";;
+	8x13)	XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-medium-r-normal--12-*";;
+	8x13bold) XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-bold-r-normal--12-*";;
+	9x15)	XFIXED="fixed    $ANS"
+		XVARIABLE="variable *-helvetica-medium-r-normal--14-*";;
+	*)	XFLAG=BAD;; 
+esac
+done
+echo
+
+grep -v fixed    $XALIAS > /tmp/fonts.alias
+grep -v variable /tmp/fonts.alias > $XALIAS
+rm -f /tmp/fonts.alias
+echo "$XFIXED"    >> $XALIAS
+echo "$XVARIABLE" >> $XALIAS

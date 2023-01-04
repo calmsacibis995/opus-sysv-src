@@ -1,0 +1,13 @@
+	subu	sp,sp,8
+	st	r1,sp,4	
+	st	r2,sp,0
+	or.u	r2,r0,hi16(M%UNIQ)
+	or	r2,r2,lo16(M%UNIQ)
+	bsr	mcount
+	ld	r2,sp,0
+	ld	r1,sp,4
+	addu	sp,sp,8
+	data
+	align	4
+M%UNIQ:	word	0
+	text

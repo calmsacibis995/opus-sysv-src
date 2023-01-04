@@ -1,0 +1,16 @@
+_m4_dnl_	@(#)reg.def	6.1 
+_m4_define_(`zero', r0)_m4_dnl_
+_m4_define_(`return', r1)_m4_dnl_
+_m4_define_(`arg0', r2)_m4_dnl_
+_m4_define_(`arg1', r3)_m4_dnl_
+_m4_define_(`arg2', r4)_m4_dnl_
+_m4_define_(`arg3', r5)_m4_dnl_
+_m4_define_(`arg4', r6)_m4_dnl_
+_m4_define_(`arg5', r7)_m4_dnl_
+_m4_define_(`arg6', r8)_m4_dnl_
+_m4_define_(`arg7', r9)_m4_dnl_
+_m4_define_(`result', r2)_m4_dnl_
+_m4_define_(`ppi', r29)_m4_dnl_
+_m4_define_(`rtrap', r30)_m4_dnl_
+_m4_define_(`trapvec', 0x80)_m4_dnl_
+_m4_define_(`sp', r31)_m4_dnl_

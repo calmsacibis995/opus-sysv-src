@@ -1,0 +1,1763 @@
+/* LIBNAME(CGI) */
+/*				*/
+/* TYPE(short,SINT16) */
+/* TYPE(long,SINT32) */
+/* TYPE(short,FD) */
+/* TYPE(char,CHAR) */
+/* TYPE(unsigned char,BIT8) */
+/* TYPE(unsigned short,BIT16) */
+/* TYPE(unsigned long,BIT32) */
+/* TYPE(unsigned short,BOOLEAN) */
+
+typedef short SINT16;
+typedef long SINT32;
+typedef short FD;
+typedef char CHAR;
+typedef unsigned char BIT8;
+typedef unsigned short BIT16;
+typedef unsigned long BIT32;
+typedef unsigned short BOOLEAN;
+
+/* Application Data */
+
+SINT16
+v_appl (dev_handle,function,data_cnt,app_data)
+
+	SINT16 dev_handle;
+	CHAR function[];	/* BUFOUT[STRING] */
+	SINT16 data_cnt;
+	SINT16 app_data[];	/* BUFOUT[data_cnt] */
+{
+}
+
+
+/* Clear Workstation */
+
+SINT16
+v_clrwk (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Close File */
+
+SINT16
+fd_close (fd)
+	FD fd;
+{
+}
+
+
+/* Close Workstation */
+
+SINT16
+v_clswk (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Connect Directory Name */
+
+FD
+fd_connect (directory)
+
+	CHAR directory[];	/* BUFOUT[STRING] */
+{
+}
+
+
+/* Copy Bitnap */
+
+SINT16
+vcp_bitmap (dev_handle, bitmap_handle,source_rect, dest_orig)
+
+	SINT16 dev_handle;
+	SINT16 bitmap_handle;
+	SINT16 source_rect[4];	/* BUFOUT[4] */
+	SINT16 dest_orig[2];	/* BUFOUT[2] */
+{
+}
+
+
+/* Copy Directory Name */
+
+FD
+fd_copy (fd)
+
+	FD fd; 
+{
+}
+
+
+/* Create Bitmap */
+
+SINT16
+vc_bitmap (dev_handle,xy,type,bitmap_handle)
+
+	SINT16 dev_handle;
+	SINT16 xy[4];			/* BUFOUT[4] */
+	SINT16 type;
+	SINT16 *bitmap_handle;	/* BUFIN[1] */
+{
+}
+
+
+/* Create Curser*/
+
+SINT16
+vc_cursor (dev_handle,data_bitmap,mask_bitmap,x,y,cursor_handle)
+
+	SINT16 dev_handle;
+	SINT16 data_bitmap;
+	SINT16 mask_bitmap;
+	SINT16 x;
+	SINT16 y;
+	SINT16 *cursor_handle;	/* BUFIN[1] */
+{
+}
+
+
+/* Cursor Down */
+
+SINT16
+v_curdown (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Cursor Home */
+
+SINT16
+v_curhome (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Cursor Left */
+
+SINT16
+v_curleft (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Cursor Right */
+
+SINT16
+v_curright (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Cursor Up */
+
+SINT16
+v_curup (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Delete Bitmap */
+
+SINT16
+vd_bitmap (dev_handle,bitmap_handle)
+
+	SINT16 dev_handle;
+	SINT16 bitmap_handle;
+{
+}
+
+
+/* Delete Cursor */
+
+SINT16
+vd_cursor (dev_handle,cursor_handle)
+	SINT16 dev_handle;
+	SINT16 cursor_handle;
+{
+}
+
+
+/* Delete File */
+
+SINT16
+fd_delete(fd,name)
+
+	FD fd;
+	CHAR name[];		/* BUFOUT[STRING] */
+{
+}
+
+
+/* Direct Cursor Address */
+
+SINT16
+vs_curaddress (dev_handle,row,column)
+
+	SINT16 dev_handle;
+	SINT16 row;
+	SINT16 column;
+{
+}
+
+
+/* Disconnect Directory Name */
+
+SINT16
+v_dspcur (dev_handle,x,y)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+{
+}
+
+
+/* Enter Cursor Addressing Mode */
+
+SINT16
+v_enter_cur (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+
+/* Erase to End of Line */
+
+SINT16
+v_eeol (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Erase to End of Screen */
+SINT16
+v_eeos (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Exit Cursor Addressing Mose */
+
+SINT16
+v_exit_cur (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* File Size */
+
+SINT32
+fd_size (fd)
+
+	FD fd;
+{
+}
+
+
+/* Hardcopy */
+
+SINT16
+v_hardcopy (dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+/* Inquire Addressable Character
+ Cells */
+
+SINT16
+vq_chcells (dev_handle,rows,columns)
+
+	SINT16 dev_handle;
+	SINT16 *rows;		/* BUFIN[1] */
+	SINT16 *columns;	/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Alpha Text Capabilities */
+
+SINT16
+vqa_cap (dev_handle,alph_cap)
+
+	SINT16 dev_handle;
+	SINT16 alph_cap[15];	/* BUFIN[15] */
+{
+}
+
+
+/* Inquire Alpha Text Cell Location */
+
+
+SINT16
+vqa_cell (dev_handle,row,column,propflag,x_out,y_out)
+
+	SINT16 dev_handle;
+	SINT16 row;
+	SINT16 column;
+	SINT16 *propflag;		/* BUFIN[1] */
+	SINT16 *x_out;			/* BUFIN[1] */
+	SINT16 *y_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Alpha Text Font
+Capability */
+
+SINT16
+vqa_font (dev_handle,font_in,size_in,font_status)
+
+	SINT16 dev_handle;
+	SINT16 font_in;
+	SINT16 size_in;
+	SINT16 font_status[7];	/* BUFIN[7] */
+{
+}
+
+
+/* Inquire Alpha Text Position */
+
+SINT16
+vqa_position (dev_handle,x_out,y_out)
+
+	SINT16 dev_handle;
+	SINT16 *x_out;			/* BUFIN[1] */
+	SINT16 *y_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Alpha Text String Length*/
+
+SINT16
+vqa_length (dev_handle,string)
+
+	SINT16 dev_handle;
+	CHAR string[];			/* BUFOUT[STRING] */
+{
+}
+
+
+/* Inquire Background Mode*/
+
+SINT16
+vqb_mode (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Inquire Bitmap Formats */
+
+SINT16
+vqb_format (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+
+/* Inquire Byte Pixel Array */
+
+SINT16
+vqb_pixels (dev_handle,origin,width,height,valid_width,valid_height,pixels)
+
+	SINT16 dev_handle;
+	SINT16 origin[2];			/* BUFOUT[2] */
+	SINT16 width;
+	SINT16 height;
+	SINT16 valid_width[2];		/* BUFIN[2] */
+	SINT16 valid_height[2];		/* BUFIN[2] */
+	CHAR pixels[];				/* BUFIN[width*height>0?width*height:-width*height] */
+{
+}
+
+
+/* Inquire Cell Array */
+
+SINT16
+vq_cellarray (dev_handle,xy,row_length,num_rows,el_per_row,rows_used,status,colors)
+	SINT16 dev_handle;
+	SINT16 xy[4];				/* BUFOUT[4] */
+	SINT16 row_length;
+	SINT16 num_rows;
+	SINT16 *el_per_row;			/* BUFIN[1] */
+	SINT16 *rows_used;			/* BUFIN[1] */
+	SINT16 *status;				/* BUFIN[1] */
+	SINT16 colors[];		 	/* BUFIN[row_length*num_rows] */
+{
+}
+
+
+/* Inquire CGI Error */
+
+SINT16
+vq_error ()
+{
+}
+
+
+/* Inquire Clip Rectangle */
+
+SINT16
+vqc_rectangle (dev_handle,clip_rect)
+
+	SINT16 dev_handle;
+	SINT16 clip_rect[4];	/* BUFIN[4] */
+{
+}
+
+
+/* Inquire Color Representation */
+
+SINT16
+vq_color (dev_handle,ind_in,set_flag,rgb)
+
+
+	SINT16 dev_handle;
+	SINT16 ind_in;
+	SINT16 set_flag;
+	SINT16 rgb[3];			/* BUFIN[3] */
+{
+}
+
+
+/* Inquire Current Cursor Text
+Address */
+
+SINT16
+vq_curaddress (dev_handle,row,column)
+
+	SINT16 dev_handle;
+	SINT16 *row;			/* BUFIN[1] */
+	SINT16 *column;			/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Current Fill Area
+Attributes */
+
+SINT16
+vqf_attributes (dev_handle,attrib)
+
+	SINT16 dev_handle;
+	SINT16 attrib[4];		/* BUFIN[4] */
+{
+}
+
+
+/* Inquire Current Graphics Text Attributes */
+
+SINT16
+vqt_attributes (dev_handle,attrib)
+
+	SINT16 dev_handle;
+	SINT16 attrib[10];		/* BUFIN[10] */
+{
+}
+
+
+/* Inquire Current Polyline Attributes */
+
+SINT16
+vql_attributes (dev_handle,attrib)
+
+	SINT16 dev_handle;
+	SINT16 attrib[4];		/* BUFIN[4] */
+{
+}
+
+
+/* Inquire Current Polymarker Attributes */
+
+SINT16
+vqm_attributes (dev_handle,attrib)
+
+	SINT16 dev_handle;
+	SINT16 attrib[4];		/* BUFIN[4] */
+{
+}
+
+
+/* Inquire Cursor Description */
+
+SINT16
+vq_cursor (dev_handle,cursor_handle,data_bitmap,mask_bitmap,x,y)
+
+	SINT16 dev_handle;
+	SINT16 cursor_handle;
+	SINT16 *data_bitmap;	/* BUFIN[1] */
+	SINT16 *mask_bitmap;	/* BUFIN[1] */
+	SINT16 *x;				/* BUFIN[1] */
+	SINT16 *y;				/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Displayable Bitmaps */
+
+SINT16
+vq_displays (dev_handle,n,displays)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 displays[];		/* BUFIN[n] */
+{
+}
+
+
+/* Inquire Drawing Bitmap */
+
+SINT16
+vqd_bitmap (dev_handle,bitmap_handle,xy)
+
+	SINT16 dev_handle;
+	SINT16 *bitmap_handle;	/* BUFIN[1] */
+	SINT16 xy[4];			/* BUFIN[4] */
+{
+}
+
+
+/* Inquire File Status */
+
+SINT16
+fd_inq (fd)
+
+	FD fd;
+{
+}
+
+
+/* Inquire Fill Area Representation */
+
+SINT16
+vqf_representation (dev_handle,n,attrib)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];	/* BUFIN[n] */
+{
+}
+
+
+/* Inquire Graphics Input Cursor */
+
+SINT16
+vqg_cursor (dev_handle,cursor_handle)
+
+	SINT16 dev_handle;
+	SINT16 *cursor_handle;	/* BUFIN[1] */
+{
+}
+
+
+/* Inquire Graphics Text Extent */
+
+SINT16
+vqt_extent (dev_handle,xin,yin,string,xcon,ycon,rectangle,bool)
+
+	SINT16 dev_handle;
+	SINT16 xin;
+	SINT16 yin;
+	CHAR string[];			/* BUFOUT[STRING] */
+	SINT16 *xcon;			/* BUFIN[1] */
+	SINT16 *ycon;			/* BUFIN[1] */
+	SINT16 rectangle[8];	/* BUFIN[8] */
+	BOOLEAN bool[5];		/* BUFIN[5] */
+{
+}
+
+
+/* Inquire Graphics Text Font Character */
+
+SINT16
+vqtf_character (dev_handle,character,n,metrics)
+
+	SINT16 dev_handle;
+	SINT16 character;
+	SINT16 n;
+	SINT16 metrics[];		/* BUFIN[n] */
+{
+}
+
+
+/* Inquire Graphics Text Font Description */
+
+SINT16
+vqtf_description (dev_handle,n,description,font_name)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 description[];	/* BUFIN[n] */
+	CHAR font_name[];		/* BUFIN[20] */
+{
+}
+
+
+/* Inquire Graphics Text Font Memtrics */
+
+SINT16
+vqtf_metrics (dev_handle,n,metrics)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 metrics[];		/* BUFIN[n] */
+{
+}
+
+
+
+/* Inquire Graphics Text Representation */
+
+SINT16
+vqt_representation (dev_handle,n,attrib)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFIN[n] */
+{
+}
+
+
+/* Inquire Input Extent */
+
+SINT16
+vqi_extent (dev_handle,rectangle)
+
+	SINT16 dev_handle;
+	SINT16 rectangle[4];	/* BUFIN[4] */
+{							
+}
+
+
+/* Inquire Integer Pixel Array */
+
+SINT16
+vqi_pixels (dev_handle,origin,width,height,valid_width,valid_height,pixels)
+
+	SINT16 dev_handle;
+	SINT16 origin[2];		/* BUFOUT[2] */
+	SINT16 width;
+	SINT16 height;
+	SINT16 valid_width[2];	/* BUFIN[2] */
+	SINT16 valid_height[2];	/* BUFIN[2] */
+	SINT16 pixels[];		/* BUFIN[width*height>0?width*height:-width*height] */
+{
+}
+
+
+/* Inquire Optimum Pattern Size */
+
+SINT16
+vqo_pattern (dev_handle,xy)
+
+	SINT16 dev_handle;
+	SINT16 xy[2];			/* BUFIN[2] */
+{
+}
+
+
+/* Inquire Polyline Representation */
+
+SINT16
+vql_representation (dev_handle,n,attrib)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFIN[n] */
+{
+}
+
+
+/* Inquire Polymarker Representation */
+
+
+SINT16
+vqm_representation (dev_handle,n,attrib)
+
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFIN[n] */
+{
+}
+
+
+/* Load CGI */
+
+SINT32
+cgi_load (where,bytes_avail)
+
+	BIT8 *where;			/* LONG */
+	SINT32 bytes_avail;		/* LONG */
+{
+}
+
+
+/* Message */
+
+SINT16
+v_msg (dev_handle,message,wait)
+
+	SINT16 dev_handle;
+	CHAR message[];			/* BUFOUT[STRING] */
+	SINT16 wait;
+{
+}
+
+
+/* Open File */
+
+SINT16
+fd_open (fd,name,mode)
+
+	FD fd;
+	CHAR name[];			/* BUFOUT[STRING] */
+	SINT16 mode;
+{
+}
+
+
+/* Open Workstation */
+
+SINT16
+v_opnwk (work_in,dev_handle,work_out)
+
+	SINT16 work_in[19];		/* BUFOUT[19] */
+	SINT16 *dev_handle;		/* BUFIN[1] */
+	SINT16 work_out[66];	/* BUFIN[66] */
+{
+}
+
+
+/* Output Alpha Text */
+
+SINT16
+v_atext (dev_handle,string,x_out,y_out)
+
+	SINT16 dev_handle;
+	CHAR string[];			/* BUFOUT[STRING] */
+	SINT16 *x_out;			/* BUFIN[1] */
+	SINT16 *y_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Output Arc */
+
+SINT16
+v_arc (dev_handle,x,y,radius,begang,endang)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 radius;
+	SINT16 begang;
+	SINT16 endang;
+{
+}
+
+
+/* Output Bar */
+
+SINT16
+v_bar (dev_handle,xy)
+
+	SINT16 dev_handle;
+	SINT16 xy[4];		/* BUFOUT[4] */
+{
+}
+
+
+/* Output Byte Pixel Array */
+
+SINT16
+vb_pixels (dev_handle,origin,width,height,valid_width,valid_height,pixels)
+
+	SINT16 dev_handle;
+	SINT16 origin[2];		/* BUFOUT[2] */
+	SINT16 width;
+	SINT16 height;
+	SINT16 valid_width[2];	/* BUFOUT[2] */
+	SINT16 valid_height[2];	/* BUFOUT[2] */
+	CHAR pixels[];			/* BUFOUT[width*height>0?width*height:-width*height] */
+{
+}
+
+
+/* Output Cell Array */
+
+SINT16
+v_cellarray (dev_handle,xy,row_length,el_per_row,num_rows,wr_mode,colors)
+
+	SINT16 dev_handle;
+	SINT16 xy[4];			/* BUFOUT[4] */
+	SINT16 row_length;
+	SINT16 el_per_row;
+	SINT16 num_rows;
+	SINT16 wr_mode;
+	SINT16 colors[];		/* BUFOUT[row_length*num_rows] */
+{
+}
+
+
+
+/* Output CIrcle */
+
+SINT16
+v_circle (dev_handle,x,y,radius)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 radius;
+{
+}
+
+
+/* Output Cursor Addressable Text */
+
+SINT16
+v_curtext (dev_handle,string)
+
+	SINT16 dev_handle;
+	CHAR string[];		/* BUFOUT[STRING] */
+{
+}
+
+
+/* Output Ellipse */
+
+SINT16
+v_ellipse (dev_handle,x,y,x_radius,y_radius)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 x_radius;
+	SINT16 y_radius;
+{
+}
+
+
+/* Output Elliptical Arc */
+
+SINT16
+vel_arc (dev_handle,x,y,x_radius,y_radius,s_angle,e_angle)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 x_radius;
+	SINT16 y_radius;
+	SINT16 s_angle;
+	SINT16 e_angle;
+{
+}
+
+
+/* Output Elliptical Pie Slice */
+
+SINT16
+vel_pieslice (dev_handle,x,y,x_radius,y_radius,s_angle,e_angle)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 x_radius;
+	SINT16 y_radius;
+	SINT16 s_angle;
+	SINT16 e_angle;
+{
+}
+
+
+/* Output Filled Area */
+
+SINT16
+v_fillarea (dev_handle,count,xy)
+
+	SINT16 dev_handle;
+	SINT16 count;
+	SINT16 xy[];			/* BUFOUT[count<<1] */
+{
+}
+
+
+/* Output Graphics Text */
+
+SINT16
+v_gtext (dev_handle,x,y,string)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	CHAR string[];			/* BUFOUT[STRING] */
+{
+}
+
+
+/* Output Integer Pixel Array */
+
+SINT16
+vi_pixels (dev_handle,origin,width,height,valid_width,valid_height,pixels)
+
+	SINT16 dev_handle;
+	SINT16 origin[2];			/* BUFOUT[2] */
+	SINT16 width;
+	SINT16 height;
+	SINT16 valid_width[2];		/* BUFOUT[2] */
+	SINT16 valid_height[2];		/* BUFOUT[2] */
+	SINT16 pixels[];			/* BUFOUT[width*height>0?width*height:-width*height] */
+{
+}
+
+
+
+/* Output Pie Slice */
+
+SINT16
+v_pieslice (dev_handle,x,y,radius,begang,endang)
+
+	SINT16 dev_handle;
+	SINT16 x;
+	SINT16 y;
+	SINT16 radius;
+	SINT16 begang;
+	SINT16 endang;
+{
+}
+
+
+
+/* Output Polyline */
+
+SINT16
+v_pline (dev_handle,count,xy)
+
+	SINT16 dev_handle;
+	SINT16 count;
+	SINT16 xy[];			/* BUFOUT[count<<1] */
+{
+}
+
+
+/* Output Polymarker */
+
+SINT16
+v_pmarker (dev_handle,count,xy)
+
+	SINT16 dev_handle;
+	SINT16 count;
+	SINT16 xy[];			/* BUFOUT[count<<1] */
+{
+}
+
+
+/* Parse File Name */
+
+SINT16
+fd_parse (qualified_name,buffer,space_available)
+
+	CHAR qualified_name[];		/* BUFOUT[STRING] */
+	CHAR buffer[];				/* BUFIN[space_available] */
+	SINT16 space_available;		/* BUFIO[1] */
+{
+}
+
+
+/* Read Cursor Keys */
+
+SINT16
+vrd_curkeys (dev_handle,input_mode,direction,key)
+
+	SINT16 dev_handle;
+	SINT16 input_mode;
+	SINT16 *direction;		/* BUFIN[1] */
+	CHAR *key;				/* BUFIN[1] */
+{
+}
+
+
+/* Read Directory */
+
+SINT16
+fd_directory (fd,name,buffer,space_available)
+
+	FD fd;
+	CHAR name[];			/* BUFOUT[STRING] */
+	CHAR buffer[];			/* BUFIN[space_available] */
+	SINT16 space_available;	/* BUFIO[1] */
+{
+}
+
+
+/* Read File Proceed */
+
+SINT16
+fdp_read (fd,count,buffer)
+
+
+	FD fd;
+	SINT16 count;
+	CHAR buffer[];			/* BUFIN[count] */
+{
+}
+
+
+/* Read File Wait */
+
+SINT16
+fd_read (fd,count,buffer)
+
+	FD fd;
+	SINT16 count;
+	CHAR buffer[];			/* BUFIN[count] */
+{
+}
+
+
+/* Remove CGI */
+
+SINT16
+cgi_kill ()
+{
+}
+
+
+/* Remove Graphics Input Cursor */
+
+SINT16
+v_rmcur (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Rename File */
+
+SINT16
+fd_rename (fd,old_name,new_name)
+
+	FD fd;
+	CHAR old_name[];		/* BUFOUT[STRING] */
+	CHAR new_name[];		/* BUFOUT[STRING] */
+{
+}
+
+
+/* Request Choice */
+
+SINT16
+vrq_choice (dev_handle,ch_in,ch_out)
+
+	SINT16 dev_handle;
+	SINT16 ch_in;
+	SINT16 *ch_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Request Locator */
+
+SINT16
+vrq_locator (dev_handle,xy_in,ink,rubberband,echo_handle,xy_out,terminator)
+
+
+	SINT16 dev_handle;
+	SINT16 xy_in[2];			/* BUFOUT[2] */
+	SINT16 ink;
+	SINT16 rubberband;
+	SINT16 echo_handle;
+	SINT16 xy_out[2];			/* BUFIN[2] */
+	CHAR *terminator;			/* BUFIN[1] */
+{
+}
+
+
+/* Request String */
+
+SINT16
+vrq_string (dev_handle,max_length,echo_mode,echo_xy,string)
+
+	SINT16 dev_handle;
+	SINT16 max_length;
+	SINT16 echo_mode;
+	SINT16 echo_xy[2];			/* BUFOUT[2] */
+	CHAR string[];				/* BUFIN[max_length] */
+{
+}
+
+
+/* Request Valuator */
+
+SINT16
+vrq_valuator (dev_handle,val_in,echo_handle,val_out)
+
+	SINT16 dev_handle;
+	SINT16 val_in;
+	SINT16 echo_handle;
+	SINT16 *val_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Reset To Defaults */
+
+SINT16
+vr_defaults (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Reverse Video Off */
+
+SINT16
+v_rvoff (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+/* Reverse Video On */
+
+SINT16
+v_rvon (dev_handle)
+
+	SINT16 dev_handle;
+{
+}
+
+
+
+/* Sample Choice */
+
+SINT16
+vsm_choice (dev_handle,ch_out)
+
+	SINT16 dev_handle;
+	SINT16 *ch_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Sample Locator */
+
+SINT16
+vsm_locator (dev_handle,xy_in,xy_out,pressed,released, key_state)
+
+	SINT16 dev_handle;
+	SINT16 xy_in[2];			/* BUFOUT[2] */
+	SINT16 xy_out[2];			/* BUFIN[2] */
+	BIT16 *pressed;				/* BUFIN[1] */
+	BIT16 *released;			/* BUFIN[1] */
+	BIT16 *key_state;			/* BUFIN[1] */
+{
+}
+
+
+/* Sample String */
+
+SINT16
+vsm_string (dev_handle,max_length,echo_mode,echo_xy,string)
+
+	SINT16 dev_handle;
+	SINT16 max_length;
+	SINT16 echo_mode;
+	SINT16 echo_xy[2];			/* BUFOUT[2] */
+	CHAR string[];				/* BUFIN[max_length] */
+{
+}
+
+
+
+/* Sample Valuator */
+
+SINT16
+vsm_valuator (dev_handle,val_out)
+
+	SINT16 dev_handle;
+	SINT16 *val_out;				/* BUFIN[1] */
+{
+}
+
+
+
+/* Seek File */
+
+SINT32
+fd_seek (fd,position,whence)
+
+	FD fd;
+	SINT32 position;				/* LONG */
+	SINT16 whence;
+{
+}
+
+
+/* Select Drawing Bitmap */
+
+SINT16
+vsd_bitmap (dev_handle,bitmap_handle)
+
+	SINT16 dev_handle;
+	SINT16 bitmap_handle;
+{
+}
+
+
+/* Select Graphics Input Cursor */
+
+SINT16
+vsg_cursor (dev_handle,cursor_handle)
+
+	SINT16 dev_handle;
+	SINT16 cursor_handle;
+{
+}
+
+
+/* Set Alpha Text Color Index */
+
+SINT16
+vsa_color (dev_handle,ind_in)
+
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+
+/* Set Alpha Text Font And Size */
+
+SINT16
+vsa_font (dev_handle,font_in,size_in,font_cap)
+
+	SINT16 dev_handle;
+	SINT16 font_in;
+	SINT16 size_in;
+	SINT16 font_cap[8];			/* BUFIN[8] */
+{
+}
+
+
+/* Set Alpha Text Line Spacing */
+
+SINT16
+vsa_spacing (dev_handle,spac_in)
+
+	SINT16 dev_handle;
+	SINT16 spac_in;
+{
+}
+
+
+/* Set Alpha Text Overstrike Mode */
+
+SINT16
+vsa_overstrike (dev_handle,mode_in)
+
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+
+
+/* Set Alpha Text Pass Through Mode */
+
+SINT16
+vsa_passthru (dev_handle,mode_in)
+
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+
+/* Set Alpha Text Position */
+
+SINT16
+vsa_position (dev_handle,x_in,y_in,x_out,y_out)
+
+	SINT16 dev_handle;
+	SINT16 x_in;
+	SINT16 y_in;
+	SINT16 *x_out;			/* BUFIN[1] */
+	SINT16 *y_out;			/* BUFIN[1] */
+{
+}
+
+
+/* Set Alpha Text Quality */
+
+SINT16
+vsa_quality (dev_handle,mode_in)
+
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+
+/* Set Alpha Text Subscript/Superscript Mode */
+
+SINT16
+vsa_supersub (dev_handle,mode_in)
+
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+
+/* Set Alpha Text Underline Mode */
+
+SINT16
+vsa_underline (dev_handle,mode_in)
+
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+
+/* Set Background Color Index */
+
+SINT16
+vsb_color (dev_handle,ind_in)
+
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+
+
+/* Set Background Mode */
+
+SINT16
+vsb_mode (dev_handle,mode)
+
+	SINT16 dev_handle;
+	SINT16 mode;
+{
+}
+
+/* Set Clip Rectangle */
+
+SINT16
+vsc_rectangle(dev_handle,clip_rectangle)
+
+	SINT16 dev_handle;
+	SINT16 clip_rectangle[4];	/* BUFOUT[4] */
+{
+}
+
+/* Set Color Representation */
+
+SINT16
+vs_color(dev_handle,ind_in,rgb_in,rgb_out)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+	SINT16 rgb_in[3];			/* BUFOUT[3] */
+	SINT16 rgb_out[3];			/* BUFIN[3] */
+{
+}
+
+/* Set Color Table */
+
+SINT16
+vsc_table(dev_handle,s_index,n,rgb)
+	SINT16 dev_handle;
+	SINT16 s_index;
+	SINT16 n;
+	SINT16 rgb[][3];			/* BUFOUT[n*3] */
+{
+}
+
+/* Set Cursor Text Attributes */
+
+SINT16
+vcur_att(dev_handle,req_att,sel_att)
+	SINT16 dev_handle;
+	SINT16 req_att[4];			/* BUFOUT[4] */
+	SINT16 sel_att[4];			/* BUFIN[4] */
+{
+}
+
+/* Set Cursor Text Color Index */
+
+SINT16
+vcur_color(dev_handle,fore_requested,back_requested,fore_selected,back_selected)
+	SINT16 dev_handle;
+	SINT16 fore_requested;
+	SINT16 back_requested;
+	SINT16 *fore_selected;			/* BUFIN[1] */
+	SINT16 *back_selected;			/* BUFIN[1] */
+{
+}
+
+/* Set Fill Area Representation */
+
+SINT16
+vsf_representation(dev_handle,n,attrib)
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];				/* BUFOUT[n] */
+{
+}
+
+/* Set Fill Color Index */
+
+SINT16
+vsf_color(dev_handle,ind_in)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+/* Set Fill Interior Style */
+
+SINT16
+vsf_interior(dev_handle,styl_in)
+	SINT16 dev_handle;
+	SINT16 styl_in;
+{
+}
+
+/* Set Fill Style Index */
+
+SINT16
+vsf_style(dev_handle,ind_in)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+/* Set Graphics Text Alignment */
+
+SINT16
+vst_alignment(dev_handle,hor_in,vert_in,hor_out,vert_out)
+	SINT16 dev_handle;
+	SINT16 hor_in;
+	SINT16 vert_in;
+	SINT16 *hor_out;		/* BUFIN[1] */
+	SINT16 *vert_out;		/* BUFIN[1] */
+{
+}
+
+/* Set Graphics Text Character */
+
+SINT16
+vst_height(dev_handle,rq_height,char_width,cell_width,cell_height)
+	SINT16 dev_handle;
+	SINT16 rq_height;
+	SINT16 *char_width;		/* BUFIN[1] */
+	SINT16 *cell_width;		/* BUFIN[1] */
+	SINT16 *cell_height;	/* BUFIN[1] */
+{
+}
+
+/* Set Graphics Text Color Index */
+
+SINT16
+vst_color(dev_handle,ind_in)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+/* Set Graphics Text Font */
+
+SINT16
+vst_font(dev_handle,font_in)
+	SINT16 dev_handle;
+	SINT16 font_in;
+{
+}
+
+/* Set Graphics Text Representation */
+
+SINT16
+vst_representation(dev_handle,n,attrib)
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFOUT[n] */
+{
+}
+
+/* Set Graphics Text String Baseline */
+
+SINT16
+vst_rotation(dev_handle,ang_in)
+	SINT16 dev_handle;
+	SINT16 ang_in;
+{
+}
+
+/* Set Input Extent */
+
+SINT16
+vsi_extent(dev_handle,rectangle)
+	SINT16 dev_handle;
+	SINT16 rectangle[4];		/* BUFOUT[4] */
+{
+}
+
+/* Set Line Edit Characters */
+
+SINT16
+vs_editchars(dev_handle,line_del,char_del)
+	SINT16 dev_handle;
+	CHAR line_del;
+	CHAR char_del;
+{
+}
+
+/* Set Pen Speed */
+
+SINT16
+vs_penspeed(dev_handle,speed)
+	SINT16 dev_handle;
+	SINT16 speed;
+{
+}
+
+/* Set Polyline Color Index */
+
+SINT16
+vsl_color(dev_handle,ind_in)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+/* Set Polyline Cross Section */
+
+SINT16
+vsl_cross(dev_handle,bitmap_handle)
+	SINT16 dev_handle;
+	SINT16 bitmap_handle;
+{
+}
+
+/* Set Polyline Line Type */
+
+SINT16
+vsl_type(dev_handle,type_in)
+	SINT16 dev_handle;
+	SINT16 type_in;
+{
+}
+
+/* Set Polyline Line Width */
+
+SINT16
+vsl_width(dev_handle,wid_in)
+	SINT16 dev_handle;
+	SINT16 wid_in;
+{
+}
+
+/* Set Polyline Representation */
+
+SINT16
+vsl_representation(dev_handle,n,attrib)
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFOUT[n] */
+{
+}
+
+
+/* Set Polyline Color Index */
+
+SINT16
+vsm_color(dev_handle,ind_in)
+	SINT16 dev_handle;
+	SINT16 ind_in;
+{
+}
+
+/* Set Polyline Color Index */
+
+SINT16
+vsm_height(dev_handle,hgt_in)
+	SINT16 dev_handle;
+	SINT16 hgt_in;
+{
+}
+
+
+/* Set Polyline Representation */
+
+SINT16
+vsm_representation(dev_handle,n,attrib)
+	SINT16 dev_handle;
+	SINT16 n;
+	SINT16 attrib[];		/* BUFOUT[n] */
+{
+}
+
+/* Set Polymarker Type */
+
+SINT16
+vsm_type(dev_handle,type_in)
+	SINT16 dev_handle;
+	SINT16 type_in;
+{
+}
+
+/* Set User Polyline Line Type */
+
+SINT16
+vsul_type(dev_handle,pattern)
+	SINT16 dev_handle;
+	SINT32 pattern;				/* LONG */
+{
+}
+
+/* Set Writing Mode */
+
+SINT16
+vswr_mode(dev_handle,mode_in)
+	SINT16 dev_handle;
+	SINT16 mode_in;
+{
+}
+
+/* Update Workstation */
+
+SINT16
+v_updwk(dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+/* Write File Proceed */
+
+SINT16
+fdp_write(fd,buffer,count)
+	FD fd;
+	CHAR buffer[];		/* BUFOUT[count] */
+	SINT16 count;
+{
+}
+
+/* Write File Wait */
+
+SINT16
+fd_write(fd,buffer,count)
+	FD fd;
+	CHAR buffer[];		/* BUFOUT[count] */
+	SINT16 count;
+{
+}
+
+	
+SINT16
+vs_curmode(dev_handle,mode)
+	SINT16 dev_handle;
+	SINT16 mode;
+{
+}
+
+SINT16
+vq_curmode(dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+SINT16
+vs_gclbu(dev_handle,mode)
+	SINT16 dev_handle;
+	SINT16 mode;
+{
+}
+
+
+SINT16
+vq_gclbu(dev_handle)
+	SINT16 dev_handle;
+{
+}
+
+
+SINT16
+v_get_npels(dev_handle, xy, src, n)
+	SINT16 dev_handle;
+	SINT16 xy[4];		/* BUFOUT[4] */
+	SINT16 *src;		/* BUFIN[n] */
+	SINT16 n;
+{
+}
+
+SINT16
+v_put_npels(dev_handle, xy, dest, n)
+	SINT16 dev_handle;
+	SINT16 xy[4];		/* BUFOUT[4] */
+	SINT16 *dest;		/* BUFOUT[n] */
+	SINT16 n;
+{
+}
+
+
+SINT16
+v_copy_npels(dev_handle, xy)
+	SINT16 dev_handle;
+	SINT16 xy[6];			/* BUFOUT[6] */
+{
+}
+
+SINT16
+vc_page(dev_handle, from, to)
+	SINT16 dev_handle;
+	SINT16 from;
+	SINT16 to;
+{
+}
+
+SINT16
+vq_page(dev_handle, gmode, cmode)
+	SINT16 dev_handle;
+	SINT16 gmode[3];		/* BUFIN[3] */
+	SINT16 cmode[3];		/* BUFIN[3] */
+{
+}
+
+SINT16
+vs_page(dev_handle, gmodein, cmodein, gmodeout, cmodeout)
+	SINT16 dev_handle;
+	SINT16 gmodein[2];		/* BUFOUT[2] */
+	SINT16 cmodein[2];		/* BUFOUT[2] */
+	SINT16 cmodeout[2];		/* BUFIN[2] */
+	SINT16 gmodeout[2];		/* BUFIN[2] */
+{
+}

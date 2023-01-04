@@ -1,0 +1,34 @@
+The following magic numbers were culled from <filehdr.h>.  Since
+I don't have the foggiest idea how to officially "register" a new
+magic number, I arbitrarily picked 0540 for the MC88000.
+
+0210	M68MAGIC
+0211	M68TVMAGIC
+0502	B16MAGIC
+0503	BTVMAGIC
+0504	IAPX16
+0505	IAPX16TV
+0506	IAPX20
+0507	IAPX20TV
+0510	X86MAGIC
+0511	XTVMAGIC
+0512	I286SMAGIC
+0520	MC68KWRMAGIC	/* writeable text segments */
+0520	MC68MAGIC
+0521	MC68KROMAGIC	/* readonly shareable text segments */
+0521	MC68TVMAGIC
+0522	I286LMAGIC	/* used by mc68000 (UNIX PC) and iAPX 286 */
+0522	MC68KPGMAGIC	/* demand paged text segments */
+0530	U370WRMAGIC	/* writeble text segments	*/
+0531	AMDWRMAGIC	/* writable text segments */
+0534	AMDROMAGIC	/* readonly sharable text segments */
+0535	U370ROMAGIC	/* readonly sharable text segments	*/
+0540	MC88MAGIC	/* M88000 normal file */
+0550	N3BMAGIC	/* 3B20 executable, no TV */
+0551	NTVMAGIC	/* 3B20 executable with TV */
+0560	FBOMAGIC	/* WE 32000, no TV */
+0560	WE32MAGIC	/* WE 32000, no TV */
+0561	MTVMAGIC	/* WE 32000 with TV */
+0562	RBOMAGIC	/* reserved for WE 32000 */
+0570	VAXWRMAGIC
+0575	VAXROMAGIC

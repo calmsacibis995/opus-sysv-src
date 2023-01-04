@@ -1,0 +1,20 @@
+#for i in `cat /tmp/files` ; do
+#echo $i
+#ed __$i.s <<!
+#/file/p
+#c
+#	file	"__$i.s"
+#.
+#w
+#q
+#!
+#done
+for i in `cat /tmp/list`; do
+	#sed "s/__/_/g" __$i.s > /tmp/temp.$$
+	#sed "s/__/_/g" __$i.s > /tmp/temp.$$
+	#sed "s/_\$sys\.$i/_$i/g" __$i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ __$i.s"
+	#mv /tmp/temp.$$ __$i.s
+	echo "mv __$i.s _$i.s"
+	mv _$i.s $i.s
+done

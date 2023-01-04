@@ -1,0 +1,103 @@
+/*
+ *  Kernel configuration information
+ */
+#include	"/etc/system"
+#include	<sys/machine.h>
+#include	<sys/param.h>
+#include	<sys/types.h>
+#include	<sys/sysmacros.h>
+#include	<sys/conf.h>
+
+/* utsname */
+#define	SYS	"unix"
+#define	NODE	"opus"
+#define	REL	"3.0"
+#define	VER	"E2"
+#define	MACH	"200PM"
+
+/* Configuration Definitions */
+#define	MAXSLICE	100
+#define	DSD_0 1
+#define	DU_0 0
+#define	CON_0 1
+#define	CLOCK_0 1
+#define	PWR_0 1
+#define	BTMO_0 1
+#define	ICU_0 1
+#define	NCLIST	120
+#define	NBUF	256
+#define	NHBUF	64
+#define	NPBUF	20
+#define	NFILE	100
+#define	NINODE	100
+#define	NS5INODE	100
+#define	NPROC	60
+#define	NREGION	180
+#define	NCALL	60
+#define	NMOUNT	25
+#define	PUTBUFSZ	512
+#define	FLCKREC	100
+#define	SHLBMAX	2
+#define	NQUEUE	256
+#define	NSTREAM	32
+#define	NMUXLINK	32
+#define	NSTRPUSH	9
+#define	NSTREVENT	256
+#define	MAXSEPGCNT	1
+#define	STRLOFRAC	80
+#define	STRMEDFRAC	90
+#define	STRMSGSZ	4096
+#define	STRCTLSZ	1024
+#define	MAXUP	25
+
+#define	SHLBMAX	2
+#define	NAUTOUP	10
+#define	NOFILES	20
+#define	VHNDFRAC	16
+#define	MAXPMEM	0
+#define	NSRMOUNT	50
+#define	PROC_0 0
+#define	pr_PIPE	0
+#define	pr_NAME	"PROC"
+#define	pr_NOTIFY	0
+#define	pr_FLAGS	0x01
+#define	s5_PIPE	0
+#define	s5_FLAGS	0
+#define	s5_NAME	"S51K"
+#define	s5_NOTIFY	0x4
+#define	TM_0 1
+#define	S5_0 0
+#define	MEMORY_0 1
+#define	TTY_0 1
+
+/* Tunable parameters */
+#define	GPGSLO	25
+#define	GPGSHI	40
+#define	VHANDR	1
+#define	BDFLUSHR	1
+#define	MINARMEM	5
+#define	MINASMEM	25
+
+/* Networking Buffers */
+#if NSU
+#define	NBLK4096	0
+#define	NBLK2048	20
+#define	NBLK1024	12
+#define	NBLK512	8
+#define	NBLK256	16
+#define	NBLK128	128
+#define	NBLK64	64
+#define	NBLK16	32
+#define	NBLK4	16
+#else
+#define	NBLK4096	0
+#define	NBLK2048	0
+#define	NBLK1024	0
+#define	NBLK512	0
+#define	NBLK256	0
+#define	NBLK128	0
+#define	NBLK64	0
+#define	NBLK16	0
+#define	NBLK4	0
+#endif
+#define	BLKTOTAL	(NBLK4096+NBLK2048+NBLK1024+NBLK512+NBLK256+NBLK128+NBLK64+NBLK16+NBLK4)

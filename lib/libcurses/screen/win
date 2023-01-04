@@ -1,0 +1,24 @@
+struct _win_st {
+	short	_cury, _curx;
+	short	_maxy, _maxx;
+	short	_begy, _begx;
+	short	_flags;
+	chtype	_attrs;
+	bool	_clear;
+	bool	_leave;
+	bool	_scroll;
+	bool	_use_idl;	/* 0=no, 1=yes, 2=go by need_idl */
+	bool	_use_keypad;	/* 0=no, 1=yes, 2=yes/timeout */
+	bool	_use_meta;	/* T=use the meta key */
+	bool	_nodelay;	/* T=don't wait for tty input */
+	chtype	**_y;
+	short	*_firstch;
+	short	*_lastch;
+	short	_tmarg,_bmarg;
+	/* end of Vr2 structure */
+	bool	_need_idl;	/* T=have done ins/del line/scroll recently */
+	bool	_notimeout;	/* T=do wait for rest of function key */
+	short	_pminrow, _pmincol, _sminrow, _smincol, _smaxrow, _smaxcol;
+	short	_yoffset;
+};
+

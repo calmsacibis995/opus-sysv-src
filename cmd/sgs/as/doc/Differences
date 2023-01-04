@@ -1,0 +1,99 @@
+This file documents the differences between the Austin version of the
+assembler (based on the BSD4.2 assembler) and the Tempe version of the
+assembler (based on the 3B2 assembler from Unix System V.3.
+
+Both assemblers implement the instruction mnemonics and syntax from
+the M88XXX Architecture Specification.  The differences arise from
+what is NOT specified in the Architecture Specification (and SHOULDN'T
+be specified there either, by the way).
+
+(3)	Switching between text and data segments.
+
+	The Tempe version requires explicit switching of sections.
+	The Austin version apparent switches automatically depending
+	upon whether or not the line was an instruction or a data
+	allocation/initialization.	
+
+	Note that one side effect of this, and a possible problem, is
+	that labels defined before the first pseudo directive to
+	set a specific section will have section number N_UNDEF and
+	storage class C_EXT, rather than a specific section number and
+	storage class C_STAT.
+
+(4)	Expression precedence.
+
+	Expressions are evaluated left to right, with arithmetic
+	operators having equal precedence in the Tempe version.
+	Subexpressions that must be evaluated first must be enclosed
+	in '(' ')' pairs.  I.E., in the Tempe version, the following
+	expression is illegal:
+
+		.word	L14 + 104*29
+
+	since it is evaluated as:
+
+		.word	(L14 + 104)*29
+
+	while
+
+		.word	L14 + (104*29)
+
+	is a legal relocatable expression.
+
+
+(6)	Control register names.
+
+	The Tempe version has a separate namespace for the SFU control
+	register names.  It implements both "crXX", where XX is 0-63, and
+	reserved names (currently unimplemented because they are not
+	yet stable) such as "psr" and "tfip".
+
+(7)	Regular register names.
+
+	Regular register names less then 10 can optionally use one or
+	two decimal digits.  I.E., r00 and r0 are both valid register
+	names for the register 0.
+
+
+Changes to the Tempe version (differences from 3b2 version) which were
+made to enhance compatibility between the two versions.
+
+(1)	Identifier characters.
+
+	The original 3b2 version does not allow the '@' character in
+	identifiers.  The Tempe version allows this since the current
+	Austin compiler emits labels with names of the form '@L10'.
+
+	The same goes for '$' characters...
+
+
+(2)	Added '.space' directive.
+
+	The '.space' directive computes the value of the absolute
+	expression given by its operand and the resultant number of
+	bytes of appropriately filled data is generated.  I.E.:
+
+		.text
+		.space	64
+		.data
+		.space	32
+
+	Fills the next 64 bytes of text space with the text fill pattern
+	(generally NOP instructions) and the next 32 bytes of data
+	space with the data fill pattern (generally 0).
+
+(3)	Added '.string' directive.
+
+	Equivalent to .byte pseudo, for each character in its operand
+	string.  I.E.
+
+		.string "This is a string\000"
+
+	is equivalent to:
+
+		.byte	'T,'h,'i,'s,0x20,'i,'s,0x20
+		.byte	'a,0x20,'s,'t,'r,'i,'n,'g
+		.byte	0x00
+
+	Normal C character quoting conventions apply within strings.
+	

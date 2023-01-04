@@ -1,0 +1,10 @@
+@(#)README	1.2	1/16/85	(jima)
+
+Liblang presently contains chipbug.o, which will be loaded with most
+language tools and the kernel.
+
+I called it "liblang" because chipbug is mostly language tool related,
+and there is at least one other shared module in the language tools
+which could go here (currently the source is duplicated).
+
+chipbug.h is in usr/include.

@@ -1,0 +1,8 @@
+#	Copyright (c) 1990 OPUS Systems		
+#	      All Rights Reserved 		
+#
+#head# 			TCP/IP MANAGEMENT
+#menu# TCP/IP management menu
+#help#
+#help# This subcommand allows you to modify the ethernet entry
+#help# in the OPUS configuration DOS-file '\opus\opus.cfg'.

@@ -1,0 +1,11 @@
+/* LP driver */
+#include "/etc/system"
+
+#ifndef LP
+lpinit() {}
+lpopen() { nodev(); }
+lpclose() { nodev(); }
+lpwrite() { nodev(); }
+lpioctl() { nodev(); }
+lpintr() {}
+#endif

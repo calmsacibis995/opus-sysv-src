@@ -1,0 +1,19 @@
+MAIL=/usr/mail/${LOGNAME:?}
+if [ "$SHELL" = "" ]; then
+	SHELL=/bin/sh
+fi
+if [ "$HOME" = "/" ]; then
+	PATH=:/opus/bin:/bin:/usr/bin:/etc:/usr/ucb:/usr/bin/X11; export PATH
+else
+	PATH=:$HOME/bin:/opus/bin:/bin:/usr/bin:/etc:/usr/ucb:/usr/bin/X11; export PATH
+fi
+. /opus/TERM
+EXINIT='set redraw nows sm'; export EXINIT
+dir() {
+	if [ "$1" = "" -o "$1" = . ]; then
+		echo "`pwd`:"
+	elif [ $# -eq 1 -a -d "$1" ]; then
+		echo "${1}:"
+	fi
+	/bin/ls -CF $*
+}

@@ -1,0 +1,18 @@
+     UID   PID  PPID  C    STIME TTY      TIME COMMAND
+    root     0     0  0  Jun  1  ?        0:01 sched
+    root     1     0  0  Jun  1  ?        4:33 /etc/init 
+    root     2     0  0  Jun  1  ?        0:00 vhand
+    root     3     0  0  Jun  1  ?        0:19 bdflush
+    root 12481     1  0  Jun 12  console  0:03 -sh 
+    root   101     1  0  Jun  1  con1     0:05 -sh 
+    root    58     1  0  Jun  1  ?        0:27 /etc/cron 
+    root   102     1  0  Jun  1  con2     0:05 -sh 
+    root 12543     1  0  Jun 12  con3     0:02 -sh 
+    root    77     1  0  Jun  1  ?        0:01 /etc/inetd 
+    root 28594 12543  0 22:43:11 con3     0:00 pg 
+    root 26485   101  0 00:57:48 con1     0:01 vi page.c 
+    root 28595 28594  7 22:43:11 con3     0:01 ps -ef 
+    root    92     1  0  Jun  1  ?        0:00 /usr/lib/named /etc/named.boot 
+    root   266     1  0  Jun  1  ?        0:01 /etc/portmap 
+    root   272     1  0  Jun  1  ?        0:01 /etc/mountd 
+    root   278     1  0  Jun  1  ?        1:22 /etc/nfsd 

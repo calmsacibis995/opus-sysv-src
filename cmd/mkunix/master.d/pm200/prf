@@ -1,0 +1,10 @@
+/* PRF driver */
+#include "/etc/system"
+
+#ifndef PRF
+prfinit() {}
+prfread() { nodev(); }
+prfwrite() { nodev(); }
+prfioctl() { nodev(); }
+prfintr() {}
+#endif

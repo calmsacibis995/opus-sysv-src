@@ -1,0 +1,30 @@
+OP=read
+if [ "$1" = -a ]; then OP=asciiread;	shift; fi
+if [ "$1" = -b ]; then OP=read;		shift; fi
+if [ "$2" = "" ]; then
+	DPATH=`/opus/bin/opdos wildcard "$1"`
+	if [ "$DPATH" = "" ]; then
+		echo $0: input file not found >&2
+		exit 1
+	fi
+	/opus/bin/opdos $OP $1
+	exit
+fi
+for UPATH in "$@";do : ; done
+UDIR="N"; if [ -d $UPATH ]; then UDIR="Y"; fi
+COPIED="N"
+while [ "$2" != "" ]; do
+	for DPATH in `/opus/bin/opdos wildcard "$1"`; do
+		if [ "$UDIR" = "Y" ]; then
+			UFILE=$UPATH/`expr "//$DPATH" : '.*[:/]\(.*\)'`
+		else
+			UFILE=$UPATH
+		fi
+		/opus/bin/opdos $OP "$DPATH" >$UFILE
+		COPIED="Y"
+	done
+	shift
+done
+if [ "$COPIED" = "N" ]; then
+	echo $0: input file not found >&2
+fi

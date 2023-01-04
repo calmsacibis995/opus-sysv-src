@@ -1,0 +1,49 @@
+
+trap "" 1 2 3 15	# ignore signals
+OPARG=/opus/oparg	# default command-passing file
+BANG=""			# pause/quit from console only
+PCODE=2			# default pause code (2=sh oparg)
+BG=0			# default background code (16 = background)
+DOS=""			# default no commands from DOS
+EXITCODE=0		# default exit code
+
+while : ; do
+	case "$1" in
+
+	REMOTE)		BANG="!"; shift;;
+	COM | EXE)	PCODE=3; shift;;
+	BAT)		PCODE=2; shift;;
+	BG)		BG=16; shift;;
+	WAIT)		BG=0; shift;;
+	DOS)		DOS=Y; shift;;
+	QUIT)		/opus/bin/opdos -k exit$BANG; exit;;
+	*)		break;;
+
+	esac
+done
+PCODE=`expr $BG + $PCODE`
+
+if [ "$#" != "0" ]; then
+	expr "$*" | /opus/bin/opdos asciiwrite $OPARG
+fi
+
+CMD=""
+while : ; do
+	if [ "$CMD" ]; then
+		set -- $CMD
+		if [ "$1" = "DOS" ]; then
+			expr "$2 $3" | /opus/bin/opdos asciiwrite $OPARG
+			shift; shift; shift
+		fi
+		($*)
+	fi
+	/opus/bin/opdos -d -k pause$BANG $PCODE
+	EXITCODE=$?
+	if [ ! "$DOS" ]; then
+		exit $EXITCODE
+	fi
+	CMD=`/opus/bin/opdos command`
+	if [ ! "$CMD" ]; then
+		exit $EXITCODE
+	fi
+done

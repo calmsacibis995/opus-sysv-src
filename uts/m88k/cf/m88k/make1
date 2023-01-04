@@ -1,0 +1,9 @@
+echo building sysV88.$1
+mv config.h config.h.save
+rm conf.o
+cp config.h.$1 config.h
+make
+rm conf.o
+mv config.h.save config.h
+mv sysV88 sysV88.$1
+echo sysV88.$1 is built

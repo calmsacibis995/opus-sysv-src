@@ -1,0 +1,7 @@
+#ident	@(#)adm:root	1.1.1.1
+#
+# The root crontab should be used to perform accounting data collection.
+#
+# NOTE: cron is intollerant of blank lines
+# IMPORTANT: there must be one active entry in the crontabs directory for cron
+00	00	1	1	0	sleep 1

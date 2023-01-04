@@ -1,0 +1,7 @@
+#ident	"@(#)sadmin:admin/menu/lpmgmt/DESC	1.2"
+#menu# printer management menu
+
+#help# 
+#help#	Printer Management functions are tools used to initialize,
+#help#	modify, and remove the line printer spooler.
+#head# 			PRINTER MANAGEMENT

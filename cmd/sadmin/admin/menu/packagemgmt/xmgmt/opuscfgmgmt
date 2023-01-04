@@ -1,0 +1,277 @@
+
+#	Copyright (c) 1990 OPUS Systems
+#	  All Rights Reserved
+
+#ident	"@(#)opuscfgmgmt	1.0"
+
+#menu#  modify the OPUS configuration file 'opus.cfg'
+#help#
+#help#	This subcommand allows to modify the X entry in 
+#help#	the DOS-file '\opus\opus.cfg'
+
+#
+#	add/modify the X device driver to the OPUS configuration file,
+#		\opus\opus.cfg
+#
+
+OPUS_CFG=/tmp/opuscfg.$$
+
+HERCULES=hercules
+VGA1="vga monochrome"
+VGA4="vga color"
+EV235="ev235, high resolution monochrome"
+AGE=AGE
+
+error_cleanup()
+{
+	trap "" 1 2 3 15
+	rm -f $OPUS_CFG
+	sync
+	exit 1
+}
+
+trap "error_cleanup" 1 2 3 15
+
+page()
+{
+	echo "\n------------------------------------------------------------------------------"
+}
+
+opuscfg()
+{
+	MONO=""
+	COLOR=""
+	while :; do
+		page #1
+		echo "\nChoose the X device driver:\n"
+		echo "1) $HERCULES"
+		echo "2) $VGA1"
+		echo "3) $VGA4"
+		echo "4) $VGA1 and $VGA4"
+		echo "5) $EV235"
+		echo "6) $AGE"
+		echo "\nEnter [1-6]: \c"
+		read ANS
+		case $ANS in
+			1)
+				MONITOR=hercules
+				break
+				;;
+			2)
+				MONITOR=vga1
+				break
+				;;
+			3)
+				MONITOR=vga4
+				break
+				;;
+			4)
+				MONO=YES
+				COLOR=YES
+				break
+				;;
+			5)
+				MONITOR=ev235
+				break
+				;;
+			6)
+				MONITOR=age
+				break
+				;;
+			"")
+				echo "Enter [1-6]: \c"
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+
+	page #2
+	while :; do
+		TTY_VALID=NO
+		echo "\nEnter the mouse serial port number [tty0]: tty\c"
+		read ANS
+		case $ANS in
+			"")
+				TTY=""
+				echo Default serial line for the mouse is tty0.
+				break
+				;;
+			[0-9]|[0-9][0-9]|[0-9][0-9][0-9])
+				MOUSE=`grep "^<tty.*" $OPUS_CFG | grep -v mega | sed 's/^<tty/=/' | cut -d= -f2"`
+				for i in $MOUSE; do
+					if [ $ANS = $i ]; then
+						TTY_VALID=YES
+					fi
+				done
+				if [ $TTY_VALID = YES ]; then
+					if [ $ANS -eq 0 ]; then
+						TTY=""
+					else
+						TTY=",tty=$ANS"
+					fi
+					break
+				else
+					echo "\n\007Invalid response. Valid tty ports are:\n"
+					for port in $MOUSE; do
+						echo "     tty$port\c"
+					done
+					echo
+				fi
+				;;
+			*)
+				echo "\n\007Invalid response."
+				;;
+		esac
+	done
+	
+	if [ "$MONO" -a "$COLOR" ]; then
+		X11="<X=X11:0(display=vga1,pointer=logitech$TTY)>
+<X=X11:1(display=vga4,pointer=logitech$TTY)>"
+	else
+		X11="<X=X11:0(display=$MONITOR,pointer=logitech$TTY)>"
+	fi
+
+	/opus/bin/ducp -a /opus/opus.cfg | sed 's/^<X/\.X/
+	/mega/s/^</\./
+	/^<end>/d' > $OPUS_CFG
+	echo "$X11" >> $OPUS_CFG
+	echo "<end>" >> $OPUS_CFG
+	/opus/bin/udcp -a $OPUS_CFG /opus/opus.cfg
+
+	while :; do
+		page #3
+		echo "\nThe OPUS configuration file '\\opus\\opus.cfg' has been modified."
+		if [ "$XCFG_INVLD" ]; then
+			echo "\nThe old X configuration:"
+			echo "\n$XCFG_INVLD"
+			echo "\nhas been modified to:"
+		else
+			echo "\nYour new X configuration reads:"
+		fi
+		echo "\n$X11"	
+		echo "\nWould you like to modify it further? [y/n] \c"
+		read ANS
+		case $ANS in
+			y|Y)
+				XCFG_INVLD="$X11"
+				opuscfg
+				break
+				;;
+			n|N)
+				page #end
+				echo "\n\007Reboot your workstation and boot UNIX using the modified '\\opus\\opus.cfg'."
+				break
+				;;
+			*) 
+				echo "\n\007Invalid response."
+				;;
+		esac
+	done
+	rm -f $OPUS_CFG
+}
+
+#		MODIFY OPUS.CFG
+#
+
+while :; do
+	echo "\nWill the X Window System be used on the system console? [y/n] \c"
+	read ANS
+	case $ANS in
+		y|Y)
+			break
+			;;
+		n|N)
+			exit 0
+			;;
+		"")
+			;;
+		*)
+			echo "\n\007Invalid response."
+			;;
+	esac
+done
+
+# Modify opus.cfg
+
+CONFIG=`/opus/bin/opdos wildcard /opus/opus.cfg`
+if [ "$CONFIG" ]; then
+	/opus/bin/ducp -a /opus/opus.cfg > $OPUS_CFG 
+else
+	echo "\n\007\\opus\\opus.cfg not found in DOS.\n"
+	echo "\nCannot proceed with the XCORE preinstallation."
+	exit 1
+fi
+
+EQNX=`grep "^<.*mega" $OPUS_CFG`
+XEQNX=`grep "^\[xeqnx\]" $OPUS_CFG`
+
+if [ "$EQNX" -a ! "$XEQNX" ]; then
+	echo "\n\007This system is currently configured for the Equinox MEGAPORT Adapter card."
+	echo "X cannot co-exist with MEGAPORT on the system console."
+	echo "\nChoose:\n"
+	echo "1) disable MEGAPORT serial ports"
+	echo "2) abort X installation"
+	while :; do
+		echo "\nEnter [1-2]: \c"
+		read ANS
+		case $ANS in
+			1)
+				break
+				;;
+			2)
+				error_cleanup
+				;;
+			"")
+				;;
+			*)
+				echo "\n\007Invalid response."
+				;;
+		esac
+	done
+fi
+
+XCFG=`grep -c "^<X=X11" $OPUS_CFG`
+X11=`grep "^<X=X11" $OPUS_CFG`
+if [ $XCFG -ge 2 ]; then
+	DISPLAY0=`grep -c "^<X=X11:0" $OPUS_CFG`
+	DISPLAY1=`grep -c "^<X=X11:1" $OPUS_CFG`
+	if [ $XCFG -eq 2 -a $DISPLAY0 -eq 1 -a $DISPLAY1 -eq 1 ]; then
+		:
+	else
+		page #0
+		XCFG_INVLD="$X11"
+		echo "\n\007sysadm: configuration error: duplicate X devices defined"
+		echo "\nThe opus configuration file must be modified."
+		opuscfg
+		exit 0
+	fi
+fi
+
+if [ "$X11" ]; then
+	while :; do
+		echo "\nThe X device driver in the OPUS configuration file reads:\n"
+		echo "$X11"
+		echo "\nWould you like to modify it? [y/n] \c"
+		read ANS
+			case $ANS in
+				y|Y)
+					opuscfg
+					break
+					;;
+				n|N)
+					rm -f $OPUS_CFG
+					break
+					;;
+				"")
+					;;
+				*) 
+					echo "\n\007 Invalid response."
+					;;
+		esac
+	done
+else
+	opuscfg
+fi

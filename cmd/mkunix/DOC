@@ -1,0 +1,126 @@
+		Opus kernel and opmon reconfiguration
+		-------------------------------------
+
+General Description
+
+	   The system driver configuration can be changed using several
+	high level commands. These commands fall into two main catagories.
+
+	The first group defines the driver configuration in opmon, the
+	DOS monitor program that services all unix device requests. The
+	available commands in this catagory are:
+
+		edittbl - edits the opmon configuration table
+
+		filltbl - fill the configuration table with the
+			minimum drivers required to boot unix
+
+	The second group manipulates the unix kernel parameters and 
+	kernel drivers. The available commands in this catagory are:
+
+		drvinstal - adds or removes a driver from the system
+			configuration file. The configuration file is
+			named "/etc/system" and is used to rebuild the
+			kernel. Also links the driver object file with
+			the driver master file to produce a linkable
+			object file in the /boot directory.
+
+		mkunix - builds a new unix kernel and a new opmon
+
+		ports - checks for configuration changes in serial
+			ports and adds or removes tty entries in the
+			"/dev" directory
+
+	These commands manipulate several data files and directories
+	which are used in the reconfiguration process. These are:
+
+	/etc/system - This file defines which drivers are installed
+		in the unix kernel. This file is modified by "drvinstal"
+		and read by mkunix when a new kernel is generated.
+
+	/boot/<driver>.o - The object files for all installable drivers
+		are located in the "/boot" directory. All object file
+		names are in lower case with a ".o" suffix.
+
+	/etc/master.d/<driver> - The "/etc/master.d" directory contains
+		a complementary master file for each object file in
+		the /boot directory. The master files contain configuration
+		parameters and "extern" data of the object files can be
+		editted by the system administrator. A special version of
+		the master file is named "kernel". The kernel file defines
+		many of the configurable system parameters.
+			
+	/boot/<DRIVER> - Drvinstal links the driver object files in this
+		directory with their master files in the /etc/master.d 
+		directory to produce a linkable object file. A linkable
+		object file has the same name as the object file, except
+		with capitalized letters and no '.o' extension. The
+		linkable object files are then linked with KERNEL to
+		produce a new bootable /unix.
+		
+
+
+Using The Reconfiguration Commands
+
+	   Here are several examples of how to use the reconfiguration
+	commands.
+
+	Example 1 will add eight serial ports on two AST cards. The 
+	first card will contain tty's 1 through 4 using interrupt #2.
+	The second card will contain tty's 5 through 8 and use interrupt
+	#3.
+
+	step #1: Install the hardware and set the switches for the proper
+		interrupt level. Boot unix.
+
+	step #2: Run "edittbl" to configure opmon with the AST driver.
+		Choose "(a)dd" from the main menu in edittbl. The driver
+		menu will appear next. Choose the number for the "serial
+		tty" driver. When the device menu appears, choose the
+		numbers for the first 4 AST devices. These are named
+		"coma1" through "coma4". You can choose multiple devices
+		by typing "<1st number>-<last number>". Before the devices
+		are added, you will be asked for any parameters. Respond
+		by typing "int=2" for the 1st parameter. Type "q" when
+		prompted for the second parameter. The four AST devices
+		will now be added to the configuration table.
+		When prompted for the next device, repeat the previous
+		sequence for "coma5" through "coma8". Use "int=3" for
+		the single parameter.
+		When these have been added, type "q" to exit back to
+		the devices menu. Type another "q" to get back to the
+		top level menu. Exit "edittbl" by choosing option "q".
+
+	step #3: Run "drvinstal" to configure the unix kernel with the
+		AST devices. The kernel uses an async serial i/o driver
+		module name "as". The object file for the serial driver
+		is "/boot/as.o". The as master file is "/etc/master.d/as".
+		To install this driver, type:
+			drvinstal -m /etc/master.d/as
+		This will modify the system configuration file 
+		"/etc/system" to include the "as" driver on the next
+		kernel build. It will also link "/boot/as" with
+		"/etc/master.d/as" to produce a linkable driver
+		file named "/boot/AS".
+
+	step #4:  Run "mkunix" to build a new unix kernel.
+		Mkunix passes the new device configuration file to
+		DOS and then calls the DOS linker to produce a new
+		"\opus\opmon.exe" file. If this completes successfuly,
+		mkunix links the linkable object files in the /boot
+		directory to produce a new /unix. To use mkunix, type:
+			mv /unix /unix.old
+			mkunix /unix.old -o /unix
+
+	step #5: Since this is a serial port driver, run the command
+		"/etc/ports" to create any new unix device entries
+		in the /dev directory.
+
+	step #6: Reboot the new kernel and opmon. Do the following
+		steps:
+			shutdown	
+
+		This will shut down unix and take you back to DOS.
+		Reboot unix by typing:
+
+			\opus\unix

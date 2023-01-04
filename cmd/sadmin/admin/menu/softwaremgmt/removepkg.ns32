@@ -1,0 +1,183 @@
+#ident	"@(#)sadmin:admin/menu/softwaremgmt/removepkg	2.7"
+#menu# remove previously installed package from built-in disk
+#help#
+#help#	This subcommand show you a list of currently installed optional
+#help#	software packages.
+#help#	It then will perform whatever actions are necessary to remove
+#help#	software packages you specify.
+#help#	The removable medium used to "installpkg" the software is needed to
+#help#	remove it.
+
+invld()
+{
+	echo "\nInvalid response"
+	sleep 1
+}
+
+RPATH=/usr/options
+IFS=" 	
+"
+
+remove_flp()
+{
+
+	flags="-qq -k$$"
+	trap 'exit 0' 1 2  15
+
+	#lp=`dirname $0`/listpkg
+	#if [ -r ${lp} ]
+	#then
+		#/bin/sh ${lp}
+	#fi
+
+	dir=${0}.d
+	if [ -d ${dir} ]
+	then
+		patterns=`ls ${dir} 2>/dev/null`
+	else
+		patterns=
+	fi
+
+	ddrive=`selectdevice -b $$ /dev/SA ${patterns}`
+	ndrive=`drivename ${ddrive}`
+
+	if [ -n "${patterns}" ]
+	then
+		. ${dir}/`selpattern ${ddrive}`
+	fi
+
+	question="
+	Insert the removable medium for the package you wish to remove
+	into the ${ndrive}.
+	Press <RETURN> when ready.  Type  q  to quit."
+
+	while true
+	do
+		fulllabel=`disklabel -q "${question}" $$ ${ddrive}`
+		fsname=
+		eval `labelfsname "${fulllabel}"`
+		case "${fsname}" in
+		instal | install )
+			trap '	trap "" 1 2
+				cd /;  diskumount -n "${ndrive}" ${ddrive}' 0
+	
+			/etc/umount ${ddrive} 2>/dev/null
+			chmod 700 /install
+			/etc/mount ${ddrive} /install -r  ||  exit 1
+			;;
+		'' )
+			echo >&2 '
+		This removable medium is NOT labeled and will not work.
+		Try another.'
+			continue
+			;;
+		* )
+			echo >&2 "
+		This removable medium is labeled '${label}' and is not a package.
+		The file system name is '${fsname}'.  It should be 'install'.
+		The full label is:
+	${fulllabel}
+		Try another."
+			continue
+		esac
+
+		if [ ! -r /install/install/UNINSTALL ]
+		then
+			echo >&2 '	This package does will not remove itself.
+			Consult the instructions that came with the medium.'
+			diskumount -n "${ndrive}" ${ddrive}
+			continue
+		fi
+
+		trap "	trap '' 1 2
+			rm -f /tmp/$$UNINSTALL
+			cd /
+			diskumount -n '${ndrive}' ${ddrive}" 0
+
+		cd /tmp
+		cp /install/install/UNINSTALL $$UNINSTALL
+		chmod +x $$UNINSTALL
+		trap : 1 2
+		/tmp/$$UNINSTALL ${ddrive} /install "${ndrive}"  ||
+			echo 'WARNING:  Package removal may not have completed properly.'
+		trap '' 1 2
+		rm -f /tmp/$$UNINSTALL
+		diskumount -n "${ndrive}" ${ddrive}
+		trap : 0
+		trap exit 1 2
+	done
+}
+
+for GROUP in `cd $RPATH; ls *.name | grep -v 'CO\.name' | sed 's/\..*$//'`; do
+	eval ${GROUP}_NAME=\"`cat < $ROOTDIR/$RPATH/$GROUP.name`\"
+	eval ${GROUP}_FLAG=1
+	CHOICES="$CHOICES $GROUP"
+done
+while [ -f $RPATH/*.name ]; do
+	echo "\nThe following packages are available for removal:\n"
+	for GROUP in $CHOICES; do
+		eval echo "\	\$${GROUP}_NAME\\\r\${GROUP}"
+	done
+	while :; do
+		echo "\nEnter the name for the package you wish to remove."
+		echo "\nEnter [${CHOICES}, or 'q' to quit ]: \c"
+		CHOICE=`line | tr '[a-z]' '[A-Z]'`
+		if [ "$CHOICE" ]; then
+			set $CHOICE
+			CHOICE=$1
+		fi
+		case $CHOICE in
+			"")
+				invld;;
+			Q)
+				exit;;
+			*\;*)
+				# Filter any lines with two semicolons;
+				# the shell this as two commands
+				# (after eval deals with it).
+				invld
+				continue;;
+			[A-Z]*)
+				if [ "`eval echo \\$\${CHOICE}_FLAG`" ]; then
+					if [ -f $RPATH/$CHOICE.Rlist ]; then
+						eval echo "Removing the \$${CHOICE}_NAME..."
+						if [ -f $RPATH/$CHOICE.unsetup ]; then
+							sh $RPATH/$CHOICE.unsetup
+						fi
+						echo "\nThe following files are being removed:"
+						cd /
+						for i in `cat ${RPATH}/$CHOICE.Rlist`; do
+							echo $i
+							rm -f $i
+						done
+						eval ${CHOICE}_FLAG=""
+						eval echo "\\\nThe \$${CHOICE}_NAME has been removed."
+						rm -f $RPATH/$CHOICE.*
+					else
+						remove_flp
+					fi
+				else
+					invld
+					continue
+				fi
+				SAVEGRPS="$CHOICES"
+				CHOICES=""
+				if [ ! -f $RPATH/*.name ]; then
+					exit
+				fi
+				CHOICE_STAT=""
+				for GRP in $SAVEGRPS; do
+					if [ "`eval echo \\$\${GRP}_FLAG`" ]; then
+						CHOICE_STAT=1
+						CHOICES="$CHOICES $GRP"
+					fi
+					if [ ! "$CHOICE_STAT" ]; then
+						exit
+					fi
+				done;;
+			*)
+				invld
+				continue;;
+		esac
+	done
+done

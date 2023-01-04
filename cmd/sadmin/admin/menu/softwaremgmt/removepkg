@@ -1,0 +1,113 @@
+#ident	"@(#)sadmin:admin/menu/softwaremgmt/removepkg	2.7"
+#menu# remove previously installed package from built-in disk
+#help#
+#help#	This subcommand show you a list of currently installed optional
+#help#	software packages.
+#help#	It then will perform whatever actions are necessary to remove
+#help#	software packages you specify.
+#help#	The removable medium used to "installpkg" the software is needed to
+#help#	remove it.
+
+invld()
+{
+	echo "\nInvalid response"
+	sleep 1
+}
+RPATH=/usr/options
+IFS=" 	
+"
+
+if [ ! -f /usr/options/*.Rlist ]; then
+	echo "\nNo Rlist files found in /usr/options"
+	exit
+fi
+
+for GROUP in `cd $RPATH; ls *.Rlist | grep -v 'CO\.Rlist' | sed 's/\..*$//'`; do
+	if [ ! -f $RPATH/$GROUP.name ]; then
+		echo "Warning: $RPATH/$GROUP.name not found"
+		eval ${GROUP}_NAME=""
+	else
+		eval ${GROUP}_NAME=\"`cat < $ROOTDIR/$RPATH/$GROUP.name`\"
+	fi
+	eval ${GROUP}_FLAG=1
+	CHOICES="$CHOICES $GROUP"
+done
+
+COUNT=`(for i in $CHOICES ]; do
+	echo $i
+done | wc -l)`
+COUNT=`echo $COUNT`
+
+while [ -f $RPATH/*.Rlist ]; do
+	(echo '\n\tThe following software packages are available for removal:\n'
+	for GROUP in $CHOICES; do
+		eval echo "\	\$${GROUP}_NAME\\\r\${GROUP}"
+	done | pr -w79 -t -e9) | pg -p"=== Press RETURN to continue ===(page %d): "
+
+	while :; do
+		echo "\nEnter the name for the package you wish to remove:\n"
+		for i in $CHOICES; do
+			echo $i
+		done | pr -t -4
+		echo "\n[ or 'q' to quit ]: \c"
+		CHOICE=`line | tr '[a-z]' '[A-Z]'`
+		if [ "$CHOICE" ]; then
+			set $CHOICE
+		fi
+		while [ "$1" ]; do
+			case $1 in
+				"")
+					invld;;
+				Q)
+					exit;;
+				*\;*)
+					# Filter any lines with two semicolons;
+					# the shell this as two commands
+					# (after eval deals with it).
+					invld
+					continue;;
+				[A-Z]*)
+					if [ "`eval echo \\$\${1}_FLAG`" ]; then
+						echo
+						eval echo "Removing the \$${1}_NAME..."
+						sleep 1
+						if [ -f $RPATH/$1.unsetup ]; then
+							sh $RPATH/$1.unsetup
+						fi
+						echo "\nThe following files are being removed:"
+						cd /
+						for i in `cat ${RPATH}/$1.Rlist`; do
+							echo $i
+							rm -f $i
+						done
+						eval ${1}_FLAG=""
+						eval echo "\\\nThe \$${1}_NAME has been removed."
+						rm -f $RPATH/$1.*
+						sleep 1
+					else
+						echo "\n\007Invalid response. The package $1 is not installed."
+						continue 2
+					fi
+					SAVEGRPS="$CHOICES"
+					CHOICES=""
+					if [ ! -f $RPATH/*.Rlist ]; then
+						exit
+					fi
+					CHOICE_STAT=""
+					for GRP in $SAVEGRPS; do
+						if [ "`eval echo \\$\${GRP}_FLAG`" ]; then
+							CHOICE_STAT=1
+							CHOICES="$CHOICES $GRP"
+						fi
+					done
+					if [ ! "$CHOICE_STAT" ]; then
+						exit
+					fi;;
+				*)
+					invld
+					continue;;
+			esac
+		shift
+		done
+	done
+done

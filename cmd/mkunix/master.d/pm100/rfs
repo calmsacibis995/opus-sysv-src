@@ -1,0 +1,140 @@
+/* RFS driver - linked with lib.fs.dufst, sex.o npack.o */
+#include "/etc/system"
+
+#include <sys/types.h>
+#include <sys/stream.h>
+#include <sys/npack.h>
+#include <sys/sex.h>
+
+#define	NPACK_0 16
+
+#define	SEX_0 2
+#define	SEXBID	2
+
+#ifdef RFS
+/* parameter definitions */
+#define	NADVERTISE	25
+#define	MAXGDP		24
+#define	MAXRSYS		10
+#define	NRCVD		150
+#define	NRDUSER		250
+#define	NSNDD		100
+#define	MINSERVE	3
+#define	MAXSERVE	6
+#define	HIST		6
+#define	RFHEAP		3072
+#define	RFS_VHIGH	1
+#define	RFS_VLOW	1
+
+int	PKTIME = 	400;
+int	NRETRNS	=	2;
+int	ACKTIME =	200;
+int	CREDIT =	4;
+int	MONITORTIME =	3000;
+int	nvc =	NPACK_0;
+struct	pck_vc pck_vc[NPACK_0];
+long	pckminor[NPACK_0];
+int	pck_cnt = 16;
+
+struct	sex	sex_sex[SEX_0];
+struct	sexnid	sexnid = 	{ 0x00, 0x00, 0x00 };
+int	sexbid = 		SEXBID;
+int	sexidflg =		0;
+
+#else
+
+/* dummy parameter definitions */
+#define	NADVERTISE	1
+#define	MAXGDP		1
+#define	MAXRSYS		0
+#define	NRCVD		1
+#define	NRDUSER		1
+#define	NSNDD		0
+#define	MINSERVE	0
+#define	MAXSERVE	0
+#define	HIST		0
+#define	RFHEAP		1
+#define	RFS_VHIGH	1
+#define	RFS_VLOW	1
+
+#define DUMMY	1
+struct streamtab pckinfo[DUMMY];
+struct streamtab sexinfo[DUMMY];
+
+sexinit() {}
+pckinit() {}
+duinit() {}
+
+duiput() { nodev(); }
+duiread() { nodev(); }
+duiupdat() { nodev(); }
+dureadi() { nodev(); }
+duwritei() { nodev(); }
+duitrunc() { nodev(); }
+dustatf() { nodev(); }
+duopeni() { nodev(); }
+duclosei() { nodev(); }
+duupdate() { nodev(); }
+duaccess() { nodev(); }
+dugetdents() { nodev(); }
+dufreemap() { nodev(); }
+dunotify() { nodev(); }
+dufcntl() { nodev(); }
+duioctl() { nodev(); }
+
+sexint() {}
+#endif
+
+/* variable definitions */
+char	advertise[NADVERTISE][0x20];
+int	nadvertise =	NADVERTISE;
+char	rcvd[NRCVD][0x2c];
+int	nrcvd =		NRCVD;
+char	sndd[NRCVD][0x20];
+int	nsndd =		NSNDD;
+int	minserve =	MINSERVE;
+int	maxserve =	MAXSERVE;
+int	nrduser =	NRDUSER;
+char	rd_user[NRDUSER][0x14];
+char	rfheap[RFHEAP];
+int	rfsize =	RFHEAP;
+int	rfs_vhigh =	RFS_VHIGH;
+int	rfs_vlow =	RFS_VLOW;
+char	gdp[MAXGDP][0x68];
+int	maxgdp = 	MAXGDP;
+
+#if !RFS
+asm("	.text");
+asm("_rfubyte:	.globl	_rfubyte");
+asm("_rfuword:	.globl	_rfuword");
+asm("_rsubyte:	.globl	_rsubyte");
+asm("_rsuword:	.globl	_rsuword");
+asm("_rcopyin:	.globl	_rcopyin");
+asm("_rcopyout:	.globl	_rcopyout");
+asm("	movqd	$-1,r0");
+asm("	ret	$0");
+asm("_advfs:	.globl	_advfs");
+asm("_unadvfs:	.globl	_unadvfs");
+asm("_rmount:	.globl	_rmount");
+asm("_rumount:	.globl	_rumount");
+asm("_rfstart:	.globl	_rfstart");
+asm("_rdebug:	.globl	_rdebug");
+asm("_rfstop:	.globl	_rfstop");
+asm("_rfsys:	.globl	_rfsys");
+asm("_duustat:	.globl	_duustat");
+asm("	jsr	@_nosys");
+asm("	ret	$0");
+asm("_rnamei1:	.globl	_rnamei1");
+asm("_rnamei2:	.globl	_rnamei2");
+asm("_rnamei3:	.globl	_rnamei3");
+asm("_rnamei4:	.globl	_rnamei4");
+asm("_riget:	.globl	_riget");
+asm("_remote_call:	.globl	_remote_call");
+asm("_remio:	.globl	_remio");
+asm("_rem_date:	.globl	_rem_date");
+asm("_unremio:	.globl	_unremio");
+asm("_del_sndd:	.globl	_del_sndd");
+asm("_remfileop:	.globl	_remfileop");
+asm("	movqd	$0,r0");
+asm("	ret	$0");
+#endif

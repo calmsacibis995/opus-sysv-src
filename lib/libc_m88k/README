@@ -1,0 +1,5 @@
+To get __ctype and ___ctype, must compile ctype.c to ctype.s
+and copy following two lines and modify them to __ctype.
+
+global		___ctype
+___ctype:

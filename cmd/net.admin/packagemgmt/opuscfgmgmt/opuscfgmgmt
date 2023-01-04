@@ -1,0 +1,408 @@
+
+#	Copyright (c) 1984 AT&T
+#	  All Rights Reserved
+
+#	THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T
+#	The copyright notice above does not evidence any
+#	actual or intended publication of such source code.
+
+#ident	"@(#)opuscfgmgmt	1.0"
+
+#menu#  modify the OPUS configuration file 'opus.cfg'
+#help#
+#help#	This subcommand allows to modify the ethernet entry in 
+#help#	the DOS-file '\opus\opus.cfg'
+
+# Networking TCP/IP and NFS packagemgmt
+
+OPUS_TMP=/tmp/opuscfg.$$
+EVEREX="Everex EV-2015"
+ETHERLINK="3COM Etherlink II"
+DEFAULT_EV2015="<ether=ev2015>"
+DEFAULT_3COM="<ether=3com>"
+
+error_cleanup()
+{
+	trap "" 1 2 3 15
+	echo "\n\n\007The Networking TCP/IP and NFS subcommand, opuscfgmgmt, may not have completed successfully.\n"
+	rm -f $OPUS_TMP
+	sync
+	exit
+}
+
+trap "error_cleanup" 1 2 3 15
+
+page()
+{
+	echo "\n------------------------------------------------------------------------------"
+}
+modify_everex()
+{
+#if [ "$MODEL" = "$EVEREX" ]; then
+	page #3
+	while :; do
+		echo "\nChoose segment address: [default=0xd000]\n"
+		echo "1) 0xC000"
+		echo "2) 0xC800"
+		echo "3) 0xD000"
+		echo "4) 0xD800"
+		echo "\nEnter [1-4]: \c"
+		read ANS
+		case $ANS in
+			1)
+				SEGMENT=0xc000
+				break
+				;;
+			2)
+				SEGMENT=0xc800
+				break
+				;;
+			3|"")
+				SEGMENT=DEFAULT
+				break
+				;;
+			4)
+				SEGMENT=0xd800
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+
+	page #4
+	while :; do
+		echo "\nChoose interrrupt level: [default=5]"
+		echo "Available     Corresponding"
+		echo "Interrupts       Jumper\n"
+		echo "   IRQ3           JP6"
+		echo "   IRQ4           JP7"
+		echo "   IRQ5           JP8"
+		echo "   IRQ6           JP9"
+		echo "   IRQ7           JP10"
+		echo "   IRQ9           JP11"
+		echo "   IRQ10          JP12"
+		echo "   IRQ15          JP13"
+		echo "\nEnter [3-7, 9, 10 or 15]: \c"
+		read INT
+		case $INT in
+			5|"")
+				INT=DEFAULT
+				break
+				;;
+			3|4|6|7|8|9|10|15)
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+
+	ETHERNET="$DEFAULT_EV2015(segment=$SEGMENT,int=$INT)>"
+	ETHERNET=`echo $ETHERNET | sed 's/segment=DEFAULT,//
+	s/int=DEFAULT//
+	s/,)/)/
+	s/()>//
+	s/ev2015>(/ev2015(/
+	'`
+}
+#else
+modify_3com()
+{
+	page #3
+	while :; do
+		echo "\nChoose I/O port address: [default=0x300]"
+		echo "1) 0x300          5) 0x250"
+		echo "2) 0x310          6) 0x280"
+		echo "3) 0x330          7) 0x2A0"
+		echo "4) 0x350          8) 0x2E0"
+		echo "\nEnter [1-8]: \c"
+		read ANS
+		case $ANS in
+			1|"")
+				IO=DEFAULT
+				break
+				;;
+			2)
+				IO=0x310
+				break
+				;;
+			3)
+				IO=0x330
+				break
+				;;
+			4)
+				IO=0x350
+				break
+				;;
+			5)
+				IO=0x250
+				break
+				;;
+			6)
+				IO=0x280
+				break
+				;;
+			7)
+				IO=0x2a0
+				break
+				;;
+			8)
+				IO=0x2eo
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+	page #4
+	while :; do
+		echo "\nChoose interrrupt level: [default=3]"
+		echo "Available     Corresponding"
+		echo "Interrupts       Jumper\n"
+		echo "   IRQ3           JP6"
+		echo "   IRQ4           JP7"
+		echo "   IRQ5           JP8"
+		echo "\nEnter [3-5]: \c"
+		read INT
+		case $INT in
+			3|"")
+				INT=DEFAULT
+				break
+				;;
+			4|5)
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+	page #5
+	while :; do
+		echo "\nChoose transceiver type: [default=External]"
+		echo "1) On-board"
+		echo "2) External"
+		echo "\nEnter [1-2]: \c"
+		read ANS
+		case $ANS in
+			1)
+				XCVR=1
+				break
+				;;
+			2|"")
+				XCVR=DEFAULT
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+	ETHERNET="$DEFAULT_3COM(io=$IO,int=$INT,xcvr=$XCVR)>"
+	ETHERNET=`echo $ETHERNET | sed 's/io=DEFAULT,//
+	s/int=DEFAULT,//
+	s/xcvr=DEFAULT//
+	s/,)/)/
+	s/()>//
+	s/3com>(/3com(/
+	'`
+#fi
+}
+
+create_ether()
+{
+	page #1
+	while :; do
+		echo "\nWhich ethernet card manufacturer are you using?\n"
+		echo "1) $EVEREX"
+		echo "2) $ETHERLINK"
+		echo "\nEnter [1-2]: \c"
+		read ANS
+		case $ANS in
+			1)
+				MODEL=$EVEREX
+				break
+				;;
+			2)
+				MODEL=$ETHERLINK
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+
+	page #2
+	while :; do
+	echo "\nThe Opus default hardware configuration for the $MODEL is:\n"
+	if [ "$MODEL" = "$EVEREX" ]; then
+		echo "Segment Address:   0xD000"
+		echo "Interrupt Level:   5"
+	else 
+		echo "I/O Port Address:  0x300"
+		echo "Interrupt Level:   3"
+		echo "Transceiver Type:  external"
+	fi
+	echo "\nWould you like to use the Opus default hardware configuration?"
+	echo "\nEnter [y/n]: \c"
+	read ANS
+	case $ANS in
+		y|Y)
+			if   [ "$MODEL" = "$EVEREX" ]; then
+				ETHERNET="$DEFAULT_EV2015"
+			elif [ "$MODEL" = "$ETHERLINK" ]; then
+				ETHERNET="$DEFAULT_3COM"
+			fi
+			break
+			;;
+		n|N)
+			if   [ "$MODEL" = "$EVEREX" ]; then
+				modify_everex
+			elif [ "$MODEL" = "$ETHERLINK" ]; then
+				modify_3com
+			fi
+			break
+			;;
+		*)
+			echo "\n\007Invalid response."
+			sleep 1
+			;;
+	esac
+	done
+	/opus/bin/ducp -a /opus/opus.cfg | sed 's/^<ether/\.ether/
+	/^<end>/d' > $OPUS_TMP
+	echo "$ETHERNET" >> $OPUS_TMP
+	echo "<end>" >> $OPUS_TMP
+	/opus/bin/udcp -a $OPUS_TMP /opus/opus.cfg
+	echo "\nThe opus configuration file '\\opus\\opus.cfg' has been modified."
+	while :; do
+		page #end
+		if [ "$ETHERNET_OLD" ]; then
+			echo "\nThe old ethernet configuration:"
+			echo "\n	$ETHERNET_OLD"
+			echo "\nhas been modified to:"
+		else
+			echo "\nYour new ethernet configuration reads:"
+		fi
+		echo "\n	$ETHERNET"	
+		echo "\nWould you like to modify it further? [y/n] \c"
+		read ANS
+		case $ANS in
+			y|Y)
+				ETHERNET_OLD=$ETHERNET
+				create_ether
+				break
+				;;
+			n|N)
+				echo "\n\007Reboot your system using the modified '\\opus\\opus.cfg'."
+				break
+				;;
+			*) 
+				echo "\n\007 Invalid response."
+				;;
+		esac
+	done
+}
+
+# MAIN()
+
+# Modify opus.cfg
+
+OPUS_CFG=`/opus/bin/opdos wildcard /opus/opus.cfg`
+if [ "$OPUS_CFG" ]; then
+	/opus/bin/ducp -a /opus/opus.cfg > $OPUS_TMP 
+else
+	echo "\n\007\\opus\\opus.cfg not found in DOS.\n"
+	echo "\nCannot proceed with the opuscfgmgmt subcommand."
+	exit 1
+fi
+
+ETHERNET=`egrep "^<ether.*ev2015|^<ether.*82586|^<ether.*3com" $OPUS_TMP`
+ETHER_DEFS=`grep -c "^<ether" $OPUS_TMP`
+if [ "$ETHER_DEFS" -gt 0 -a ! "$ETHERNET" ]; then
+	ETHER_INVLD=`grep "^<ether" $OPUS_TMP`
+	page #0
+	echo "\n\007WARNING: There is an invalid 400PM/8000 ethernet entry defined"
+	echo "         in the DOS file '\\opus\\opus.cfg':"
+	echo "\n         	$ETHER_INVLD"
+	echo "\n         It must be modified."
+	ETHERNET_OLD=$ETHER_INVLD
+	create_ether
+	exit 0
+fi
+if [ "$ETHERNET" ]; then
+	EV2015=`egrep "^<ether.*ev2015|^<ether.*82586" $OPUS_TMP`
+	THREE_COM=`grep "^<ether.*3com" $OPUS_TMP`
+	if [ "$ETHER_DEFS" -ge 2 ]; then
+		DEFS_EV2015=`egrep -c "^<ether.*ev2015|^<ether.*82586" $OPUS_TMP`
+		DEFS_3COM=`grep -c "^<ether.*3com" $OPUS_TMP`
+		page #0
+		if [ "$DEFS_EV2015" -ge 2 -o "$DEFS_3COM" -ge 2 ]; then
+			echo "\n\007WARNING: There are multiple ethernet entries defined"
+			echo "         in the DOS file '\\opus\\opus.cfg'."
+			MODIFY=1
+		else    # Everex and 3Com are both defined.
+			echo "\n\007WARNING: There are two ethernet entries defined in the DOS file '\\opus\\opus.cfg':"
+			while :; do
+				echo "\n1)	$EV2015"
+				echo "2)	$THREE_COM"
+				echo "\nWhich ethernet configuration will you be using?"
+				echo "\nEnter [1-2]: \c"
+				read ANS
+				case $ANS in
+					1)
+						ETHERNET="$EV2015"
+						break
+						;;
+					2)
+						ETHERNET="THREE_COM"
+						break
+						;;
+					*)
+						echo "\n\007Invalid response."
+						;;
+				esac
+			done
+		fi
+	else
+		ETHERNET="$EV2015$THREE_COM"
+	fi
+	while :; do
+		if [ "$MODIFY" ]; then
+			ANS=y
+		else
+			page #1
+			echo "\nThe ethernet configuration in \\opus\\opus.cfg reads:\n"
+			echo "	$ETHERNET"
+			echo "\nWould you like to modify it? [y/n] \c"
+			read ANS
+		fi
+		case $ANS in
+			y|Y)
+				ETHERNET_OLD=$ETHERNET
+				create_ether
+				break
+				;;
+			n|N)
+				break
+				;;
+			*) 
+				echo "\n\007 Invalid response."
+				;;
+		esac
+	done
+		
+else
+	create_ether
+fi

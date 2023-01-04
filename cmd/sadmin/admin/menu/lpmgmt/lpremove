@@ -1,0 +1,149 @@
+#ident	"@(#)sadmin:admin/menu/lpmgmt/lpremove	2.3"
+#menu# remove the line printer spooler
+
+#help# 
+#help#	lpremove uninstalls the line printer spooler.
+#help#
+
+#
+#  unsetup
+#
+#	This procedure will modify /etc/inittab
+#	to free up the "tty's" used
+#	by the lp system as a hardwired printer port(s)
+#	and remove /etc/rc.d/lp which starts the scheduler
+#	when the system is booted.
+#
+
+#
+# Shut down the scheduler
+#
+
+echo "Shutting down the lp scheduler."
+sh -c /usr/lib/lpshut 2>/dev/null >/dev/null
+
+#
+# querry for printers to delete
+#
+while true
+do
+echo "The printers currently installed are:"
+cd /usr/spool/lp/member
+ls
+echo
+echo "Type the name of a single device you want to remove or \"all\""
+echo "to remove all printers. Type q to exit."
+echo "	Choice: \c"
+read ANS
+	case $ANS in
+		q | Q ) exit;;
+		all | ALL ) break;;
+		* ) #check for valid entry
+		FLAG=0
+		for i in `ls`
+		do
+			if [ "$ANS" = "$i" ]; then
+				FLAG=1
+			fi
+		done
+		if [ $FLAG = 0 ]; then
+			echo
+			echo "${ANS} is not a valid device, try again."
+			echo
+			continue
+		fi
+		
+		# Modify entry in /etc/inittab
+		num=`basename $ANS`
+		if
+			[ "$num" = console ]
+		then
+			num=ct
+		else
+			num=`expr "$num" : ".*\([0-9][0-9]*\)"`
+		fi
+		if
+			[ "$num" != "" ]
+		then
+			ed - /etc/inittab <<-!End
+				H
+				g/^$num:/s/ *#.*//
+				w
+				q
+			!End
+		fi
+		# Tell /etc/init to look at /etc/inittab again.
+		/etc/init q
+		# remove destination name from lp system
+		/usr/lib/lpadmin -x${ANS}
+		# if default is ANS, then delete it
+		grep $ANS /usr/spool/lp/default > /dev/null 2>&1
+		if [ $? -eq 0 ]; then
+			rm -f /usr/spool/lp/default
+		fi
+		# Remove /usr/spool/lp files added by lpinit
+		rm -f /usr/spool/lp/member/${ANS}.*
+		rm -f /usr/spool/lp/interface/${ANS}.*
+		rm -f /usr/spool/lp/request/${ANS}.*
+		# if this was last printer, remove everything
+		LP=`ls /usr/spool/lp/member`
+		if [ -z "$LP" ]; then
+			break
+		else
+			continue
+		fi
+		;;
+	esac
+done
+
+#
+# Modify entry in /etc/inittab
+#
+
+for device in `lpstat -v | cut -d: -f2`
+do
+	num=`basename $device`
+	if
+		[ "$num" = console ]
+	then
+		num=ct
+	else
+		num=`expr "$num" : ".*\([0-9][0-9]*\)"`
+	fi
+	if
+		[ "$num" != "" ]
+	then
+		ed - /etc/inittab <<-!End
+			H
+			g/^$num:/s/ *#.*//
+			w
+			q
+		!End
+	fi
+done
+
+#
+# Tell /etc/init to look at /etc/inittab again.
+#
+
+/etc/init q
+
+#
+# Remove lp entry from /etc/rc.d
+#
+
+rm -f /etc/rc.d/lp
+
+#
+# Remove /usr/spool/lp files added by lpinit
+#
+
+rm /usr/spool/lp/default > /dev/null 2>&1
+rm /usr/spool/lp/log > /dev/null 2>&1
+rm /usr/spool/lp/oldlog > /dev/null 2>&1
+rm /usr/spool/lp/seqfile > /dev/null 2>&1
+rm /usr/spool/lp/member/* > /dev/null 2>&1
+rm /usr/spool/lp/interface/* > /dev/null 2>&1
+cd /usr/spool/lp/request; rm -r * > /dev/null 2>&1
+> /usr/spool/lp/pstatus
+> /usr/spool/lp/qstatus

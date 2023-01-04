@@ -1,0 +1,51 @@
+/*	@(#)mac2defs	1.2	*/
+/*	MC88000 Registers */
+
+# ifndef MC88000
+# define MC88000 1
+# endif
+
+	/* well known registers */
+# define R0 0
+# define R1 1
+# define R2 2
+# define R9 9
+# define R10 10
+# define R25 25
+# define R30 30
+
+	/* special purpose */
+# define FP 31		/* frame pointer */
+# define SP 31		/* stack pointer */
+
+# define NREGARGS	8
+
+extern int fregs;
+extern int maxargs;
+
+# define BYTEOFF(x) ((x)&03)
+# define wdal(k) (BYTEOFF(k)==0)
+# define BITOOR(x) ((x)>>3)  /* bit offset to oreg offset */
+
+# define REGSZ 32
+
+# define TMPREG FP
+
+# define R2REGS		/* permit double indexing */
+# define R2FLAGS 07	/* on a 16 bit host 03 is best you can do */
+
+# define STOARG(p)     /* just evaluate the arguments, and be done with it... */
+# define STOFARG(p)
+# define STOSTARG(p)
+# define genfcall(a,b) gencall(a,b)
+
+# define NESTCALLS
+
+# define MYREADER(p) myreader(p)
+int optim2();
+
+# define SCCON (SPECIAL|3)	/* -256 <= constant < 256 */
+# define SSCON (SPECIAL|4)	/* -32768 <= constant < 32768 */
+# define SPCON16 (SPECIAL|5)	/* 0 <= constant < 0xFFFF */
+# define SICON (SPECIAL|6)	/* constant */
+# define SMULCON (SPECIAL|7)	/* multiply constant */

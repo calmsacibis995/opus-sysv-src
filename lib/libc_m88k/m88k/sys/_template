@@ -1,0 +1,8 @@
+;	M88000 template(2) Routine
+;
+	file	"template.s"
+	text
+	global	_template
+	global	__$sys.template
+_template:
+	br	__$sys.template

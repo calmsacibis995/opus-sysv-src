@@ -1,0 +1,8 @@
+for i in $@
+do
+echo cc -I.. -DINKERNEL -Dm88k -Dopus -DCMMU -c $i
+/bin/mcc -E -I../.. -DINKERNEL -Dm88k -Dopus -DCMMU  $i > /tmp/cpp
+/lib/mcomp /tmp/cpp > /tmp/old
+/usr/src/cmd/sgs/comp/m88k/comp /tmp/cpp > /tmp/new
+sdiff -w80 -s /tmp/old /tmp/new
+done

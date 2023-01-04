@@ -1,0 +1,21 @@
+
+		kdebug bit definitions
+
+0x0001			Cache Inhibit Page 0-2
+0x0002			Trace System Calls
+0x0004			Trace System Call Errors
+0x0008			Trace Signals sent to processes
+0x0010			Trace Data Pipe completions on page faults
+0x0020			Disallow old style syslocal
+0x0040			Trace actual faults
+0x0080			Use old Signals which clobbered r2, r3, r4
+0x0100			Non supported signals accepted
+0x0200			Modified paging allocation
+0x0400			Disk caching enabled
+0x0800			Disk queue promotion enabled
+0x1000			Trace Unix Domain bind/connect
+0x2000			Trace Unix Domain bind/connect errors
+0x4000			Return EWOULDBLOCK instead of EAGAIN
+0x8000			X frame buffer is cache inhibited instead of write thru
+0x10000			Trace tty system calls
+0x20000			Trace tty interrupts

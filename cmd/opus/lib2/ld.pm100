@@ -1,0 +1,16 @@
+/* #ident	"@(#)ld.file */
+
+MEMORY	{
+	valid:	origin	= 0xf00000,	length	=   0x100000
+}
+
+SECTIONS {
+
+
+	.text:	{ }
+	GROUP	ALIGN(0x200) : {
+	.data:	{ } 
+
+	.bss:	{ }
+	}
+}

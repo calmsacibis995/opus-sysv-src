@@ -1,0 +1,13 @@
+#ident	"@(#)sh::fix	1.13"
+CC=${CC:-cc}
+USRINC=${CC:-/usr/include}
+for i do
+	$CC -I$USRINC -O -S -c $i.c
+	ed - <<\! $i.s 
+	g/^[ 	]*\.data/s/data/text/
+	w
+	q
+!
+	$CC -c $i.s
+	rm $i.s
+done

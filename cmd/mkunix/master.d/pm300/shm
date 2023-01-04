@@ -1,0 +1,38 @@
+/* SHM driver */
+#include	"/etc/system"
+#include	<sys/param.h>
+#include	<sys/types.h>
+#include	<sys/stream.h>
+#include	<sys/sysmacros.h>
+#include	<sys/conf.h>
+#include 	<sys/ipc.h>
+#include 	<sys/map.h>
+#include	<sys/shm.h>
+
+/* parameter definitions */
+#define	SHMMAX	2097152
+#define	SHMMIN	1
+#define	SHMMNI	100
+#define	SHMSEG	6
+#define	SHMALL	512
+
+/* variable definitions */
+#ifdef SHM
+struct shmid_ds shmem[SHMMNI];
+
+struct shminfo shminfo ={SHMMAX, SHMMIN, SHMMNI, SHMSEG, SHMALL};
+#else
+#define DUMMY	1
+struct shmid_ds shmem[DUMMY];
+struct shminfo shminfo;
+shminit() {}
+shmsys()
+{
+	nopkg();
+}
+shmexec() {}
+shmexit() {}
+shmseg() {
+	return 0;
+}
+#endif /* SHM */

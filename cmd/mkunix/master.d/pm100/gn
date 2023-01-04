@@ -1,0 +1,16 @@
+/* GN driver - general purpose driver interface */
+#include "/etc/system"
+
+#ifndef GN
+gninit() {}
+gnopenc() { nodev(); }
+gnopenb() { nodev(); }
+gnclosec() { nodev(); }
+gncloseb() { nodev(); }
+gnread() { nodev(); }
+gnwrite() { nodev(); }
+gnioctl() { nodev(); }
+gnstrategy() { nodev(); }
+gnintr() {}
+gnprint() { nodev(); }
+#endif

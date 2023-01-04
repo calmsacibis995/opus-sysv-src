@@ -1,0 +1,15 @@
+#ident	"@(#)sadmin:admin/menu/lpmgmt/lpstop	2.3"
+#menu# stop the line printer spooling scheduler
+
+#help# 
+#help#	lpstop stops the line printer spooler daemon. This should
+#help#	be done at shutdown automatically, but this allows
+#help#	you to do it manually if needed.
+#help#
+
+#
+# Shut down the scheduler
+#
+
+echo "stopping lp scheduler "
+sh -c /usr/lib/lpshut

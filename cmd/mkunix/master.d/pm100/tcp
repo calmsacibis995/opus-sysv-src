@@ -1,0 +1,28 @@
+/* TCP driver */
+#include "/etc/system"
+
+#ifndef TCP
+#define	NOETHER	-1
+int	ethdix = NOETHER;
+int	ex_inited = 0;
+ethintr() {}
+xttyopen() { nodev(); }
+xttyclose() { nodev(); }
+xttyread() { nodev(); }
+xttywrite() { nodev(); }
+xttyioctl() { nodev(); }
+exinit() {}
+exopen() { nodev(); }
+exclose() { nodev(); }
+exread() { nodev(); }
+exwrite() { nodev(); }
+exioctl() { nodev(); }
+xmread() { nodev(); }
+xmwrite() { nodev(); }
+xmioctl() { nodev(); }
+xsoopen() { nodev(); }
+xsoclose() { nodev(); }
+xsoread() { nodev(); }
+xsowrite() { nodev(); }
+xsoioctl() { nodev(); }
+#endif

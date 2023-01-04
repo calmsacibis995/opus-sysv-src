@@ -1,0 +1,85 @@
+
+							10/04/84  CCF
+
+
+			OPUS5 LOGICAL MEMORY LAYOUT
+
+
+	The following is the format for logical memory on the OPUS16 during
+	bootstrap and initial kernel operation:
+
+
+   	    0 ->|-----------------------|
+		| monitor text		|
+		|			|
+		|-----------------------|
+		| monitor data and bss	|
+		|			|
+		|-----------------------|
+		| ... (invalid)		|
+		|			|
+		|-----------------------|
+		| monitor stack		|
+		|			|
+	 f000 ->|-----------------------|
+		| ... (invalid)		|
+		|			|
+	maxmem->|-----------------------|<- pointers correspond to 0xf00000
+	 -19000 | kernel map pointers	|	(0x1000 bytes)
+		|			|
+	maxmem->|-----------------------|<- pointers correspond to 0 thru
+	 -18000 | map pointer tables	|	0x400000 (0x8000 bytes)
+		|   (monitor)		|
+	maxmem->|-----------------------|<- where monitor is moved after
+	 -10000	| ... (invalid)		|	startup (still logically 0)
+		|			|
+	maxmem->|-----------------------|
+	 -400	| top level page table	|
+		|   (monitor)		|
+	maxmem->|-----------------------|<- end of available memory
+		|			|
+		| ... (invalid)		|
+		|			|
+
+
+							01/04/84  CCF
+							Page 2
+
+
+		|			|
+	f00000->|-----------------------|<- corresponds to 0 physical
+		| kernel text		|
+		|-----------------------|<- rounded up to 0x400 boundary
+		| kernel data and bss	|
+		|-----------------------|<- rounded up to 0x400 boundary
+		| top level page table	|   (0x400 bytes)
+		|   (kernel)		|
+		|-----------------------|
+		| TMPVAD page		|   (0x200 bytes)
+		|-----------------------|
+		| DMA page		|   (0x200 bytes)
+		|-----------------------|
+		| kernel pointer tables |   (8 * 0x200 bytes)
+		|-----------------------|
+		| kernel stack		|   (USIZE*0x200 bytes)
+		|-----------------------|<- maximum address is 0xf67000
+		| ... (invalid)		|
+		|-----------------------|<- virtual 64k for map modification
+	fe0000->| TMPVADPAGE virtual	|
+		|   space		|
+	ff0000->|-----------------------|<- first 0x200 bytes mapped to kernel
+		| DMA space		|     instruction space 0
+		|			|
+	fff000->|-----------------------|<- no physical page for four reg slots
+		| WAIT I/O reg		|
+	fff200->|-----------------------|
+		| RESET DMA I/O reg	|
+	fff400->|-----------------------|
+		| RESET INT I/O reg	|
+	fff600->|-----------------------|
+		| INT REQUEST I/O reg	|
+	fff800->|-----------------------|
+		| ... (invalid)		|
+	fffe00->|-----------------------|<- accessed during nvi
+		| NVI PAGE		|   (512 bytes)
+       1000000->|-----------------------|

@@ -1,0 +1,64 @@
+A New Verticom driver - 08MAY86
+
+The Verticom driver has been changed to enable its use with the new
+Verticom H-xx series controllers. The driver has also undergone
+other major changes to speed up access.
+
+One change is that the application no longer has to put the
+1 or 3 byte code at the beginning of each command that specifies
+how many bytes the command uses. Now the driver figures this out by using
+the command code and, in some cases, various parameter bytes
+from the command. All the standard commands of the M-xx series
+are supported plus the new 0x43 command which is specific to
+the H-xx series. If the application still wants exact control over what
+part of the command sequence is read/written then a the command code
+0xff should be issued. This code is followed by the lsb then the msb of
+the number of bytes of command to be written to the verticom buffer,
+followed by the lsb then the msb of the number of bytes to be read from
+the verticom buffer, followed by the actual command bytes. Example:
+Setting the screen to color 3, normal command sequence would be
+'0x44 0x03' or with the 0xff command it would be '0xff 0x02 0x00 0x00
+0x00 0x44 0x03'
+
+The new driver also supports double buffering. If the command sequence
+is written to the controller with the 'write' system call then it is
+assumed by the driver that there will be no return data. In this case
+the driver will check its side buffer length to see if the command 
+sequence would fit. If so then the command sequence is copied into the
+side buffer and the i/o request is completed thus allowing the application
+to continue. The driver then starts executing the command sequence. If
+another command sequence is sent to the driver while the side buffer is
+being used then the application will block until the side buffer is empty.
+The size of the side buffer is controlled by adding a 'buf=xxx' parameter
+to the opus.cfg entry for the verticom driver. The default is a 0 length
+side buffer which turns off double buffering.
+
+Note that using the 'read' system call does not do double buffering since
+the request may return some data to the application.
+
+Also note that issuing an 'ioctl(fn, 0, 0)' where 'fn' is an open file
+descriptor to the verticom controller will block until the current side
+buffer command sequence is complete.
+
+The new driver supports both the H-xx and M-xx series Verticom controllers.
+The particular type of controller is specified as a parameter in the opus.cfg
+entry for the verticom device. Specifying 'h' indicates that an H-xx controller
+is installed. Specifying 'm' indicates that an M-xx controller is installed. The
+default is 'm'.
+
+The new driver supports the ability the set a limit on how much of the IBM-PC
+cpu time will be used for processing verticom graphics commands. This is
+controlled by the 'throttle=xxx' parameter in the opus.cfg file. 'xxx' is
+bigger (up to 0xffff) to allow the Verticom controller to use more of the
+available cpu time or smaller (down to 0) to allow other processing to have
+higher priority. The default is 5 which allows other device requests to be
+processed frequently while graphics is in progress without heavily sacrificing
+graphics performance.
+
+Some sample opus.cfg entries for the verticom driver:
+
+H-xx controller with a big side buffer and the ability to hog the cpu:
+	<graphics=verticom(h,buf=16384,throttle=0xffff)>
+
+M-xx controller with no side buffer and doesn't hog the cpu:
+	<graphics=verticom(m)>

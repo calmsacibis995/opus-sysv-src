@@ -1,0 +1,4 @@
+for i in `cat list`; do
+	echo $i
+	sed "s/template/$i/" _template.s > _$i.s
+done

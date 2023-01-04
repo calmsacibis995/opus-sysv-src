@@ -1,0 +1,26 @@
+
+# This script either installs or uninstalls all available drivers
+# and then generates a unix kernel with mkunix.
+
+# This is a list of all known drivers:
+# as gn lp mt prf cpt debug ipc msg nfs nsu rfs sem shm sxt tcp xw
+
+INCLUDE="as cpt gn lp mt prf ipc msg sem shm nfs nsu sxt tcp xw"
+EXCLUDE="debug rfs"
+
+for i in $INCLUDE
+do
+	echo "Installing $i"
+	drvinstall -m /etc/master.d/$i
+	echo
+done
+
+for i in $EXCLUDE
+do
+	echo "Uninstalling $i"
+	drvinstall -m /etc/master.d/$i -u
+	echo
+done
+
+echo "Doing mkunix ..."
+/etc/mkunix

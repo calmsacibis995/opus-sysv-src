@@ -1,0 +1,175 @@
+;	@(#)crt0.s	6.1 
+;
+;	M78000 _start(3) Routine
+;
+;	(C) Copyright 1987 by Motorola Inc.
+;
+;	Written by: Bob Greiner
+;
+; _start - interface between Unix process launch and C programs
+;
+; Input:	sp - stack pointer register, with formatted data
+;		arg0 - initial stack limit
+;
+;	The format of the data on the stack is:
+;
+;	arg0 -->initial stack limit
+;
+;	sp   -->argc
+;	argv -->pointer to the text for the first argv entry
+;		pointer to the text for the second argv entry
+;		...
+;		pointer to the text for the last argv entry
+;		NIL
+;	env  -->pointer to the text for the first env entry
+;		pointer to the text for the second env entry
+;		...
+;		pointer to the text for the last env entry
+;		NIL
+;		text for the first argv entry
+;		text for the second argv entry
+;		...
+;		text for the last argv entry
+;		text for the first env entry
+;		text for the second env entry
+;		...
+;		text for the last env entry
+;
+;	or
+;
+;	arg0 -->initial stack limit
+;
+;	sp   -->argc
+;	argv -->pointer to the text for the first argv entry
+;		pointer to the text for the second argv entry
+;		...
+;		pointer to the text for the last argv entry
+;	env  -->NIL
+;		text for the first argv entry
+;		text for the second argv entry
+;		...
+;		text for the last argv entry
+;
+;	These two patterns are differentiated by the pointer
+;	to the text for the first argv entry pointing immediately
+;	after the first NIL.
+;
+;	Note the implication that argc >= 1, and that argv[0]!=NIL.
+;	Thus, the minimum startup data pattern is
+;
+;	arg0 -->initial stack limit
+;
+;	sp   -->word 1
+;	argv -->word argv.0
+;	env  -->word 0
+;	argv.0->byte 0
+;
+; Output:	NEVER RETURNS
+;
+_m4_define_(`argc', r2)_m4_dnl_
+_m4_define_(`argv', r3)_m4_dnl_
+_m4_define_(`env', r4)_m4_dnl_
+_m4_define_(`temp', r5)_m4_dnl_
+;
+_m4_define_(`m_argc', `sp,0')_m4_dnl_
+_m4_define_(`m_argv', `sp,4')_m4_dnl_
+_m4_define_(`m_env', `sp,8')_m4_dnl_
+_m4_define_(`m_code_space', `sp,12')_m4_dnl_
+;
+_m4_define_(`m_code', `sp,0')_m4_dnl_
+_m4_define_(`m_exit', `sp,16')_m4_dnl_
+;
+_m4_define_(`trap_exit', 1)_m4_dnl_
+_m4_define_(`bufs', `600')_m4_dnl_
+_m4_define_(`hdr', 12)_m4_dnl_
+_m4_define_(`n', 8)_m4_dnl_
+;
+	file	"mcrt0.s"
+	text
+	global	_start
+	global	splimit%
+	global	_environ
+	global	_exit
+	global	_initfpu
+	global	_cleanup
+	global	_write
+	global	_main
+	global	_monitor
+	global	_etext
+;
+__start:
+	st	arg0,zero,splimit%	; initial stack limit
+	ld	argc,sp,0		; argc
+	addu	argv,sp,4		; argv
+	or	env,zero,argv		; env
+loop:					; search for end of argv
+	ld	temp,env,0		; get argv word
+	addu	env,env,4
+	bcnd	ne0,temp,loop		; test for NIL
+	ld	temp,argv,0		; first pointer to arg text
+	cmp	temp,env,temp		; pointer to env pointer list
+	bb1	lt,temp,no_env
+	subu	env,env,4		; no env--point to argv's NIL
+no_env:
+	st	env,zero,_environ	; save pointer to environment
+	and	sp,sp,lo16(-16)		; round to cache line boundary
+	subu	sp,sp,16		; allocate space for arguments
+;	or	ppi,sp,0	; set up parameter in pointer 880206saj
+	st	argc,m_argc		; save argc
+	st	argv,m_argv		; save argv
+	st	env,m_env		; save env
+	bsr	_initfpu		; initialize floating point HW
+;
+;  start of monitor initialization
+;
+	or	arg0,zero,_etext	; end of text segment
+	sub	arg0,arg0,eprol		; start of text segment
+	add	arg0,arg0,3		; round up to 32 bit words
+	and	arg0,arg0,lo16(-4)
+	add	arg0,arg0,hdr+n*bufs	; header and buffers
+	st	arg0,m_code_space	; save code space size
+	bsr	_sbrk			; get buffer space
+	add	temp,result,1		; test for -1 error code
+	bcnd	eq0,temp,nospace
+	or	arg2,result,zero	; allocated buffer
+	or	arg0,zero,eprol		; start of text segment
+	or	arg1,zero,_etext	; end   of text segment
+	ld	arg3,m_code_space
+	extu	arg3,arg3,31<1>		; length in 16 bit words
+	or	arg4,zero,cbufs		; entrance counters
+	bsr	_monitor		; monitor (...)
+;
+;  end of monitor initialization
+;
+	ld	argc,m_argc
+	ld	argv,m_argv
+	ld	env,m_env
+	bsr	_main			; main (argc, argv, env);
+	bsr	_exit			; exit (main (...));
+nospace:
+	or	arg0,zero,2		; stderr
+	or	arg1,zero,error		; address of error message
+	or	arg2,zero,error-error_end	; length of error message
+	bsr	_write			; write the error message
+	or	arg0,zero,1
+	or	rtrap,zero,trap_exit	; exit without cleanup
+	tb0	0,zero,0
+_exit:
+	sub	sp,m_exit
+	st	arg0,m_code
+	or	arg0,zero,0
+	bsr	_monitor		; cleanup for monitor
+	bsr	_cleanup		; cleanup for rest of program
+	ld	arg0,m_code
+	add	sp,m_exit
+	or	rtrap,zero,trap_exit
+	tb0	0,zero,0		; really exit back to Unix
+eprol:
+	data
+splimit%:
+	word	0
+_environ:
+	word	0
+error:
+	string	"No space for monitor buffer\n\0"
+error_end:

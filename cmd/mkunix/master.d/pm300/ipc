@@ -1,0 +1,7 @@
+/* IPC driver - required for shm, sem, msg */
+#include "/etc/system"
+
+#ifndef IPC
+ipcaccess() { nodev(); };
+ipcget() { nodev(); };
+#endif

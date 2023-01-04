@@ -1,0 +1,48 @@
+/* 
+ *	Opus Systems Copyright. 1987.
+ *
+ *	SYSTEM SPECIFICATION FILE FOR THE pm300
+ *
+ *	AS		asynchronous tty
+ *	CPT		Hardware serial number for security
+ *	DEBUG		kernel debugger
+ *	GN		general purpose device (used for graphics)
+ *	IPC		inter-process communication
+ *	LP		line printer
+ *	MT		mag tape
+ *	NSU		networking services utilities (streams)
+ *	SXT		shell layering
+ *	TCP		Excelan based TCP/IP interface.
+ *	PRF		kernel profiling
+ *	
+ *	The following drivers depend on having other drivers installed.
+ *	
+ *	MSG	needs	IPC			messages
+ *	SEM	needs	IPC			semaphores
+ *	SHM	needs	IPC			shared memory
+ *	NFS	needs	TCP, NSU		Network File System
+ *	RFS	needs	TCP, NSU		Remote File Sharing
+ *	
+ */
+
+/* define processor type */
+#define pm300	1
+
+/* DRIVER MODULES */
+#undef	AS
+#undef	CPT
+#undef	DEBUG
+#undef	GN
+#undef	IPC
+#undef	LP
+#undef	MSG
+#undef	MT
+#undef	NFS
+#undef	NSU
+#undef	PRF
+#undef	RFS
+#undef	SEM
+#undef	SHM
+#undef	SXT
+#undef	TCP
+#undef	XW

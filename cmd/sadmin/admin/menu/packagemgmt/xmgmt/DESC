@@ -1,0 +1,12 @@
+#	Copyright (c) 1990 OPUS Systems		
+#	      All Rights Reserved 		
+#
+#head# 			X Window System, Version 11
+#menu# X Window System management menu
+#help#
+#help#      The commands in this menu help you to set up your default X
+#help#      server, window manager, and fonts.  Use the Xsetupmgmnt
+#help#      utility to set these parameters.
+#help#
+#help#      Use the opuscfgmgmt utility to modify the X entry in the
+#help#      OPUS configuration DOS-file '\opus\opus.cfg'.

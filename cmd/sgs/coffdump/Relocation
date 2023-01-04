@@ -1,0 +1,36 @@
+The following information was taken from <reloc.h>, and describes the
+current supported COFF relocation types in the AT&T release, as of System V
+Release 3.  There is no information about how to "official register"
+a new relocation type.
+
+	Value	Symbol		Meaning
+	-----	--------	-------------------------------------
+	000	R_ABS		Relocation already done, ignored.
+	001	R_DIR16		B16/X86 generic, 16-bit direct reference
+	002	R_REL16		B16/X86 generic, 16-bit relative reference
+	003	R_IND16		B16/X86 generic, 16-bit indirect (TV) reference
+	004	R_DIR24		3B generic, 24-bit direct reference
+	005	R_REL24		3B generic, 24-bit relative reference
+	006	R_DIR32		3B/M32 generic, 32-bit direct reference
+	007	R_OFF8		X86 generic, 8-bit offset reference in 8-bits
+	010	R_OFF16		X86 generic, 8-bit offset reference in 16-bits
+	011	R_SEG12		X86 generic, 12-bit segment reference
+	012	R_DIR32S	M32 generic, 32-bit direct reference (swapped)
+	013	R_AUX		X86 generic, Auxiliary relocation entry
+	014	R_OPT16		3B generic, 16-bit optimized indirect TV ref.
+	015	R_IND24		3B generic, 24-bit indirect TV reference
+	016	R_IND32		3B generic, 32-bit indirect TV reference
+	017	R_RELBYTE	DEC/M68K generic, direct byte reference
+	020	R_RELWORD	DEC/M68K generic, direct word reference
+	021	R_RELLONG	DEC/M68K generic, direct long word reference
+	022	R_PCRBYTE	DEC/M68K generic, pc relative byte reference
+	023	R_PCRWORD	DEC/M68K generic, pc relative word reference
+	024	R_PCRLONG	DEC/M68K generic, pc relative long word refer.
+
+
+The following new relocation types were added to support the m88000
+processor.  The numeric values were chosen to be large enough to not
+conflict with any officially supported values added by AT&T.
+
+	100	R_PCR26		M88K pc relative, lower 26 bits of 32 bit word
+

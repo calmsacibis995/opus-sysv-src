@@ -1,0 +1,7 @@
+(1)	Remove intermediate file code (or make it optional) and pass
+	everything in memory.  Should speed it up...
+
+(2)	Make it totally FLEXNAMES internally, and only map to dual
+	string handling when writing out COFF file.  I.E., put all
+	symbols in internal string table regardless of length, and
+	remove internal code that looks in two places.

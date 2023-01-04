@@ -1,0 +1,7 @@
+for i in $@
+do
+echo cc -I.. -DINKERNEL -Dm88k -Dopus -DCMMU -DSVR3 -E $i
+/lib/cpp -I.. -DINKERNEL -Dm88k -Dopus -DCMMU -DSVR3 $i > /tmp/cpp
+echo comp
+/usr/src/cmd/comp/88k/comp /tmp/cpp 
+done

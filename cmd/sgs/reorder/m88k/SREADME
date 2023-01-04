@@ -1,0 +1,22 @@
+Usage:  input: text stdin
+	output: text stdout
+	options:        -r      reorganize instructions
+			-v      value optimization
+			-b      branch optimiztions (delay slots, branch removal)
+			-sa     show assembly code
+			-sb     show timing before scheduling
+			-sf     show timing after scheduling
+
+	    defaults: -r, -v -b, -sa
+
+example usage:  reorder  <test.a  >test.scd
+
+Data Section Processing:  Comment stripping.
+Text Section Processing:  Comment stripping, unused local label removal,
+			  flow graph minimization, value optimization
+
+known bugs:     add and sub with carry instructions (add.ci, add.co, add.cio,
+		sub.ci, sub.co, sub.cio) may not be scheduled properly)
+
+		value optimizations not yet implemented (register renumbering,
+			value propagtion)

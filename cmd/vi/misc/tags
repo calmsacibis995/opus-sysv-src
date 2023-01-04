@@ -1,0 +1,46 @@
+C_funcs	ctags.c	/^C_funcs()$/
+Ignore	xstr.c	/^Ignore(a)$/
+Mctags	ctags.c	/^main(ac,av)$/
+Mfold	fold.c	/^main(argc, argv)$/
+Mmkstr	mkstr.c	/^main(argc, argv)$/
+Mxstr	xstr.c	/^main(argc, argv)$/
+PF_funcs	ctags.c	/^PF_funcs(fi)$/
+add_node	ctags.c	/^add_node(node, cur_node)$/
+begtoken	ctags.c	/^#define	begtoken(arg)	(_btk[arg])	/* T if char can/
+copystr	mkstr.c	/^copystr()$/
+endtoken	ctags.c	/^#define	endtoken(arg)	(_etk[arg])	/* T if char end/
+fgetNUL	mkstr.c	/^fgetNUL(obuf, rmdr, file)$/
+find_funcs	ctags.c	/^find_funcs(file)$/
+flushsh	xstr.c	/^flushsh()$/
+found	xstr.c	/^found(new, off, str)$/
+free_tree	ctags.c	/^free_tree(node)$/
+getit	ctags.c	/^getit()$/
+getline	ctags.c	/^getline()$/
+hashit	mkstr.c	/^hashit(str, really, fakept)$/
+ignore	xstr.c	/^#define	ignore(a)	Ignore((char *) a)$/
+ignorf	xstr.c	/^ignorf(a)$/
+init	ctags.c	/^init()$/
+inithash	mkstr.c	/^inithash()$/
+intoken	ctags.c	/^#define	intoken(arg)	(_itk[arg])	/* T if char can /
+isgood	ctags.c	/^#define	isgood(arg)	(_gd[arg])	/* T if char can be/
+istail	xstr.c	/^istail(str, of)$/
+iswhite	ctags.c	/^#define	iswhite(arg)	(_wht[arg])	/* T if char is w/
+lastchr	xstr.c	/^lastchr(cp)$/
+match	mkstr.c	/^match(ocp)$/
+max	ctags.c	/^#define	max(I1,I2)	(I1 > I2 ? I1 : I2)$/
+octdigit	mkstr.c	/^octdigit(c)$/
+onintr	xstr.c	/^onintr()$/
+pfnote	ctags.c	/^pfnote(name, ln)$/
+process	mkstr.c	/^process()$/
+prstr	xstr.c	/^prstr(cp)$/
+put_funcs	ctags.c	/^put_funcs(node)$/
+putch	fold.c	/^putch(c)$/
+rindex	ctags.c	/^rindex(sp, c)$/
+savestr	ctags.c	/^savestr(cp)$/
+start_func	ctags.c	/^start_func(lp,token,tp)$/
+tail	ctags.c	/^tail(cp)$/
+takeprec	ctags.c	/^takeprec()$/
+ungetchar	mkstr.c	/^#define	ungetchar(c)	ungetc(c, stdin)$/
+xgetc	xstr.c	/^xgetc(file)$/
+xsdotc	xstr.c	/^xsdotc()$/
+yankstr	xstr.c	/^yankstr(cpp)$/

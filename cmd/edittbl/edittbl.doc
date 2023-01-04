@@ -1,0 +1,36 @@
+EDITTBL(1M)							EDITTBL(1M)
+
+NAME
+	edittbl - edit the opus configuration file
+SYNOPSIS
+	/etc/edittbl [file]
+DESCRIPTION
+	edittbl is an administator utility that permits changes to the
+	DOS-level configuration file, "\opus\opus.cfg". This file is
+	read by the DOS program opmon(1) when it runs a standalone
+	program or boots unix. Edittbl is used to change the opmon
+	driver configuration after the initial installation. After
+	using edittbl, "mkopmon" is normally run to build a new "opmon"
+	with the devices listed in the new configuration file. The unix
+	system must then be shut down and rebooted with the new opmon
+	to enable the new device configuration.
+
+	Edittbl is a menu driver program. The following list describes
+	the various options available:
+
+		- Add a driver : This submenu lists all the possible
+				 groups of drivers. Once you select
+				 a group, you will be prompted for the
+				 specific driver type, name, and options.
+
+		- Delete a driver : remove one or more drivers from the
+				 configuration file.
+
+		- Quit the program, saving the new configuration in
+				 the DOS file "\opus\opus.cfg".
+
+		- Exit the program without making any changes to the
+				 original configuration file.
+
+	The "file" argument allows you to specify a DOS configuration
+	filename other than the default, "\opus\opus.cfg".

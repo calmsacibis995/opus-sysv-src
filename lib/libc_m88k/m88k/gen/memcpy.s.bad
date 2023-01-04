@@ -1,0 +1,236 @@
+;	@(#)__memcpy.s	6.1	
+;
+;	M78000 __memcpy(3C) Routine
+;
+;	(C) Copyright 1987 by Motorola Inc.
+;
+;	Written by: Bob Greiner
+;
+; __memcpy - copies ln characters from sorc to dsave, and returns dsave
+;	If copying takes place between objects that overlap, the
+;	behaviour is un_m4_define_d.
+;
+;	This routine works in Big Endian mode only.
+;
+; Input:	dsave - destination
+;		sorc  - source
+;		ln    - number of bytes to copy
+;
+; Output:	dsave
+;
+; Algorithm:
+;
+;	This routine has been hand microscheduled and branch
+;	delayed.  Be extremely carefull in changing, especially
+;	the word after a bcnd.n instruction.
+;
+;	This routine is carefully optimized to move full words
+;	whenever possible.
+;
+;	The aligned word loop takes 4 ticks per word, assuming
+;	cache hits on both read and write, and a copy back cache.
+;	The two bubbles after the load are overlapped with the
+;	increment and branch.  The bubble after the branch is
+;	overlapped with the increment.  This inner loop speed
+;	is obtained with considerable overhead calculation.
+;
+;	The unaligned word loop takes 8 ticks per word, using the
+;	same techniques and assumptions as the aligned word loop.
+;	The extra four ticks give a (rot, and, and, or) sequence
+;	which aligns a source word to the destination.	One wait
+;	state of the write will be overlapped by overhead
+;	calculation.
+;
+;	Despite the optimization, the words in the source and 
+;	destination strings are fetched in the obvious order.
+;
+;	The optimization of the beginning and ending byte moves
+;	to just use one load and store was not judged worthwhile
+;	because of the large number of special cases.
+;
+;	This routine is designed to access data only within the
+;	words containing the sorc and dsave strings, to avoid extraneous
+;	memory faults.
+;
+; __memcpy (dsave, sorc, ln)
+;
+;	dest = dsave
+;	while ln>0 && dest&3 != 0 loop
+;		-- move until word boundary
+;		dest->byte = sorc->byte
+;		dest += 1
+;		sorc += 1
+;		ln -= 1
+;	end loop
+;	ln -= 4
+;	if ln>=0 then
+;		-- optimized word move
+;		lw = ln & ~3
+;		lx = -lw
+;		assert lx<=0
+;		sorc -= lx
+;		dest -= lx + 4
+;		sbyte = sorc&3
+;		if sbyte == 0 then
+;			-- aligned word to aligned word
+;			loop
+;				temp = (sorc + lx)->word
+;				lx += 4
+;				(dest + lx)->word = temp
+;			when lx-4 >= 0 exit
+;			end loop
+;			assert lx==4
+;		else
+;			-- unaligned word to aligned word
+;			if sbyte == 1 then
+;				rotm = 24
+;				oldm = 0xFFFFFF00
+;			elseif sbyte == 2 then
+;				rotm = 16
+;				oldm = 0xFFFF0000
+;			elseif sbyte == 3 then
+;				rotm = 8
+;				oldm = 0xFF000000
+;			end if
+;			newm = ~oldm
+;			sw = sorc & ~3
+;			old = (sw + lx)->word rot rotm
+;			old &= oldm
+;			sw += 4
+;			loop
+;				new = (sw + lx)->word rot rotm
+;				(dest + lx)->word = old | new & newm
+;				old = new & oldm
+;				lx += 4
+;			when lx-4 >= 0 exit
+;			end loop
+;		end if
+;		sorc += 4
+;		dest += 8
+;		ln -= lw + 4
+;	end if
+;	ln += 4
+;	while ln>0 loop
+;		-- move from word boundary
+;		dest->byte = sorc->byte
+;		dest += 1
+;		sorc += 1
+;		ln -= 1
+;	end loop
+;	return dsave
+;
+; Register usage:
+;
+_m4_define_(`dsave', r2)_m4_dnl_		; destination pointer; in and function value
+_m4_define_(`sorc', r3)_m4_dnl_		; source pointer
+_m4_define_(`ln', r4)_m4_dnl_		; length to copy in bytes
+_m4_define_(`dest', r5)_m4_dnl_		; working destination pointer
+_m4_define_(`sw', r6)_m4_dnl_		; working source pointer
+_m4_define_(`rotm', r7)_m4_dnl_		; shift amount for unaligned word moving
+_m4_define_(`oldm', r8)_m4_dnl_		; merging mask for unaligned word moving
+_m4_define_(`newm', r9)_m4_dnl_		; merging mask for unaligned word moving
+_m4_define_(`old', r10)_m4_dnl_		; old source word for unaligned word moving
+_m4_define_(`new', r11)_m4_dnl_		; new source word for unaligned word moving
+_m4_define_(`lw', r12)_m4_dnl_		; number of words to move
+_m4_define_(`lx', r13)_m4_dnl_		; negative word counter
+_m4_define_(`temp', r14)_m4_dnl_		; utility register
+;
+	file	"__memcpy.s"
+	text
+	global	__memcpy
+	global	dmemcpy
+;
+__memcpy:				; dest = dsave
+dmemcpy:				; for diab C compiler
+	MCOUNT
+	bcnd	le0,ln,done		; while ln>0 && dest&3 != 0 loop
+	mask	temp,dsave,3
+	bcnd.n	eq0,temp,beg_end
+	or	dest,zero,dsave
+beg:
+	ld.bu	temp,sorc,0		; dest->byte = sorc->byte
+	addu	sorc,sorc,1		; sorc += 1
+	subu	ln,ln,1			; ln -= 1
+	st.b	temp,dest,0
+	addu	dest,dest,1		; dest += 1
+	bcnd	le0,ln,done		; unroll loop
+	mask	temp,dest,3		; unroll loop
+	bcnd	ne0,temp,beg		; unroll loop
+beg_end:				; end loop
+	subu	ln,ln,4			; ln -= 4
+	bcnd	lt0,ln,no_word		; if ln>=0 then
+					; -- optimized word move
+	and	lw,ln,0xFFFC		; lw = ln & ~3
+	subu	lx,zero,lw		; lx = -lw
+					; assert lx<=0
+	subu	sorc,sorc,lx		; sorc -= lx
+	subu	dest,dest,lx		; dest -= lx + 4
+	subu	dest,dest,4
+	bb1	0,sorc,word_1		; sbyte = sorc&3
+	bb1	1,sorc,word_2		; if sbyte == 0 then
+	ld	temp,sorc,lx		; unroll loop
+	bcnd.n	ge0,lx,aligned_end	; unroll loop
+	addu	lx,lx,4			; unroll loop
+aligned:				; loop
+	st	temp,dest,lx		; (dest + lx)->word = temp
+	ld	temp,sorc,lx		; temp = (sorc + lx)->word
+	bcnd.n	lt0,lx,aligned		; lx += 4
+	addu	lx,lx,4			; when lx-4 >= 0 exit
+aligned_end:				; end loop
+	st	temp,dest,lx		; unroll loop
+					; assert lx==4
+	br	word_end
+word_1:					; else
+	bb1	1,sorc,word_3		; if sbyte == 1 then
+	or	rotm,zero,24		; rotm = 24
+	subu	oldm,zero,0x0100	; oldm = 0xFFFFFF00
+	br	words
+word_2:					; elseif sbyte == 2 then
+	or	rotm,zero,16		; rotm = 16
+	or.u	oldm,zero,0xFFFF	; oldm = 0xFFFF0000
+	br	words
+word_3:					; elseif sbyte == 3 then
+	or	rotm,zero,8		; rotm = 8
+	or.u	oldm,zero,0xFF00	; oldm = 0xFF000000
+words:					; end if
+	xor.c	newm,zero,oldm		; newm = ~oldm
+	and	sw,sorc,0xFFFC		; sw = sorc & ~3
+	ld	old,sw,lx		; old = (sw + lx)->word rot rotm
+	rot	old,old,rotm
+	and	old,old,oldm		; old &= oldm
+	addu	sw,sw,4			; sw += 4
+	ld	new,sw,lx		; unroll loop
+	bcnd.n	ge0,lx,shifting_end	; unroll loop
+	addu	lx,lx,4			; unroll loop
+shifting:				; loop
+	rot	new,new,rotm		; new = (sw + lx)->word rot rotm
+	and	temp,new,newm
+	or	temp,old,temp
+	st	temp,dest,lx		; (dest + lx)->word = old | new & newm
+	and	old,new,oldm		; old = new & oldm
+	ld	new,sw,lx
+	bcnd.n	lt0,lx,shifting		; lx += 4
+	addu	lx,lx,4			; when lx-4 >= 0 exit
+shifting_end:				; end loop
+	rot	new,new,rotm		; unroll loop
+	and	temp,new,newm		; unroll loop
+	or	temp,old,temp		; unroll loop
+	st	temp,dest,lx		; unroll loop
+word_end:				; end if
+	addu	sorc,sorc,4		; sorc += 4
+	addu	dest,dest,8		; dest += 8
+	subu	ln,ln,lw		; ln -= lw + 4
+	subu	ln,ln,4
+no_word:				; end if
+	addu	ln,ln,4			; ln += 4
+	bcnd.n	le0,ln,ending_end	; unroll loop
+ending:					; while ln>0 loop
+	ld.bu	temp,sorc,0		; dest->byte = sorc->byte
+	addu	sorc,sorc,1		; sorc += 1
+	subu	ln,ln,1			; ln -= 1
+	st.b	temp,dest,0
+	bcnd.n	gt0,ln,ending		; dest += 1
+	addu	dest,dest,1		; when ln<=0 exit
+ending_end:				; end loop
+done:					; return dsave
+	jmp	return

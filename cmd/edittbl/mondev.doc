@@ -1,0 +1,43 @@
+MONDEV.c(4)		(Opus)				MONDEV.C(4)
+
+NAME
+	mondev.c - "edittbl" device driver database for "opmon"
+
+DESCRIPTION
+	Mondev.c is the data base for all valid device drivers
+	in "opmon". This file is also part of the "opmon" driver kit.
+	"Edittbl" checks the "mondev.c" file for valid and non-duplicate
+	entries when modifying the system configuration table, "opus.cfg".
+	
+Format for edittbl-compatible mondev.c:
+Example entry:
+	/** BIOS disk*:<dsk/?> */
+		{ "c:", &dt_c10 },
+		{ "d:", &dt_d10 },
+
+Description:
+	Each device type is enclosed in "/**     */". The double star
+	at the start of the comment tells "edittbl" that this is a
+	device name.
+
+	Each device name has two parts seperated with a colon. The
+	left side of the colon is the descriptive name of the device.
+	If the name ends in a star"*", is means this is a required
+	device. The right side of the colon is the "opus.cfg" unix
+	name, i.e., the name on the left side of the equal sign in
+	an "opus.cfg" file device entry. If this name ends with a
+	question mark, then the device may have multiple entries with
+	a sequence number in place of the "?". In the example above,
+	the first BIOS disk is called "dsk/0", the second one is
+	"dsk/1", etc.
+
+	The dos devices are assumed to be all consecutive lines after
+	the device name. The "edittbl" script displays the 1st field
+	as the dos device name and checks that no two selected entries
+	have the same function name (the 2nd field starting with "&").
+	"Edittbl" stops parsing new lines as devices when it reaches
+	a blank line.
+
+	"Edittbl" will only display the first device when the are
+	multiple devices on a line. This is can be used to hide entries
+	and display only one of the three devices for each tty device.

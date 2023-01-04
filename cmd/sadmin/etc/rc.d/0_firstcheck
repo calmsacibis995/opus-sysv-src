@@ -1,0 +1,2 @@
+#ident	"@(#)sadmin:etc/rc.d/0_firstcheck	2.2"
+#	Perform the "never have been run before" checks.

@@ -1,0 +1,6 @@
+do the following:
+	cc -o sex01pckd sex01pckd.c
+	cp sex01pckd /usr/bin/pckd
+	chmod a+x /usr/bin/pckd
+
+sexpack script calls pckd.

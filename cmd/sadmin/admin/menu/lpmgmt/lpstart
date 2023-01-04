@@ -1,0 +1,20 @@
+#ident	"@(#)sadmin:admin/menu/lpmgmt/lpstart	2.3"
+#menu# start the line printer spooling scheduler
+
+#help# 
+#help#	lpstart starts the line printer spooler daemon. This should
+#help#	be done after each system boot automatically, but this allows
+#help#	you to do it manually if needed.
+#help#
+
+STAT=`lpstat -t | grep '^scheduler is running'`
+if [ -z "$STAT" ]; then
+	echo "starting lp scheduler "
+	rm -f /usr/spool/lp/SCHEDLOCK
+	/usr/lib/lpsched
+	echo "\n Current lp system status:"
+	lpstat -t
+else
+	echo
+	echo "The lp scheduler is already running"
+fi

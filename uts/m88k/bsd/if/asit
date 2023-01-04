@@ -1,0 +1,2 @@
+	echo cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU $1
+	cc -S -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU $1

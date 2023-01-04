@@ -1,0 +1,25 @@
+OP=write
+if [ "$1" = -a ]; then OP=asciiwrite;	shift; fi
+if [ "$1" = -b ]; then OP=write;	shift; fi
+if [ "$2" = "" ]; then
+	/opus/bin/opdos $OP "$1"
+	exit
+fi
+for DPATH in "$@"; do : ; done
+DDIR=`/opus/bin/opdos isdir "$DPATH"`; 
+COPIED="N"
+while [ "$2" != "" ]; do
+	if [ -f "$1" ]; then
+		if [ "$DDIR" = "1" ]; then
+			DFILE="${DPATH}"/`expr "//$1" : '.*/\(.*\)'`
+		else
+			DFILE="$DPATH"
+		fi
+		/opus/bin/opdos $OP "$DFILE" <$1
+		COPIED="Y"
+	fi
+	shift
+done
+if [ "$COPIED" = "N" ]; then
+	echo $0: input file not found >&2
+fi

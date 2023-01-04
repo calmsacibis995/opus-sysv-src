@@ -1,0 +1,67 @@
+/* Interrupt Service Routine table */
+
+#include	"/etc/system"
+
+extern nulldev();
+extern conrint(), conxint(), conctlint();
+extern asrint(), asxint(), asctlint();
+extern dkintr();
+extern dosintr();
+extern lpintr();
+extern gnintr();
+extern mtintr();
+extern ethintr();
+extern Xdispctlint(), Xsigrint();
+extern gnfintr();
+
+int (*intdevsw[])() = {
+	nulldev,	/* 0 */
+	nulldev,	/* 1 */
+	conrint,	/* 2 */
+	conxint,	/* 3 */
+	dkintr,		/* 4 */
+	nulldev,	/* 5 */
+	asrint,		/* 6 */
+	asxint,		/* 7 */
+	dosintr,	/* 8 */
+	lpintr,		/* 9 */
+	asctlint,	/* 10 */
+	conctlint,	/* 11 */
+	nulldev,	/* 12 was vdiintr */
+	nulldev,	/* 13 was netint */
+	gnintr,		/* 14 */
+	mtintr,		/* 15 */
+	ethintr,	/* 16 */
+	nulldev,	/* 17 user reserved */
+	nulldev,	/* 18 user reserved */
+	nulldev,	/* 19 user reserved */
+	Xsigrint,	/* 20 */
+	Xdispctlint,	/* 21 */
+	0,		/* 22 for gnfintr*/
+	0,		/* 23 for ecintr */
+	0,		/* spares */
+	0,
+	0,
+	0,
+	0,
+};
+
+int intdevcnt = sizeof(intdevsw)/sizeof(int *);
+
+/* 
+	use this function to figure out device type instead of hardwired
+   	constants.
+	For example in as.c 
+	instead of SERIN use devtype(asrint);
+*/
+
+devtype(func)
+register int (*func)();
+{
+	register i;
+
+	for (i = 0 ; i < (sizeof(intdevsw)/sizeof(int *)) ; i++)
+		if ( intdevsw[i] == func )
+			return (i);
+	return (0);
+}

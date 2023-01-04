@@ -1,0 +1,58 @@
+NOTES ON NEW DUCP/UDCP				JKL  5/21/86
+
+I have generated new versions of the ducp(1*) and udcp(1*) commands
+that accept wildcard file names for the source files.
+
+Install the accompanying diskette with:
+
+	cd /
+	cpio -civBdum </dev/rflpa
+	dos copy a:opmon.exe \opus
+	(reboot with new opmon)
+
+The affected files are:		/opus/bin/ducp		/opus/bin/udcp
+				/opus/bin/opdos		\opus\opmon.exe
+
+Also affected, but not included here are:
+	/usr/lib/libopus.a	 /usr/include/sys/doscomm.h
+	/usr/src/cmd/dos/opdos.c /usr/src/cmd/dos/doslib.c
+
+Usage:
+	ducp [-a] [-b] list_of_dos_files unix_directory
+	ducp [-a] [-b] dos_file unix_file
+	ducp [-a] [-b] dos_file		{ to standard output }
+
+	udcp [-a] [-b] list_of_unix_files dos_directory
+	udcp [-a] [-b] unix_file dos_file
+
+OPTIONS: -a specifies DOS/UNIX ascii conversion.
+	 -b specifies no conversion (binary; default).
+
+DOS WILDCARD expansion is done by standard DOS functions, subject to
+the usual DOS conventions.  Either / or \ can be used for directory
+separators; the wildcard characters can appear only in the file name,
+not in a directory name.
+
+QUOTES:  If list_of_dos_files contains elements with special characters
+(dos allows \, * and ?), the elements must be individually protected
+from the unix shell by quotes:
+
+	ducp -a "\opus\*.cfg" /tmp
+	ducp -a "\opus\*.cfg" "\opus\*.bat" .
+
+	NOT ducp -a "\opus\*.cfg \opus\*.bat" /tmp
+
+ALSO:  Leading colons are stripped from the dos path, and dos accepts
+slashes as will as backslashes.  Therefore, unless your unix file system
+has very strange names, the following will work:
+
+	ducp -a :/opus/*.* /tmp
+	ducp -a c:/opus/*.* /tmp
+
+because the shell will not expand :/opus/*.* and c:/opus/*.*
+if there are no local matches.
+
+CASE:  dos is not case-sensitive.  When using ducp, if the pattern
+supplied as the dos path has no lowercase characters and has at least
+one uppercase character, the unix filename is made uppercase; otherwise
+the unix filename is made lowercase.

@@ -1,0 +1,3 @@
+echo udcp sysV88.syms a:unix.sym
+udcp sysV88.syms a:unix.sym
+echo == done ==

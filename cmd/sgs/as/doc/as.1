@@ -1,0 +1,204 @@
+'\"macro stdmacro
+.if n .pH g1.as @(#)as	30.5 of 3/13/86
+.nr X
+.if \nX=0 .ds x} AS 1 "Software Generation System Utilities" "\&"
+.if \nX=1 .ds x} AS 1 "Software Generation System Utilities"
+.if \nX=2 .ds x} AS 1 "" "\&"
+.if \nX=3 .ds x} AS "" "" "\&"
+.TH \*(x}
+.SH NAME
+as \- assembler
+.SH SYNOPSIS
+.B as
+[options] filename
+.br
+.SH DESCRIPTION
+The 
+.I as
+command
+assembles the named file.
+.if ''b16' \{\
+The output file is executable if no errors
+occurred during the assembly, transfer vectors were not used,
+and there are no unresolved external references.\}
+The following flags
+may be specified in any order:
+.if ''m32' \{\
+.TP \w'\f3\-o\fP\ \f2objfile\fP\ \ 'u
+.BI \-v " type"
+type is either an 'x' indicating the original
+.B 
+assembler or an 'a' indicating the
+.B a
+assembler.
+\}
+.TP \w'\f3\-o\fP\ \f2objfile\fP\ \ 'u
+.BI \-o " objfile"
+Put the output of the assembly in
+.IR objfile .
+By default, the output file name is formed by
+removing the 
+.B .s
+suffix, if there is one, from the input file name
+and appending a 
+.B .o
+suffix.
+.if ''x86' \{\
+.TP
+.B \-x
+This
+flag is
+.I required
+for all x86 files.
+\}
+.if ''3b' \{
+.TP
+.B \-Q
+Warn the user if a transfer vector operand is used
+in any context other than a "call" instruction.
+\}
+.if ''vax' \{\
+.TP
+.B \-j
+Invoke the long-jump assembler
+(for the \s-1VAX\s+1 version of the common assembler only).
+The address optimization algorithm chooses between long and short
+address lengths, with short lengths chosen when possible.
+Often, three distinct lengths are allowed by the machine architecture;
+a choice must be made between two of those lengths.
+When the two choices given to the assembler exclude the largest length
+allowed, then some addresses might be unrepresentable.
+The long-jump assembler will always have the largest length as one of
+its allowable choices.
+If the assembler is invoked without this option, and the case arises
+where an address is unrepresentable by either of the two allowed choices,
+then the user will be informed of the error, and advised to try again
+using the
+.B \-j
+option.
+\}
+.TP
+.B \-m
+Run the 
+.I m4
+macro processor
+on the input to the assembler.
+.TP
+.B \-R
+Remove (unlink) the input file after assembly
+is completed.
+.if ''vax' \{\
+.TP
+.B \-r
+Place all assembled data
+(normally placed in the \f3.data\f1 section)
+into the \f3.text\f1 section
+(for the \s-1VAX\s+1 version of the common assembler only).
+This option effectively disables the
+.B .data
+pseudo operation.
+This option is off by default.
+\}
+.if ''vax' \{\
+.TP
+.B \-[bwl]
+Create byte
+.RB ( b "),"
+halfword
+.RB ( w )
+or long
+.RB ( l )
+displacements for undefined symbols
+(for the \s-1VAX\s+1 version of the common assembler only).
+(An undefined symbol is a reference to a symbol
+whose definition is external
+to the input file
+or a forward reference.)
+The default value for this option is long 
+.RB ( l )
+displacements.
+\}
+.TP
+.B \-dl
+Do not produce line number information in the object file.
+.TP
+.B \-V
+Write the version number of the assembler being run
+on the standard error output.
+.TP
+.BI \-Y " [md],dir"
+Find the 
+.B m4
+preprocessor
+.RB ( m )
+and/or the file of predefined macros
+.RB ( d )
+in directory
+.I dir
+instead of in the customary place.
+Note the required space after the \-Y.
+.SH "FILES"
+.TP 22
+\f2TMPDIR\f1/\(**
+temporary files
+.br
+\f2TMPDIR\f1 is usually /usr/tmp but can be redefined by setting 
+the environment variable
+.B TMPDIR
+[see \f2tempnam\f1() in \f2tmpnam\f1(3S)].
+.br
+.SH "SEE ALSO"
+cc(1),
+ld(1),
+m4(1),
+nm(1),
+strip(1),
+tmpnam(3S),
+a.out(4)
+.SH WARNING
+.if ''3b' \{
+.P
+If the input file does not contain a 
+.B .file
+assembler directive and the
+.B \-m
+flag was not specified,
+the file name given by the assembler when an
+error occurs is one of the temporary files
+.RB ( /usr/tmp/as \s-1XXXXXX\s+1)
+\}
+.P
+If the 
+.B \-m
+(\f2m4\f1
+macro processor invocation) option is used,
+keywords for
+.I m4
+.RI "[see " m4 (1)]
+cannot be used as symbols (variables, functions, labels)
+in the input file since
+.I m4
+cannot determine which are assembler symbols and 
+which are real 
+.I m4
+macros.
+.if ''vax' \{\
+.P
+Use the
+.B \-b
+or 
+.B \-w
+option only when undefined symbols are known to refer to locations
+representable by the specified default displacement.
+Use of either option when assembling a file containing a reference
+to a symbol that is to be resolved by the loader can lead to
+unpredictable results,
+since the loader may be unable to place the address of the symbol
+into the space provided.
+\}
+.SH NOTES
+Wherever possible, the assembler should be accessed through a
+compilation system interface program [such as \f2cc\f1(1)].
+'\" \%W\%
+.\"	@(#)as.1	6.2 of 9/2/83
+.Ee

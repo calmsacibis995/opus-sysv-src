@@ -1,0 +1,179 @@
+This is a description of the opmon driver dvrpgc and its UNIX support
+library.
+
+Dvrpgc is used to control PC based graphics hardware that emulates an
+IBM PGC. The driver has been tested with a Vermont Microsystems, Inc.
+VM-8825 controller.
+
+To include the driver in your configuration you should add a line to
+opus.cfg of the following form:
+
+<graph=pgc(throttle=10000,timeout=20000,buf=16384)>
+
+throttle is an optional parameter that gives the number of bytes that
+dvrpgc will write to the controllers write fifo before checking to see
+if other devices need service. A high number for this parameter allows
+graphics commands to be executed faster at the expense of other I/O 
+processing. If the throttle parameter is not included its value will
+default to 256. throttle can be at most 32767.
+
+timeout is an optional parameter that gives the maximum amount of time
+for a dvrpgc command to complete. A value of 0 will allow a command to
+take forever. If timeout is not included then the default is 0. Timeout
+can be at most 32768.
+
+buf is an optional parameter that gives the size of the a side buffer that
+is allocated in the driver for double buffering of write commands. If the size
+of buf is greater than the size of a write to the driver then the data from
+the write command is copied to the side buffer, the write is completed and then
+the data in the side buffer is sent to the pgc write fifo. In this manner an
+application can regain control in order to fill another buffer with commands
+while the contents of the previous write are being sent to the pgc.
+If a write command is issued before the side buffer is emptied then it blocks.
+if buf is not present then its default value is 0 which disables double
+buffering. Buf can be at most 16384 bytes long.
+
+In UNIX the dvrpgc driver is accessed through /dev/graph.
+
+If there is no /dev/graph then create one with:
+
+	su
+	cd /dev
+	mknod graph c 15 224
+	chmod 666 graph
+
+To aid in program development there is a library of procedures available
+that drive the pgc.
+
+pgc_open(buf, len, err)
+char *buf;
+int len;
+int (*err)();
+
+	Opens a file descriptor to /dev/graph and initializes buffers.
+
+	buf is the address of a user supplied buffer. If buf is NULL then
+	a default buffer will be used. This is where commands are gathered
+	togeather before being sent to the pgc.
+
+	len is the length of the buffer. It should be 0 if the user dosn't
+	provide a buf address. The size of the default buffer is 1024.
+
+	err is the address of a user supplied error routine to call if the
+	library procedures encounter a problem. The cause of the error
+	is in the external int variable errno. Most errors are a result of
+	a problem in using the file system to access /dev/graph. If NULL
+	is given for the err parameter then a default error handler called
+	pgc_error is used.
+
+
+pgc_close()
+
+	This routine closes out access to the pgc controller. All data left
+	in the write buffer is flushed out to the driver. The file descriptor
+	and any default buffers are released. 
+
+pgc_writefifo(buf, len)
+char *buf;
+int len;
+
+	Writes data to the write fifo.
+
+	buf is the address of the buffer to be written.
+
+	len is the length of the data to be written.
+
+	The command will return the number of bytes actually written.
+
+pgc_readfifo(buf, len)
+
+	Reads the data currently available in the read fifo.
+
+	buf is the address of the buffer to receive the data.
+
+	len is the maximum size of buf.
+
+	the routine returns the number of bytes actually read. This may be
+	0 if there was no data in the fifo when the command was issued.
+
+pgc_errorfifo(buf, len)
+
+	Reads the data currently available in the error fifo.
+
+	buf is the address of the buffer to receive the data.
+
+	len is the maximum size of buf.
+
+	the routine returns the number of bytes actually read. This may be
+	0 if there was no data in the fifo when the command was issued.
+
+pgc_flush()
+
+	Causes buffered commands to be written to the pgc. Returns as soon as
+	the write completes.
+
+pgc_drain()
+
+	Caused buffered commands to be written to the pgc and does not return until
+	all the bytes have actually been transfered to the controller.
+
+pgc_coldstart()
+
+	Causes the pgc controller to be cold started.
+
+pgc_warmstart()
+
+	Causes the pgc controller to be warm started.
+
+pgc_errorenable(onoff)
+
+	Causes the pgc to turn on/off error reporting.
+
+	onoff is 1 to enable error reporting and 0 to disable it.
+
+
+The file pgc.h contains an extensive set of defines that are used to
+put the codes for the pgc commands into the write buffer. These defines
+automatically flush the buffer if it fills up. The defines are names
+with upper case letters that follow the naming convention in the pgc
+manual. Note that the defines fill up the write buffer but do not send
+the buffer to the pgc until it is full. IF you want to see the results
+of a command right away then you must call pgc_flush() to cause the
+buffered data to be written out.
+
+An example of a program that floods the screen with color 32 and
+then draws a rectangle at 100, 100, 150, 250:
+
+	#include <stdio.h>  /* to pick up the definition for NULL */
+	#include "pgc.h"  /* pgc related defines */
+
+	main() {
+
+	pgc_open(NULL, 0, NULL);  /* use the default buffer and error routine */
+	CX();  /* go into hex mode */
+	IMGSIZ(1024, 800, 8, 1);  /* set the sceen size for the vmi 8825 */
+	WINDOW(FLT(0, 0), FLT(1023, 0), FLT(0, 0), FLT(799, 0));  /* vmi 8825 */
+	FLOOD(32);  /* flood the screen with color 32 */
+	MOVE(FLT(100, 0), FLT(100, 0));  /* move to location 100 100 */
+	RECTR(FLT(50), FLT(150));  /* draw a rectangle */
+	pgc_flush();  /* send the commands to the pgc */
+	pgc_close();  /* give back resources */
+
+	}
+
+Note the use of FLT(h, l) in the above example. This is a short hand to
+form the special type of 64 bit floating point numbers used by the pgc.
+The FLT define takes the intger part as the first parameter and the 
+fractional part as the second parameter and combines them to form a
+parameter suitable for the graphics calls.
+
+Note also that the above example assumes that the pgc comes up in "ascii"
+mode so a switch to "hex" mode is made.
+
+******** The defines in pgc.h are meant to be used with the  pgc in "hex" mode.
+
+Note that data read from the read fifo will have to be byte swapped
+if its in the form of word or real results. This is due to the difference
+in the byte order between the NS32000 series processors and the
+INTEL 8xxx processors used on the pgc. The bytes that are output by the
+defined commands are byte swapped for you.

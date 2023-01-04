@@ -1,0 +1,52 @@
+#for i in `cat /tmp/files` ; do
+#echo $i
+#ed __$i.s <<!
+#/file/p
+#c
+#	file	"__$i.s"
+#.
+#w
+#q
+#!
+#done
+for i in `cat /tmp/list`; do
+	# change 'file<tab>"' to 'file<tab>"_'
+	#sed 's/file	"/file	"_/' $i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ $i.s"
+	#mv /tmp/temp.$$ $i.s
+
+	# change 'file<tab>"_' to 'file<tab>"YYYYY'
+	#sed 's/file	"_/file	"YYYYY/' $i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ $i.s"
+	#mv /tmp/temp.$$ $i.s
+
+	# change 'M88000 ' to 'M88000 _'
+	#sed "s/M88000 /M88000 _/" $i.s > /tmp/temp.$$
+
+	# delete lines with 'global.*__$'
+	#sed '/global.*__\$/d' $i.s > /tmp/temp.$$
+
+	sed "s/XXXXX/_/" $i.s | sed 's/YYYYY/_/' > /tmp/temp.$$
+	echo "mv /tmp/temp.$$ $i.s"
+	mv /tmp/temp.$$ $i.s
+
+	# change '__' to 'XXXXX' (global)
+	#sed "s/__/XXXXX/" $i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ $i.s"
+	#mv /tmp/temp.$$ $i.s
+
+	# change '_' to '__' (global)
+	#sed "s/_/__/g" $i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ $i.s"
+	#mv /tmp/temp.$$ $i.s
+
+	# substitute '$.sys' with nothing (once)
+	#sed "s/\$sys\.//" $i.s > /tmp/temp.$$
+
+	#sed "s/_\$sys\.$i/_$i/g" $i.s > /tmp/temp.$$
+	#echo "mv /tmp/temp.$$ $i.s"
+	#mv /tmp/temp.$$ $i.s
+
+	#echo "mv $i.s _$i.s"
+	#mv $i.s _$i.s
+done

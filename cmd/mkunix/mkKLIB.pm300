@@ -1,0 +1,116 @@
+
+# This makefile is part of the Opus kernel reconfiguration process.
+# It is not a released file. It is used to build a core kernel with
+# only the minimal drivers needed to boot. This file resides in the
+# "/boot/libs" directory.
+# The objects of this make will be installed in the /boot directory.
+# They will be used by "drvinstall" and "mkunix" to rebuild the kernel.
+
+ROOT = /
+INCRT = /usr/include
+INS = /etc/install
+INSDIR = $(ROOT)/
+FRC =
+DEFS = /etc/system
+MASDIR = /etc/master.d
+BOOTDIR=/boot
+UTS=/usr/src/uts/$(TYPE)/cf
+
+MACH = $(CPU)
+
+KLIBS=$(UTS)/lib.os $(UTS)/lib.nudnix $(UTS)/lib.fs
+
+DRIVERS=$(UTS)/lib.io
+
+BASE_DRVRS=cons.o dk.o dos.o pc.o mem.o gentty.o syms.o clist.o monitor.o \
+	partab.o stream.o tt1.o tty.o errmsg.o rgd.o
+
+OBSOLETE=vdi.o pcl.o
+
+DEBUG=$(UTS)/lib.debug
+TCP=$(UTS)/lib.exos
+ETHER=$(UTS)/lib.ether
+NFS=$(UTS)/lib.nfs
+NSU_IO=clone.o tirdwr.o sp.o
+NSU_ETHER=log.o timod.o
+RFSLIB=$(UTS)/lib.du
+RFS=sex.o npack.o
+XW=conx.o Xdisp.o Xsig.o ptc.o ptcspace.o pts.o ptsspace.o
+
+all:	drivers KLIB
+
+KLIB: univec.o
+	-mkdir $(MASDIR)
+	cp ./master.d/$(CPU)/* $(MASDIR)
+	cp $(UTS)/ld.file $(BOOTDIR)/LD.FILE
+	cp $(UTS)/stubs.o .
+	cp $(UTS)/vectlow.o .
+	cp $(UTS)/locore.o .
+	ld -rd -o $(BOOTDIR)/LOCORE vectlow.o locore.o
+	cp conf.$(CPU) $(BOOTDIR)/conf.c
+	-mkdir tmp
+	-rm -f tmp/*
+	cd tmp; echo $(KLIBS) | xargs -n1 ar x
+	cd tmp; ar x $(DRIVERS) $(BASE_DRVRS)
+	-rm $(BOOTDIR)/KLIB
+	cd tmp; ar q $(BOOTDIR)/KLIB \
+		../vectlow.o ../univec.o ../stubs.o *.o
+
+drivers: debug.o tcp.o nfs.o nsu.o rfs.o xw.o
+	cp system.$(CPU) /etc/system
+	-cd tmp; rm *
+	cd tmp; ar x $(DRIVERS)
+	-cd tmp; rm $(BASE_DRVRS) $(OBSOLETE) $(NSU_IO) $(XW)
+	cd tmp; /bin/ls *.o | xargs -i /bin/ld -rd -o $(BOOTDIR)/{} {}
+	-cd tmp; rm *
+
+debug.o: FRC
+	@echo "- debug"
+	-mkdir $(BOOTDIR)
+	-mkdir tmp
+	-cd tmp; rm *
+	cd tmp; ar x $(DEBUG)
+	cd tmp; ld -rd -o $(BOOTDIR)/debug.o *.o
+	cd tmp; rm *
+
+nfs.o: FRC
+	@echo "- nfs"
+	cd tmp; ar x $(NFS)
+	cd tmp; ld -rd -o $(BOOTDIR)/nfs.o *.o
+	cd tmp; rm *
+
+tcp.o: FRC
+	@echo "- tcp"
+	cd tmp; ar x $(TCP)
+	cd tmp; ld -rd -o $(BOOTDIR)/tcp.o *.o
+	cd tmp; rm *
+
+nsu.o: FRC
+	@echo "- nsu"
+	cd tmp; ar x $(DRIVERS) $(NSU_IO)
+	cd tmp; ar x $(ETHER) $(NSU_ETHER)
+	cd tmp; ld -rd -o $(BOOTDIR)/nsu.o *.o
+	cd tmp; rm *
+
+rfs.o: FRC
+	@echo "- rfs"
+	cd tmp; ar x $(ETHER) $(RFS)
+	cd tmp; ar x $(RFSLIB)
+	cd tmp; ld -rd -o $(BOOTDIR)/rfs.o *.o
+	cd tmp; rm *
+
+xw.o: FRC
+	@echo "- xw"
+	cd tmp; ar x $(DRIVERS) $(XW)
+	cd tmp; ld -rd -o $(BOOTDIR)/xw.o *.o
+	cd tmp; rm *
+
+univec.o: $(FRC)
+	cp univec.pm300 univec.c
+	cc -c $(CFLAGS) univec.c
+
+FRC:
+
+clobber:
+	-rm -rf tmp
+	-rm -f univec.c *.o

@@ -1,0 +1,63 @@
+/* NFS driver */
+#include "/etc/system"
+
+/* NFS parameter definitions */
+#define	nfs_FLAGS	1		/* FS_NOICACHE */
+#define	nfs_NAME	"NFS"
+#define	nfs_NOTIFY	0xC		/* NO_SEEK|NO_IGET */
+
+#if NFS
+#define NFSDEBUG -1
+#define RPCDEBUG -1
+#define NFS_RNUM 50
+int nfs_rnum = NFS_RNUM;
+unsigned char nfs_rnodes[NFS_RNUM][0x130];
+int nfsdebug = NFSDEBUG;
+int rpcdebug = RPCDEBUG;
+int nfsd_imaj = 7;		/* bdevsw entry number for NFS */
+
+/* variable definitions */
+char hostname[32];
+int hostnamelen = sizeof(hostname);
+
+#else
+char hostname[32];
+int hostnamelen = sizeof(hostname);
+int rcstat, clstat, rsstat, svstat;	/* for io/syms.c */
+
+nfsdioctl() {
+	nopkg();
+}
+nfsdstrategy(){
+	nopkg();
+}
+
+nfsinit() {}
+ nfsiput() { nodev(); }
+ nfsiread() { nodev(); }
+ nfsiupdat() { nodev(); }
+ nfsreadi() { nodev(); }
+
+nfswritei() { nodev(); }
+ nfsitrunc() { nodev(); }
+ nfsstatf() { nodev(); }
+ nfsnamei() { nodev(); }
+ nfsmount() { nodev(); }
+
+nfsumount() { nodev(); }
+ nfsopeni() { nodev(); }
+ nfsclosei() { nodev(); }
+ nfsupdate() { nodev(); }
+
+nfsstatfs() { nodev(); }
+ nfsaccess() { nodev(); }
+ nfsgetdents() { nodev(); }
+ nfsallocmap() { nodev(); }
+ nfsfreemap() { nodev(); }
+
+nfsreadmap() { nodev(); }
+ nfssetattr() { nodev(); }
+ nfsnotify() { nodev(); }
+ nfsfcntl() { nodev(); }
+ nfsioctl() { nodev(); }
+#endif

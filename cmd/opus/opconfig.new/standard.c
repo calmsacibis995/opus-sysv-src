@@ -1,0 +1,1189 @@
+#include <sys/types.h>
+#include <sys/iorb.h>
+#include <sys/sysconf.h>
+#include <sys/errno.h>
+#include "opconfig.h"
+
+char *scr_std[] = {
+"Many different types of systems are supported by the Opus5 software on",
+#if pm100
+"\tthe Opus 100PM processor.  In order to initialize the system properly,",
+#endif
+#if pm200
+"\tthe Opus 200PM processor.  In order to initialize the system properly,",
+#endif
+#if pm300
+"\tthe Opus 300PM processor.  In order to initialize the system properly,",
+#endif
+#if pm400
+"\tthe Opus 400PM processor.  In order to initialize the system properly,",
+#endif
+"\tsome decisions need to made concerning the hardware and software",
+"\tinterfaces to your particular system.  The purpose of this program",
+"\tis to simplify those decisions.  For most systems, choosing the",
+"\tdefault parameters allows the best performance and most flexibility.",
+"\tIf at any time you wish to terminate this program, type \"exit\".",
+"",
+0
+};
+
+char *scr_std2[] = {
+"To install Opus5 software, you must allocate space for you UNIX file system",
+"\tas well as a paging area called the swap area.",
+"",
+0
+};
+
+char *scr_type[] = {
+"This program knows about the following different types of systems:",
+"\t(1)  AT  (IBM PC/AT or functional equivalent)",
+"\t(2)  XT  (IBM PC/XT with IBM disk controller)",
+"\t(3)  PC  (IBM PC/XT or functional equivalent)",
+"\t(4)  63  (ATT 6300)",
+"",
+0
+};
+
+char *systype[] = {
+	"",
+	"AT",
+	"XT",
+	"PC",
+	"63",
+	0
+};
+
+char *scr_typinfo[] = {
+"Most PC systems currently fall into the AT category.  The ATT 6300 differs",
+"\tfrom the other systems in having a slightly different clock rate.",
+"\tThe XT differs from the PC in that the XT uses a direct XT-only",
+"\tdisk driver.",
+"",
+0
+};
+
+char *scr_stand2[] = {
+	"With a \"standard\" configuration (i.e., you have not added ",
+	"\tnon-standard boards or devices to your system), you are only",
+	"\trequired to designate how much space you will make available",
+	"\tfor the root file system, how much space you will make",
+	"\tavailable for the swap area, and how much space you wish to",
+	"\tset aside for alternates for bad sectors.",
+	"",
+	0
+};
+
+char *scr_stand3[] = {
+	"For a minimal usable Opus5 system, you should designate five (5)",
+	"\tmegabytes (10000 blocks) for the root file system and at least",
+	"\ttwo (2) megabytes (4000 blocks) for the swap area.  If you will",
+ 	"\tbe running very large programs or plan on running large numbers",
+	"\tof programs simultaneously, you should increase the size of the",
+	"\tswap area.  One rule of thumb is to add the maximum stack and",
+	"\tdata areas of all the programs you might be running simultaneously,",
+	"\tthen add one (1) megabyte for margin.  It is better to err on the",
+	"\tside of too large a swap area rather than too small, since",
+	"\trunning out of swap area is fatal, and increasing the swap area",
+	"\tis difficult if you have used up the remaining disk space with file",
+	"\tsystems.  If you have more disk space available, you should",
+	"\tincrease the size of the root file system to allow more room for",
+	"\tboth Opus5 and user programs.  The full release takes about sixteen",
+	"\t(16) megabytes (32000 blocks), and you should always leave at least",
+	"\ttwo (2) megabytes (4000 blocks) free for user programs.  For most",
+	"\tsystems, 1% of the disk is sufficient for alternates.  You",
+	"\tmay need to increase this if you run out while automatically",
+	"\tsparing bad blocks.",
+	"",
+	0,
+};
+
+char *scr_stand[] = {
+	"The following configurations require special treatment:",
+	"",
+	"\t(1) More than one Opus5 file system this partition",
+	"\t(2) An unusually large number of bad sectors on your hard disk",
+	"",
+	0
+};
+
+standard() {
+	printdiv("Standard System Initialization\n");
+	nl();
+	if (Cflag) {
+		 return(copyroot(Tflag));
+	}
+	if (Lflag) {
+		printf("Opus5 will now be loaded on top of a previous release.\n");
+		nl();
+		return(copyroot(Tflag));
+	}
+	if (Rflag) {
+		printf("The root file system will be recreated and\n");
+		printf("\tOpus5 will now be reloaded over a previous release.\n");
+		nl();
+		return(copyroot(Tflag));
+	}
+#if pm100
+	scrn(scr_std);
+#endif
+	setupdosfiles(Eflag);
+#if pm200 || pm300 || pm400
+	Tflag = TYPE_AT;
+#else
+	while (!Tflag) {
+		scrn(scr_type);
+		printf("For more information type \"?\".");
+		printf("  Please choose the system from the above list\n");
+		printf("\tthat most closely resembles your system [1-4]: "); 
+		getresponse();
+		nl();
+		Tflag = chktype(systype[atoi(response)]);
+		if (!Tflag) {
+			if (response[0] == 'q' || response[0] == 'Q')
+				return(-1);
+			else if (response[0] == '?') {
+				scrn(scr_typinfo);
+				seeman();
+			} else 
+				bpause("Invalid system type.  ");
+		} else {
+			printf("Is your system type \"%s\" [y,n]? ",
+				systype[Tflag]);
+			if (!yesno())
+				Tflag = 0;
+		}
+	}
+#endif	/* pm200 || pm300 || pm400 */
+	
+				/* define opus.cfg for entire system */
+	if (setupcfg(Tflag,0) < 0)
+		return(-1);
+
+	if (setupdisk(Tflag,-1) < 0)
+		return(-1);
+
+				/* look at drives and initialize if needed */
+	if (setupblk0(Tflag,-1) < 0)
+		return(-1);
+
+	return(copyroot(Tflag));
+}
+
+setupdosfiles(flag) {
+	int i;
+	int reqsize;
+	int swapreq;
+	int entry;
+	int swapentry;
+	int dsk0size;
+	char rootbuf[256];
+	char swapbuf[256];
+
+	if (!flag || Aflag) return;
+	*rootbuf = 0;
+	reqsize = rootsize;
+	swapentry = findargval("swap",0,swapbuf);
+	if (findargval("dsk/0","size",rootbuf) < 0)  {
+	    while (!Uflag) {
+		printf("How large would you like your UNIX root file system [%d]? ",rootsize);
+		getresponse();
+		nl();
+		if (*lineptr == 0) {
+			reqsize = rootsize;
+			break;
+		} else if ((reqsize = atoi(response)) != 0)
+			break;
+		if (*response == 'q' || *response == 'Q')
+			break;
+		printf("You need to specify the size in (512 byte) blocks\n");
+		bpause("\tof the root file system.  ");
+	    }
+	    rootsize = reqsize;
+	    reqsize = swapsize;
+	    while (!Wflag) {
+		printf("How large would you like your UNIX swap area [%d]? ",swapsize);
+		getresponse();
+		nl();
+		if (*lineptr == 0) {
+			reqsize = swapsize;
+			break;
+		} else if ((reqsize = atoi(response)) != 0)
+			break;
+		if (*response == 'q' || *response == 'Q')
+			break;
+		printf("You need to specify the size in (512 byte) blocks\n");
+		bpause("\tof the swap area.  ");
+	    }
+	    swapsize = reqsize;
+	    if (swapentry >= 0)
+		dsk0size = rootsize;
+	    else
+		dsk0size = rootsize + swapsize;
+	    entry = findargval("dsk/0",0,rootbuf);
+	    if (entry >= 0) {
+		sprintf(rootbuf,"fil0(size=c:%d)",dsk0size);
+		if (strcmp("fil0",configlist[entry].dosname) != 0 &&
+				strcmp("c:",configlist[entry].dosname) != 0 &&
+				strcmp(rootbuf,configlist[entry].dosname) != 0) {
+			printf("There is already an entry for dsk/0 \"<dsk/0=%s\".\n",configlist[entry].dosname);
+			printf("\tDo you wish to overwrite it with \"<dsk/0=%s>\"? ",rootbuf);
+			getresponse();
+			nl();
+			if (*lineptr != 'y' && *lineptr != 'Y')
+				goto doroot;
+		} 
+		strcpy(configlist[entry].dosname,rootbuf);
+		writeconfig();
+		diskchanged++;
+	    } else {
+			printf("Missing \"dsk/0\" entry in opus.cfg.\n");
+			seeman();
+			exit(18);
+	    }
+	}
+doroot:
+	entry = findargval("dsk/0",0,rootbuf);
+	if (swapentry >= 0)
+		printf("The entry for your file UNIX root file system is:\n\t%s\n\n",rootbuf);
+	else
+		printf("The entry for your file system/swap area is:\n\t%s\n\n",rootbuf);
+	printf("Type the new entry if you wish to change it or <cr> if it is okay:\n\t");
+	getresponse();
+	if (*lineptr) {	
+		strcpy(rootbuf,lineptr);
+		strcpy(configlist[entry].dosname,rootbuf);
+		writeconfig();
+		diskchanged++;
+		goto doroot;
+	}
+/* If the user has a swap entry in opus.cfg, go ahead and put swap there */
+	if (swapentry >= 0) {
+		sprintf(swapbuf,"swap(size=c:%d)",swapsize);
+		strcpy(configlist[swapentry].dosname,swapbuf);
+		writeconfig();
+		diskchanged++;
+doswap:
+		swapentry = findargval("swap",0,swapbuf);
+		printf("The entry for your swap area is:\n\t%s\n\n",swapbuf);
+		printf("Type the new entry if you wish to change it or <cr> if it is okay:\n\t");
+		getresponse();
+		nl();
+		if (*lineptr) {	
+			strcpy(swapbuf,lineptr);
+			strcpy(configlist[swapentry].dosname,swapbuf);
+			writeconfig();
+			diskchanged++;
+			goto doswap;
+		}
+		if (*swapbuf == 0) {
+			sprintf(swapbuf,"size=c:%d",swapsize);
+		}
+	}
+}
+
+/*
+ * This routine accepts a unix opus.cfg device name, an opus.cfg argument
+ * name, and the address of where the actual opus.cfg argument value for
+ * that device and argument is to be put.  If argname is null, the entire
+ * argument list is returned.
+ *
+ * For example, findargval("dsk/1","size",&argval) might return
+ * "c:10000 d:10000" for a value.
+ */
+
+findargval(devname,argname,argval)
+char *devname;
+char *argname;
+char *argval;
+{
+	int entry;
+	char *endpos;
+	char *arglist;
+
+	*argval = 0;
+	if (readconfig() < 0)
+		return(-2);
+	if ((entry = findconfig(devname)) < 0) {
+		return(-3);
+	}
+	arglist = configlist[entry].dosname;
+	if (argname == NULL) { 
+		strcpy(argval,arglist);
+		return(entry);
+	}
+	while (*arglist) {
+		if (*arglist == ')')
+			break;
+		if (*arglist == '(' || *arglist == ' ' || *arglist == '	' || *arglist == ',') {
+			arglist++;
+			continue;
+		}
+		if (strncmp(arglist,argname,strlen(argname))) {
+			while (*arglist) {
+				if (*arglist == ')' || *arglist == ' ' || *arglist == '	' || *arglist == ',')
+					break;
+				arglist++;
+			}
+			continue;
+		}
+		arglist += strlen(argname);
+		while (*arglist) {
+			if (*arglist == ' ' || *arglist == '	' || *arglist == '=')
+				arglist++;
+			else
+				break;
+		}
+		endpos = strchr(arglist,',');
+		if (!endpos)
+			endpos = strchr(arglist,')');
+		if (!endpos)
+			endpos = arglist + strlen(arglist);
+		strncpy(argval,arglist,endpos-arglist);
+		return(entry);
+	}
+	return(-1);
+}
+
+/* NOT YET FULLY IMPLEMENTED -- CCF */
+showavail(area,reqsize)
+char *area;
+{
+	char drive;
+	int size;
+	int newspace;
+	int totspace;
+	int spaceleft;
+	int i,j;
+	char sizestring[128];
+	int unixuse[26];
+
+	printdiv("Creating space for the ");
+	printf("%s\n\n",area);
+	printf("The following table shows the available space on your disk drives:\n\n");
+	printf("        Drive   Total   Available     	Drive   Total   Available\n");
+	i = 0;
+	spaceleft = 0;
+	for (drive='c'; drive<'z'; drive++)
+		unixuse[drive-'c'] = 0;
+	for (drive='c'; drive<'z'; drive++) {
+		if ((size = spaceavail(drive)) > 0) {
+			printf("\t  %c:   %6d    %6d\t",drive,totalavail(drive),size);
+			if (i++ & 1)
+				printf("\n");
+			spaceleft += size;
+		}
+	}
+	nl();
+	nl();
+retry:
+	totspace = 0;
+	printdiv("Specify the size in (512 byte) blocks you would like for the ");
+	printf("%s.\n\n",area);
+	printf("        Drive   Total   Available     Needed	UNIX\n\n");
+	for (drive='c'; drive<'z'; drive++) {
+		unixuse[drive-'c'] = 0;
+		if ((size = spaceavail(drive)) > 0) {
+			printf("\t  %c:   %6d    %6d      %6d\t",drive,
+				totalavail(drive),size,reqsize-totspace,unixuse[drive-'c']);
+			getresponse();
+			if (*lineptr == 0)
+				newspace = -1;
+			else
+				newspace = getnum(10);
+			if (newspace > size) {
+				bpause("\nValue must be less than current available space.  "); 
+				drive--;
+				continue;
+			}
+			if (newspace >= 0) {
+				if (newspace > reqsize)
+					newspace = reqsize;
+				unixuse[drive-'c'] = newspace;
+				totspace += newspace;
+			}
+			if (totspace >= reqsize) {
+				break;
+			}
+		}
+	}
+	if (totspace < reqsize) {
+		printf("\nYou have not allocated enough space for the %s.  Type \"p\"\n",area);
+		printf("\tto pause to DOS to make more space available, or type <cr> to retry: ");
+		getresponse();
+		nl();
+		if (*lineptr == 'p' || *lineptr == 'P') {
+			printf("Exiting to DOS.  When done, type \"exit\" to return to configuration program.\n");
+#if STANDALONE
+			_syscmd(3,2);
+#else
+			syspause(2);
+#endif
+		}
+		goto retry;
+	}
+	sizestring[0] = 0;
+	for (drive='c'; drive<'z'; drive++) {
+		if (unixuse[drive-'c'])
+			sprintf(sizestring,"%s%c:%d ",sizestring,drive,unixuse[drive-'c']);
+	}
+	printf("\nThe drive specification for your %s is:\n\n",area);
+	printf("\tsize=%s\n\n",sizestring);
+	printf("Type \"n\" if this is not okay, <cr> to continue: ");
+	getresponse();
+	nl();
+	if (*lineptr == 'n' || *lineptr == 'N')
+		goto retry;
+}
+
+spaceavail(drive) { 
+	if (drive == 'c')
+		return(10111);
+	if (drive == 'd')
+		return(102);
+	if (drive == 'e')
+		return(101010);
+	if (drive == 'f')
+		return(-1);
+	if (drive == 'g')
+		return(1);
+	return(-1);
+}
+
+totalavail(drive) { 
+	if (drive == 'c')
+		return(20111);
+	if (drive == 'd')
+		return(11102);
+	if (drive == 'e')
+		return(101014);
+	if (drive == 'f')
+		return(-1);
+	if (drive == 'g')
+		return(110);
+	return(-1);
+}
+/* END OF UNIMPLEMENTED SOFTWARE -- CCF */
+
+setupblk0(typeflag,diskno) {
+	register i, j;
+	register root;
+	register swap;		/* number of swap blocks this drive */
+	register spare;
+	register ifid;
+	register ofid;
+	int total;
+	int val;
+	int left;
+	int beenhere;
+	int swapdrive;
+	int swapsection;
+	int nswap;		/* number of swap blocks for system */
+	int swplo;
+	int rootdrive;
+	int isapartition;
+	int hasasize;
+	int menucnt;
+	int gsize;		/* minimum group (track) size for bad blocks */
+	int entry;
+	char filestr[128];
+	char diskname[32];
+	long tempsize;
+	
+    beenhere = 0;
+    diskcnt = 0;
+    nswap = swapsize;
+    swplo = -1;
+    rootdrive = swapdrive = swapsection = 0;
+    if (readconfig() < 0)
+	return(-2);
+    if ((entry = findconfig("swap")) >= 0) {
+	partsize(i,&partinfo[i]);
+	if (partinfo[i].parttype >= 0)
+		nswap = partinfo[i].sectsperpart;
+	else
+		nswap = swapsize;
+	swapdrive = 15;
+	swplo = 0;
+    }
+    if (!dflag && (rdblock0(0,READONLY) == BLKOK)) {
+	if (blk0->nswap > 0) {
+	    nswap = blk0->nswap;
+	    swplo = blk0->swplo;
+	    swapdrive = (blk0->swapdev & 0xff) / NUMLOGVOL;
+	    swapsection = blk0->swapdev % NUMLOGVOL;
+	    rootdrive = (blk0->rootdev & 0xff) / NUMLOGVOL;
+	}
+    }
+    for (i=0; i<DKMAX; i++) {
+	if (diskno > -1) {
+		if (beenhere++)
+			return(0);
+		i = diskno;
+	}
+	partsize(i,&partinfo[i]);
+	if (partinfo[i].status == -1)	/* not a legitimate drive */
+		continue;
+	isapartition = (partinfo[i].status >= 10) ? 1 : 0;
+	hasasize = (partinfo[i].status >= 0) ? 1 : 0;
+	if (isapartition) {
+	    sprintf(diskname,"/dev/dsk/%ds7",i);
+	    if ((sparedisk = open(diskname,2)) < 0) {
+		printf("Unable to initialize and spare bad blocks for");
+		printf(" logical drive dsk/%d.\n",i);
+		seeman();
+		close(sparedisk);
+		continue;
+	    }
+	} else {		/* ignore diskette drives */
+	    if (i >= 11 && i <=14) {
+		close(sparedisk);
+		continue;
+	    }
+	}
+	if (rdblock0(i,READONLY)==BLKBAD) {	/* block zero not defined */
+		if (rdblock0(i,INITONLY)==BLKBAD) {
+		    close(sparedisk);
+		    continue;
+		}
+		updblock0(i,NOPROMPT);
+	}
+	diskcnt++;
+	if (rdblock0(i,READONLY)==BLKBAD || partinfo[i].status == -1
+		|| partinfo[i].nblk == 0) {
+		close(sparedisk);
+		continue;
+	}
+        printdiv("Allocation of sections");
+	if (isapartition)
+          printf(" and spare area for");
+	else
+          printf(" for");
+        printf(" dsk/%d.\n",i);
+	nl();
+	if (hasasize) {
+	    total = partinfo[i].sectsperpart;
+	    if (total == 0)
+		total = 100000000;
+				/* if blk0 has correct value, implies okay */
+	} else {		/* verify size of dos file */
+	    if (blk0->sectors <= 0 || blk0->sectors == 1000000) {
+		spare = 0;
+		resp("How large (in 512 byte blocks) is this DOS file? ");
+		if ((total = getnum(10)) < 0)
+			total = 1;
+	    } else {
+		printf("Is this DOS file %d blocks large [y,n]? ",
+			blk0->sectors);
+		if (yesno())
+			total = blk0->sectors;
+		else {
+			resp("How large (in 512 byte blocks) is this DOS file? ");
+			if ((total = getnum(10)) < 0)
+				total = 1;
+		}
+	    }
+	    partinfo[i].nblk = total;
+	}
+	if (blk0->sectors == total && nswap != 100000) {
+		spare = blk0->spares;
+		swap = (i == swapdrive && swapsection == 0) ? nswap : 0;
+		if (i == 15)
+			root = 0;
+		else
+			root = blk0->rootsects;
+	} else {
+		if (!isapartition)
+			spare = 0;
+		else {
+			spare = total / 100 + 1;
+			if (spare&1 != total&1)
+				spare++; /* even up start of spare area */
+		}
+		swap = (i == swapdrive && swapsection == 0) ? nswap : 0;
+		if (swap > total)
+			swap = total;
+		if (i == 15)
+			root = 0;
+		else
+			root = total - spare - swap;
+		root &= ~1;
+	}
+    printf("Normally, each partition is accessed via a single section\n");
+    printf("\t(e.g., /dev/dsk/c1d%ds0).",i);
+    printf("  If this is okay, type \"y\" to continue: ");
+    if (!yesno()) {
+	unixfilsys(i);
+    }
+    printf("The next step gives you an opportunity to change the number\n");
+    printf("\tof blocks allocated for the swap area and spare block area.\n");
+    printf("\tIf you have an unusually large number of bad sectors on your\n");
+    printf("\thard disk (more than 1%%), you may need to increase the size\n");
+    printf("\tof the spare block area.\n"); 
+    nl();
+checkit:
+	divider();
+	printf("This UNIX logical drive (dsk/%d)",i);
+	printf(" is currently divided as follows:\n");
+	nl();
+	menucnt = 0;
+	printf("\t(%d)  %sile system: %d blocks (%d.%d MB)  %d%%\n",
+		++menucnt,(i==rootdrive) ? "Root f" : "     F",root,
+		MEGSX10(root)/10,MEGSX10(root)%10,total?100*root/total:0);
+	if ((i == swapdrive) && (swapsection == 0))
+	    printf("\t(%d)         Swap area: %d blocks (%d.%d MB)  %d%%\n",
+		++menucnt,swap,
+		MEGSX10(swap)/10,MEGSX10(swap)%10,total?100*swap/total:0);
+	printf("\t(%d)  Spare block area: %d blocks (%d.%d MB)  %d%%",
+		++menucnt,spare,
+		MEGSX10(spare)/10,MEGSX10(spare)%10,total?100*spare/total:0);
+	if (partinfo[i].status == -2 || partinfo[i].parttype == 4 || partinfo[i].parttype == 6)
+		printf("  (NOT NEEDED)\n");
+	else
+		nl();
+	left = total - root - swap - spare;
+	printf("\t            Available: %d blocks (%d.%d MB)  %d%%\n",
+		left,MEGSX10(left)/10,MEGSX10(left)%10,total?100*left/total:0);
+	nl();
+	printf("\t Total partition size: %d blocks (%d.%d MB)\n",
+		partinfo[i].nblk,MEGSX10(partinfo[i].nblk)/10,
+		MEGSX10(partinfo[i].nblk)%10);
+	nl();
+	printf("Type \"?\" for more information, type \"q\" to go to the");
+	printf(" next partition, type the\n");
+	printf("\tcorresponding number [1-%d] to change a value, or",menucnt);
+	printf(" type \"y\" if these\n");
+	resp("\tnumbers are acceptable: ");
+	switch(*lineptr) {
+	case 'y':
+	case 'Y':
+		break;
+	case '?':
+		printdiv("Information on how to set up your disk\n");
+		scrn(scr_stand3);
+		pause("");
+		goto checkit;
+	case '1':
+		printf("Please type size (in 512 byte blocks) of ");
+		resp("file system: ");
+		val = getnum(10);
+		if (val >=0)
+			if (gflag && i==0)
+				root = rootsize;
+			else
+				root = val;
+		goto checkit;
+	case '2':
+		if (menucnt == 3) {
+			printf("Please type size (in 512 byte blocks) of ");
+			resp("swap area: ");
+			val = getnum(10);
+			if (val >= 0)
+			    nswap = swap = val;
+			if (val == 0) {
+			    printf("Would you like to designate another");
+			    printf(" drive as the primary swap area [y,n]? ");
+			    if (yesno()) {
+				printf("Swap area drive number [0-15]: ");
+				getresponse();
+				swapdrive = getnum(10);
+				printf("Swap area section number [0-6]: ");
+				getresponse();
+				swapsection = getnum(10);
+				printf("Swap area first block: ");
+				getresponse();
+				swplo = getnum(10);
+				printf("Swap area size: ");
+				getresponse();
+				nswap = getnum(10);
+				nl();
+				if (swapdrive <= i) {
+				    close(sparedisk);
+				    i = swapdrive - 1;
+				    beenhere--;
+				    continue;
+				}
+			    }
+			}
+			goto checkit;
+		}		/* else we meant spare block area */
+	case '3':
+		printf("Please type size (in 512 byte blocks) of ");
+		resp("spare block area: ");
+		val = getnum(10);
+		if (val >= 0)
+			spare = val;
+		goto checkit;
+	case 'q':
+	case 'Q':
+		close(sparedisk);
+		continue;
+	default:
+		goto checkit;
+	}
+	if (root + swap + spare > total) {
+		if (gflag) {
+			root = total - spare - swap;
+			if (root < 10000) {
+				instream = stdin;
+				nl();
+				printf("Root should be at least 10000 blocks, unable to continue.\n");
+				exit(13);
+			}	
+		} else {
+			printf("Sum of areas cannot exceed disk size!  ");
+			printf("Decrease the size of one of the areas.\n");
+			bpause("\t");
+			goto checkit;
+		}
+	}
+	/*DC if (gflag && !fflag && ((total - spare - swap - rootsize) < 40000)) */
+	if (gflag && ((total - spare - swap - rootsize) < 40000)) {
+		root = total - spare - swap;
+		for (j=1;j<NUMLOGVOL-1;j++){
+			blk0->logvol[j].start = 0;
+			blk0->logvol[j].len = -1;
+		}
+	} else if (gflag && (Uflag || fflag)) {
+		blk0->logvol[0].start = 0;
+		blk0->logvol[0].len = -1;
+		blk0->logvol[1].start = rootsize;
+		blk0->logvol[1].len = -1;
+		tempsize = rootsize; 
+		for (j=2;j<NUMLOGVOL-1;j++){
+			tempsize = tempsize + sectionsize;
+			blk0->logvol[j].start = tempsize ;
+			blk0->logvol[j].len = -1;
+		}
+	}
+
+	if (i == swapdrive && nswap < (flpsects+10)) {
+		printf("Swap area should be at least %d sectors ",flpsects+10);
+		printf("for initial load.\n");
+		printf("You must increase the size of the swap area.");
+		bpause("  ");
+		if (response[0] != 'q' && response[0] != 'Q') {
+			close(sparedisk);
+			i = swapdrive - 1;
+			beenhere--;
+			continue;
+		}
+	}
+	
+	blk0->sectors = total;
+	blk0->rootsects = root;
+	if (swap)
+		swplo = total - spare - swap;
+	if (i==0) {
+		blk0->swapdev = swapdrive * NUMLOGVOL + swapsection;
+		blk0->dumpdev = blk0->swapdev;
+		blk0->nswap = nswap;
+		blk0->swplo = swplo;
+	}
+	blk0->spares = spare;
+	blk0->sparetbl = total - spare;
+	updblock0(i,NOPROMPT);
+
+	if (partinfo[i].parttype >= 10) {
+	    divider();
+	    printf("The disk (dsk/%d) will now be searched for bad disk blocks",
+		i);
+	    printf(" to assign alternates.\n");
+	    printf("\tTHIS MAY DESTROY DATA ON THE DISK!  Type \"q\" to");
+	    printf(" skip the bad block\n");
+	    printf("\tsearch; type the filename to specify a list");
+	    printf(" of bad disk blocks;\n");
+	    resp("\tor type <cr> to continue with search: ");
+	    if (*lineptr != 'q' && *lineptr != 'Q') {
+		gsize = 1;
+		gsize = (*lineptr == '*') ? strtol(&lineptr[1],0,0) : 1;
+		if (srchbadblk(i,gsize,*lineptr?lineptr:0,0) != 0) {
+			beenhere--;
+			i--;		/* go back and try again */
+			close(sparedisk);
+			continue;
+	        }
+	    }
+	}
+	close(sparedisk);
+    }
+
+    if (swapdrive != 0) {
+	rdblock0(0,2);
+	blk0->swapdev = swapdrive * NUMLOGVOL + swapsection;
+	blk0->dumpdev = blk0->swapdev;
+	blk0->nswap = nswap;
+	blk0->swplo = swplo;
+	updblock0(0,NOPROMPT);
+    }
+
+    if (diskcnt == 0)	/* no disks available */
+	return(-1);
+	
+    return(0);
+}
+
+copyroot(flag) {
+	register ifid;
+	register ofid;
+	register i;
+	int avail_blocks;
+	int bytes;
+	int swapbase;
+	int swapdrive;
+	int swapsection;
+	int swapminor;
+	int swapmajor;
+	int nswap;
+	int swplo;
+	int rootdrive;
+	int rootsection;
+	int rootminor;
+	int rootmajor;
+	int tmpsection;
+	int tmpminor;
+	int cylsize;
+	FILE *savestream;
+	char filestr[128];
+	char diskname[32];
+	char tmpbuf[512];
+
+	if (rdblock0(0,READONLY)==BLKBAD) {	/* block zero not defined */
+		if (rdblock0(0,INITONLY)==BLKBAD) {
+		    printf("Invalid Parameter Block on drive 0 (dsk/0)\n");
+		    exit(10);
+		}
+	}
+	sprintf(diskname,"/dev/dsk/15s0");
+	if ((ofid = open(diskname,2)) > 0) {
+		if (Eflag || (read(ofid,tmpbuf,512) == 512)) {
+		      	blk0->swapdev = 120;	/* subs old defaults */
+			blk0->dumpdev = 120;
+			blk0->swplo = 0;
+			blk0->nswap = swapsize;
+		}
+		close(ofid);
+	}
+	updblock0(0,NOPROMPT);
+	if (blk0->swplo < 0 || blk0->nswap < flpsects) {
+		bpause("Sufficient swap area not defined.  Unable to proceed.  "
+			);
+		exit(11);
+	}
+	if (blk0->swapdev == blk0->rootdev && blk0->swplo == 0) {
+		printf("Swap area overlaps root file system.");
+		printf("  Unable to continue.\n");
+		bpause("\t");
+		exit(12);
+	}
+	if (msgfilename)	 { /* -M option specified user defined prompt */
+		if ((ofid = open(msgfilename,0)) >= 0) {
+			savestream = instream;
+			instream = stdin;
+			while (read(ofid,response,1) > 0) {
+				if (*response == '\032')
+					break;
+				printf("%c",*response);
+			}
+			getresponse();
+			instream = savestream;
+			close(ofid);
+		}
+	} else
+		bpause("Insert \"Root\" diskette in drive A.  ");
+	swapdrive = (blk0->swapdev & 0xff) / NUMLOGVOL;
+	swapmajor = blk0->swapdev >> 8;
+	swapminor = blk0->swapdev & 0xff;
+	swapsection = blk0->swapdev % NUMLOGVOL;
+	nswap = blk0->nswap;
+	swplo = blk0->swplo;
+	rootmajor = blk0->rootdev >> 8;
+	rootminor = blk0->rootdev & 0xff;
+	rootdrive = (blk0->rootdev & 0xff) / NUMLOGVOL;
+	rootsection = blk0->rootdev % NUMLOGVOL;
+	if ((ofid = open(":mkfscmd",1)) >= 0) {
+		lseek(ofid,0,0);
+		if (Lflag) {
+			    sprintf(filestr,"");
+			    write(ofid,filestr,strlen(filestr));
+		} else {
+			for (i=0; i<11; i++) { /* ignore diskettes and swap */
+				if (gflag && i == 10)
+					continue;
+			    if (Rflag && (i != 0))
+				break;
+			    if (rdblock0(i,READONLY) != BLKOK)
+				if (rdblock0(i,INITONLY)==BLKBAD)
+				    continue;
+			    if (filsiz[i] > 0)
+				blk0->rootsects = filsiz[i];
+				if (gflag && i == 0) {
+					
+					avail_blocks = blk0->swplo - blk0->rootsects;
+				}
+					
+			    if (blk0->rootsects <= 1)
+				continue;
+			    partsize(i,&partinfo[i]);
+			    if (partinfo[i].status < 10)
+				cylsize = 400;
+			    else
+			    	cylsize = partinfo[i].headcnt 
+					* partinfo[i].secttrk;
+			    
+			    sprintf(filestr,"ans=\"y\"\r\n");
+			    write(ofid,filestr,strlen(filestr));
+			    if (i != 0) {
+				sprintf(filestr,
+				"echo \"\\nDo you want to create a %d block file system on /dev/dsk/c1d%ds0 [y,n]? \\c\"\r\n",blk0->rootsects & ~1,i);
+			        write(ofid,filestr,strlen(filestr));
+			    	sprintf(filestr,"ans=`line`\r\n");
+			        write(ofid,filestr,strlen(filestr));
+			    }
+			    sprintf(filestr,"if [ ${ans} = 'y' -o ${ans} = 'Y' ] ; then\r\n");
+			    write(ofid,filestr,strlen(filestr));
+			    if (blocksize == 1024)
+			    	sprintf(filestr,
+					"echo \\# /etc/mkfs /dev/dsk/c1d%ds0 %d %d %d\r\n",
+					i,blk0->rootsects & ~1,gap,cylsize);
+			    else
+			    	sprintf(filestr,
+					"echo \\# /etc/mkfs /dev/dsk/c1d%ds0 %d %d %d -b %d\r\n",
+					i,blk0->rootsects & ~1,gap,cylsize, blocksize);
+			    write(ofid,filestr,strlen(filestr));
+			    if (blocksize == 1024)
+			    	sprintf(filestr,
+					"/etc/mkfs /dev/dsk/c1d%ds0 %d %d %d\r\n",i,
+					blk0->rootsects & ~1,gap,cylsize);
+			    else
+			    	sprintf(filestr,
+					"/etc/mkfs /dev/dsk/c1d%ds0 %d %d %d -b %d\r\n",i,
+					blk0->rootsects & ~1,gap,cylsize, blocksize);
+			    write(ofid,filestr,strlen(filestr));
+			    sprintf(filestr,"fi\r\n");
+			    write(ofid,filestr,strlen(filestr));
+			    
+			}
+		}
+		if (gflag) {
+			for (i=1;i<NUMLOGVOL-1 && avail_blocks > 0;i++) {
+				if ((fflag && (avail_blocks <= sectionsize)) || (!fflag && (avail_blocks <= 160000))) {
+					sprintf(filestr,
+					"echo \"\\nMaking a %d block file system on /dev/dsk/c1d0s%d\\n\"\n",avail_blocks & ~1,i);
+			        	write(ofid,filestr,strlen(filestr));
+					if (blocksize == 1024)
+				    		sprintf(filestr,
+						"/etc/mkfs /dev/dsk/c1d0s%d %d %d %d\r\n",i,
+						avail_blocks & ~1,gap,cylsize);
+				    	else
+				    		sprintf(filestr,
+						"/etc/mkfs /dev/dsk/c1d0s%d %d %d %d -b %d\r\n",i,
+						avail_blocks & ~1,gap,cylsize, blocksize);
+					write(ofid,filestr,strlen(filestr));
+					avail_blocks = 0;
+				} else {
+					sprintf(filestr,
+					"echo \"\\nMaking a %d block file system on /dev/dsk/c1d0s%d\\n\"\n",sectionsize & ~1,i);
+			        	write(ofid,filestr,strlen(filestr));
+				    if (blocksize == 1024)
+				    	sprintf(filestr,
+						"/etc/mkfs /dev/dsk/c1d0s%d %d %d %d\r\n",i,
+						sectionsize & ~1,gap,cylsize);
+				    else
+				    	sprintf(filestr,
+						"/etc/mkfs /dev/dsk/c1d0s%d %d %d %d -b %d\r\n",i,
+						sectionsize & ~1,gap,cylsize, blocksize);
+				    write(ofid,filestr,strlen(filestr));
+					avail_blocks = avail_blocks - sectionsize;
+				}
+			}
+		}
+		sprintf(filestr,"sync\r\n\032");
+		write(ofid,filestr,strlen(filestr));
+		close(ofid);
+	}
+	if (rdblock0(swapdrive,READONLY) == BLKOK)
+		swapbase = blk0->logvol[swapsection].start;
+	else
+		swapbase = 0;
+	/* Note that swapboot will be created so that it loads the mini-root
+	   filesystem into the first section after root. In a multi-file system
+	   configuration, this means that the mkfs of the second filesystem will
+	   overwrite the mini-root filesystem. It is not possible to use section 7
+	   for swap because the kernel does not do bad block sparing on section 7.
+	   Unless you can guarantee that there will be less than 6 filesystems
+	   (0-5), then you cannot use the unix partition for the swapboot. Instead
+	   you will have to use a dos file.
+    */
+	if ((ofid = open(":swapboot.bat",1)) >= 0) {
+		lseek(ofid,0,0);
+		sprintf(filestr,"echo off\r\n");
+		write(ofid,filestr,strlen(filestr));
+		if (configfile[1] == ':')
+			configfile++; 
+		if (configfile[0] == ':')
+			configfile++;
+		if (altcopydev)
+#if pm200 || pm300 || pm400
+		sprintf(filestr,"opmon %s/c unix; -r %d -p %d\r\n",
+#else
+		sprintf(filestr,"opmon %s/c opsash;:unix -r %d -p %d\r\n",
+#endif
+			configfile,altcopydev,altcopydev);
+		else
+#if pm200 || pm300 || pm400
+		sprintf(filestr,"opmon %s/c unix; -r %d -p %d -l %d -w %d -z %d %d %d %d\r\n",
+#else
+		sprintf(filestr,"opmon %s/c opsash;:unix -r %d -p %d -l %d -w %d -z %d %d %d %d\r\n",
+#endif
+			configfile,swapminor+1,swapminor+1,
+			swplo+flpsects,nswap-flpsects,
+			swapdrive,swapsection+1,swapbase+swplo,nswap);
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"if errorlevel 2 goto :badboot\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"if errorlevel 1 goto :bootunix\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,":badboot\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"echo #\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"echo # Unable to perform initial boot.  Please see the Opus %s User Manual.\r\n",MANUAL);
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"goto ex\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,":bootunix\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,"unix\r\n");
+		write(ofid,filestr,strlen(filestr));
+		sprintf(filestr,":ex\r\n\032");
+		write(ofid,filestr,strlen(filestr));
+		close(ofid);
+	}
+
+	ifid = open("/dev/dsk/14s0",0);
+	if (ifid < 0) {
+		printf("Unable to open \"Root\" diskette in drive A.\n");
+		resp("\tType \"q\" to quit; type <cr> to try again: ");
+		nl();
+		if (*lineptr == 'q' || *lineptr == 'Q')
+			exit(11);
+	}
+	if (altcopydev)
+		sprintf(diskname,"/dev/dsk/%ds%d",
+			altcopydev/NUMLOGVOL,altcopydev%NUMLOGVOL);
+	else
+		sprintf(diskname,"/dev/dsk/%ds%d",swapdrive,swapsection);
+	ofid = open(diskname,2);
+	if (ofid < 0) {
+		printf("Unable to open swap area on %s.  Either the",diskname);
+		printf(" configuration file\n");
+		printf("\t%s is not set up properly, the disk is",configfile);
+		printf(" not properly partitioned,\n");
+		printf("\tor the swap area has not been set up properly.");
+		printf("  Redo the installation\n");
+		bpause("\tbeing sure these are set up correctly.  "); 
+		exit(5);
+	}
+	if (altcopydev)
+		lseek(ofid,0,0);
+	else
+		lseek(ofid,swplo*512,0);
+	if (ifid > 0 && ofid > 0) {
+		for (i=0; i<flpsects; i+=(bytes/512)) {
+			bytes = min(flpsects - i,BIGBLK) * 512;
+			if (read(ifid,sectbuf,bytes) != bytes) {
+				printf("Error: could not read \"Root\" diskette.\n");
+				seeman();
+				exit(6);
+			}
+			if (write(ofid,sectbuf,bytes) != bytes)
+				break;
+		}
+		if (Vflag) {
+		    lseek(ifid,0,0);
+		    lseek(ofid,swplo*512,0);
+		    bytes = 512;
+		    for (i=0; i<flpsects; i+=(bytes/512)) {
+			if ((read(ifid,sectbuf,bytes) != bytes) ||
+				(read(ofid,&sectbuf[512],bytes) != bytes) ||
+				(memcmp(sectbuf,&sectbuf[512],512) != 0)) {
+#if 0
+	int jl;
+	printf("bad verify at sector %d\nflop: ",i);
+	for (jl=0; jl<16; ++jl)
+		printf("%02x ", sectbuf[jl]);
+	printf("\ndisk: ");
+	for (jl=0; jl<16; ++jl)
+		printf("%02x ", sectbuf[512+jl]);
+	printf("\n");
+	continue;
+#else
+				break;
+#endif
+			}
+		    }
+		    if (i >= flpsects)
+		    	printf("Verification of copy of \"Root\" diskette to swap area complete.\n");
+		    nl();
+		}
+		if (i < flpsects) { /* if last read failed, try smaller reads */
+		    lseek(ifid,0,0);
+		    lseek(ofid,swplo*512,0);
+		    for (i=0; i<flpsects; i+=(bytes/512)) {
+			bytes = 512;
+			if (read(ifid,sectbuf,bytes) != bytes) {
+				printf("Error: could not read \"Root\" diskette.\n");
+				seeman();
+				close(ifid);
+				close(ofid);
+				exit(7);
+			}
+			if (write(ofid,sectbuf,bytes) != bytes) {
+    				printf("Could not copy \"Root\" diskette to swap area.\n");
+				seeman();
+				close(ifid);
+				close(ofid);
+				exit(8);
+			}
+		    }
+		    /* if we had to do this 512b at a time, verify it went ok */
+		    lseek(ifid,0,0);
+		    lseek(ofid,swplo*512,0);
+		    bytes = 512;
+		    for (i=0; i<flpsects; i+=(bytes/512)) {
+			if ((read(ifid,sectbuf,bytes) != bytes) ||
+			    (read(ofid,&sectbuf[512],bytes) != bytes) ||
+			    (memcmp(sectbuf,&sectbuf[512],512) != 0)) {
+			    printf("Bad verification on copy of \"Root\" diskette to swap area (block %d).\n",i);
+			    seeman();
+			    close(ifid);
+			    close(ofid);
+			    exit(9);
+			}
+		    }
+		    printf("Verification of copy of \"Root\" diskette to swap area complete.\n");
+		    nl();
+		}
+		close(ifid);
+		close(ofid);
+	}
+	if (Sflag)
+		printf("Booting temporary root file system from swap area.\n");
+	else
+		printf("Reboot temporary root file system from swap area by typing \'swapboot\'.\n");
+	return(2);		/* signifies everything is okay for boot */
+}
+
+chktype(str)
+char *str;
+{
+	if (!strcmp(str,"AT") || !strcmp(str,"at"))
+		return(TYPE_AT);
+	if (!strcmp(str,"XT") || !strcmp(str,"xt"))
+		return(TYPE_XT);
+	if (!strcmp(str,"PC") || !strcmp(str,"pc"))
+		return(TYPE_PC);
+	if (!strcmp(str,"63"))
+		return(TYPE_63);
+	return(0);
+}

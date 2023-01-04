@@ -1,0 +1,25 @@
+
+# set TTY and TERM shell variables and run stty
+# used by /opus/profile
+
+export TTY TERM
+
+TTY=`tty`
+if [ "$TTY" != "not a tty" ]; then
+	stty -ixany erase '^h' kill '^x' echoe tab3
+fi
+TERM=`opterm`
+
+case "$TERM" in
+	opus-pc)
+		stty ixany tab0;;
+	opus-pc-ic)
+		stty -ixany ixoff tab0 -parenb cs8 -istrip;;
+	xterm*)
+		export LINES COLUMNS
+		stty ixany tab0;;
+	wy60)
+		echo "\033c8"`date "+%H%M"`"\c" >&2
+		echo "\033\`c\c" >&2
+		;;
+esac

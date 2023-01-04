@@ -1,0 +1,65 @@
+/* BSD driver */
+#include "/etc/system"
+
+#define	sock_FLAGS	0
+#define	sock_NAME	"SOCK"
+#define	sock_NOTIFY	0x4		/* NO_SEEK */
+
+#if !BSD
+int ec_inited;
+int arptab[1];
+int arptab_size;
+#if !TCP
+/* exos defines these */
+int rthost[1];
+int rtnet[1];
+#endif
+int rthashsize;
+bsdfunc()
+{
+	nopkg();
+}
+
+ecintr()
+{
+	panic("ecintr called\n");
+}
+
+ttwakeup()
+{
+	return 0;
+}
+
+ewouldblock()
+{
+}
+
+bsdttiocom()
+{
+	return 0;
+}
+
+kudp_socket()
+{
+	printf("stray kudp_create\n");
+	return(1);
+}
+kudp_recvfrom() 
+{
+	printf("stray kudp_recvfrom\n");
+	return(0);
+}
+kudp_sendto()
+{
+	printf("stray kudp_sendto\n");
+	return 1;
+}
+kudp_wait()
+{
+	return 0;
+}
+kudp_close()
+{
+	return 0;
+}
+#endif

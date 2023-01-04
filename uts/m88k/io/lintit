@@ -1,0 +1,2 @@
+echo lint -u -DBCS -I.. -DINKERNEL -Dm88k -Dopus -DCMMU $*
+lint -u -DBCS -I.. -DINKERNEL -Dm88k -Dopus -DCMMU  $*

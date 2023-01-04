@@ -1,0 +1,16 @@
+/*
+ *
+ *	Copyright (c) 1986 by Opus Systems
+ *	All Rights Reserved
+ */
+
+MEMORY {
+	valid : org = 0x0000, len = 0x1000000
+}
+SECTIONS {
+	.text	: { }
+	GROUP	ALIGN(0x1000) : {
+		.data : { }
+		.bss : { }
+	}
+}

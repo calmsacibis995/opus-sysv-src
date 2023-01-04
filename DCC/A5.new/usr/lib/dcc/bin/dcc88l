@@ -1,0 +1,9 @@
+PROC=88000
+DCC=$DCCROOT/usr/lib/dcc
+LIB=$DCC/MC$PROC
+BIN=$DCC/bin
+MAP=$LIB/mapfile88
+O1=$LIB/reorder
+O2=
+IL=
+exec $BIN/dcc -Wm$MAP -Dm88k -M$LIB/MC88lit.cd -Wa$BIN/das -Wa,-T,$LIB/M$PROC.tab -Wl$BIN/dld -WP-L$LIB/libp -Ws$LIB/crt0.o -WS$LIB/mcrt0.o -W0$DCC/ctoa -W1$O1 -W2$O2 -Wi$IL -L$LIB "$@" -I$LIB/include

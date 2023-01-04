@@ -1,0 +1,56 @@
+/* SEM driver */
+#include 	"/etc/system"
+#include 	"/etc/master.d/kernel"
+#include	<sys/stream.h>
+#include 	<sys/ipc.h>
+#include 	<sys/map.h>
+#include	<sys/sem.h>
+#include	<sys/msg.h>
+
+/* parameter definitions */
+#define SEMMAP	60
+#define SEMMNI	10
+#define SEMMNS	60
+#define SEMMNU	30
+#define SEMMSL	25
+#define SEMOPM	10
+#define SEMUME	10
+#define SEMVMX	32767
+#define SEMAEM	16384
+
+/* variable definitions */
+#ifdef SEM
+struct semid_ds	sema[SEMMNI];
+struct sem	sem[SEMMNS];
+struct map	semmap[SEMMAP];
+struct sem_undo	*sem_undo[NPROC];
+struct sem_undo	semu[((SEMUSZ*SEMMNU)+NBPW-1)/NBPW];
+union {
+	ushort		semvals[SEMMSL];
+	struct semid_ds	ds;
+	struct sembuf	semops[SEMOPM];
+}	semtmp;
+
+struct	seminfo seminfo = {
+	SEMMAP,
+	SEMMNI,
+	SEMMNS,
+	SEMMNU,
+	SEMMSL,
+	SEMOPM,
+	SEMUME,
+	SEMUSZ,
+	SEMVMX,
+	SEMAEM
+};
+#else
+#define DUMMY	1
+struct seminfo seminfo;
+struct semid_ds	sema[DUMMY];
+seminit() {}
+semsys()
+{
+	nopkg();
+}
+semexit() {}
+#endif

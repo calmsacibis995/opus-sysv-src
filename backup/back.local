@@ -1,0 +1,27 @@
+> $LOG
+set -x
+trap 'echo "\n******************************************\n${REVERSE} Backup of usr/src/local aborted abnormally ${UNBOLD}\n******************************************\n" > ${LOG}; sync; exit 1' 1 2 3 12 15
+cd $PWD
+echo $CLEAR
+echo "		${REVERSE} $DAY usr/src/local backup ${UNBOLD}"
+echo "\nReady to backup usr/src/local."
+echo "\nLoad the $DAY usr/src/local tape in tape unit 0."
+echo "\nPress RETURN to continue: \c"
+line
+# Save date to 1st file written
+date > :backup.date
+/opus/bin/tape rew > /dev/null 2>&1
+cd /
+find usr/src/local -print | cpio -ocvC1024000 > /dev/rmt/0m
+cd $PWD
+/opus/bin/tape rew > /dev/null 2>&1
+cpio -itcC1024000 < /dev/rmt/0m
+if [ $? != 0 ]; then
+	/opus/bin/tape rew > /dev/null 2>&1
+	echo "\n\n${REVERSE} ERROR backing up /usr/src/local. ${UNBOLD}\n\n" >> $LOG
+	exit 1
+else
+	/opus/bin/tape rew > /dev/null 2>&1
+	echo "\n\n${REVERSE} ${DAY} tape backup for /usr/src/local successful. ${UNBOLD}\n\n" >> $LOG
+	exit 0
+fi

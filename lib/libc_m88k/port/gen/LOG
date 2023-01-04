@@ -1,0 +1,426 @@
+a64l.c:
+	cc   -I../../inc -O -c a64l.c
+a64l.c:
+	cc  -I../../inc -O -c -p a64l.c   && mv a64l.o a64l.p
+abort.c:
+	cc   -I../../inc -O -c abort.c
+abort.c:
+	cc  -I../../inc -O -c -p abort.c   && mv abort.o abort.p
+abs.c:
+	cc   -I../../inc -O -c abs.c
+abs.c:
+	cc  -I../../inc -O -c -p abs.c   && mv abs.o abs.p
+assert.c:
+	cc   -I../../inc -O -c assert.c
+assert.c:
+	cc  -I../../inc -O -c -p assert.c   && mv assert.o assert.p
+atexit.c:
+	cc   -I../../inc -O -c atexit.c
+atexit.c:
+	cc  -I../../inc -O -c -p atexit.c   && mv atexit.o atexit.p
+atof.c:
+	cc   -I../../inc -O -c atof.c
+atof.c:
+	cc  -I../../inc -O -c -p atof.c   && mv atof.o atof.p
+atoi.c:
+	cc   -I../../inc -O -c atoi.c
+atoi.c:
+	cc  -I../../inc -O -c -p atoi.c   && mv atoi.o atoi.p
+atol.c:
+	cc   -I../../inc -O -c atol.c
+atol.c:
+	cc  -I../../inc -O -c -p atol.c   && mv atol.o atol.p
+bsearch.c:
+	cc   -I../../inc -O -c bsearch.c
+bsearch.c:
+	cc  -I../../inc -O -c -p bsearch.c   && mv bsearch.o bsearch.p
+calloc.c:
+	cc   -I../../inc -O -c calloc.c
+calloc.c:
+	cc  -I../../inc -O -c -p calloc.c   && mv calloc.o calloc.p
+clock.c:
+	cc   -I../../inc -O -c clock.c
+clock.c:
+	cc  -I../../inc -O -c -p clock.c   && mv clock.o clock.p
+closedir.c:
+	cc   -I../../inc -O -c closedir.c
+closedir.c:
+	cc  -I../../inc -O -c -p closedir.c   && mv closedir.o closedir.p
+crypt.c:
+	cc   -I../../inc -O -c crypt.c
+crypt.c:
+	cc  -I../../inc -O -c -p crypt.c   && mv crypt.o crypt.p
+ctime.c:
+	cc   -I../../inc -O -c ctime.c
+ctime.c:
+	cc  -I../../inc -O -c -p ctime.c   && mv ctime.o ctime.p
+cftime.c:
+	cc   -I../../inc -O -c cftime.c
+cftime.c:
+	cc  -I../../inc -O -c -p cftime.c   && mv cftime.o cftime.p
+ctype_def.c:
+	cc   -I../../inc -O -c ctype_def.c
+ctype_def.c:
+	cc  -I../../inc -O -c -p ctype_def.c   && mv ctype_def.o ctype_def.p
+cuexit.c:
+	cc   -I../../inc -O -c cuexit.c
+cuexit.c:
+	cc  -I../../inc -O -c -p cuexit.c   && mv cuexit.o cuexit.p
+dial.c:
+	cc   -I../../inc -O -c dial.c
+"dial.c", line 4352: warning: expression not used!
+dial.c:
+	cc  -I../../inc -O -c -p dial.c   && mv dial.o dial.p
+"dial.c", line 4352: warning: expression not used!
+drand48.c:
+	cc   -I../../inc -O -c drand48.c
+drand48.c:
+	cc  -I../../inc -O -c -p drand48.c   && mv drand48.o drand48.p
+dup2.c:
+	cc   -I../../inc -O -c dup2.c
+dup2.c:
+	cc  -I../../inc -O -c -p dup2.c   && mv dup2.o dup2.p
+ecvt.c:
+	cc   -I../../inc -O -c ecvt.c
+ecvt.c:
+	cc  -I../../inc -O -c -p ecvt.c   && mv ecvt.o ecvt.p
+errlst.c:
+	cc   -I../../inc -O -c errlst.c
+errlst.c:
+	cc  -I../../inc -O -c -p errlst.c   && mv errlst.o errlst.p
+err_def.c:
+	cc   -I../../inc -O -c err_def.c
+err_def.c:
+	cc  -I../../inc -O -c -p err_def.c   && mv err_def.o err_def.p
+execvp.c:
+	cc   -I../../inc -O -c execvp.c
+execvp.c:
+	cc  -I../../inc -O -c -p execvp.c   && mv execvp.o execvp.p
+fakcu.c:
+	cc   -I../../inc -O -c fakcu.c
+fakcu.c:
+	cc  -I../../inc -O -c -p fakcu.c   && mv fakcu.o fakcu.p
+free_def.c:
+	cc   -I../../inc -O -c free_def.c
+free_def.c:
+	cc  -I../../inc -O -c -p free_def.c   && mv free_def.o free_def.p
+frexp.c:
+	cc   -I../../inc -O -c frexp.c
+frexp.c:
+	cc  -I../../inc -O -c -p frexp.c   && mv frexp.o frexp.p
+ftok.c:
+	cc   -I../../inc -O -c ftok.c
+ftok.c:
+	cc  -I../../inc -O -c -p ftok.c   && mv ftok.o ftok.p
+ftw.c:
+	cc   -I../../inc -O -c ftw.c
+"ftw.c", line 147: warning: illegal types: pointer = integer
+ftw.c:
+	cc  -I../../inc -O -c -p ftw.c   && mv ftw.o ftw.p
+"ftw.c", line 147: warning: illegal types: pointer = integer
+gcvt.c:
+	cc   -I../../inc -O -c gcvt.c
+gcvt.c:
+	cc  -I../../inc -O -c -p gcvt.c   && mv gcvt.o gcvt.p
+getcwd.c:
+	cc   -I../../inc -O -c getcwd.c
+getcwd.c:
+	cc  -I../../inc -O -c -p getcwd.c   && mv getcwd.o getcwd.p
+getenv.c:
+	cc   -I../../inc -O -c getenv.c
+getenv.c:
+	cc  -I../../inc -O -c -p getenv.c   && mv getenv.o getenv.p
+getgrent.c:
+	cc   -I../../inc -O -c getgrent.c
+getgrent.c:
+	cc  -I../../inc -O -c -p getgrent.c   && mv getgrent.o getgrent.p
+getgrgid.c:
+	cc   -I../../inc -O -c getgrgid.c
+getgrgid.c:
+	cc  -I../../inc -O -c -p getgrgid.c   && mv getgrgid.o getgrgid.p
+getgrnam.c:
+	cc   -I../../inc -O -c getgrnam.c
+getgrnam.c:
+	cc  -I../../inc -O -c -p getgrnam.c   && mv getgrnam.o getgrnam.p
+getlogin.c:
+	cc   -I../../inc -O -c getlogin.c
+getlogin.c:
+	cc  -I../../inc -O -c -p getlogin.c   && mv getlogin.o getlogin.p
+getopt.c:
+	cc   -I../../inc -O -c getopt.c
+getopt.c:
+	cc  -I../../inc -O -c -p getopt.c   && mv getopt.o getopt.p
+getpw.c:
+	cc   -I../../inc -O -c getpw.c
+getpw.c:
+	cc  -I../../inc -O -c -p getpw.c   && mv getpw.o getpw.p
+getpwent.c:
+	cc   -I../../inc -O -c getpwent.c
+getpwent.c:
+	cc  -I../../inc -O -c -p getpwent.c   && mv getpwent.o getpwent.p
+getpwnam.c:
+	cc   -I../../inc -O -c getpwnam.c
+getpwnam.c:
+	cc  -I../../inc -O -c -p getpwnam.c   && mv getpwnam.o getpwnam.p
+getpwuid.c:
+	cc   -I../../inc -O -c getpwuid.c
+getpwuid.c:
+	cc  -I../../inc -O -c -p getpwuid.c   && mv getpwuid.o getpwuid.p
+getut.c:
+	cc   -I../../inc -O -c getut.c
+getut.c:
+	cc  -I../../inc -O -c -p getut.c   && mv getut.o getut.p
+getwd.c:
+	cc   -I../../inc -O -c getwd.c
+getwd.c:
+	cc  -I../../inc -O -c -p getwd.c   && mv getwd.o getwd.p
+grent_def.c:
+	cc   -I../../inc -O -c grent_def.c
+grent_def.c:
+	cc  -I../../inc -O -c -p grent_def.c   && mv grent_def.o grent_def.p
+hsearch.c:
+	cc   -I../../inc -O -c hsearch.c
+hsearch.c:
+	cc  -I../../inc -O -c -p hsearch.c   && mv hsearch.o hsearch.p
+isatty.c:
+	cc   -I../../inc -O -c isatty.c
+isatty.c:
+	cc  -I../../inc -O -c -p isatty.c   && mv isatty.o isatty.p
+l3.c:
+	cc   -I../../inc -O -c l3.c
+l3.c:
+	cc  -I../../inc -O -c -p l3.c   && mv l3.o l3.p
+l64a.c:
+	cc   -I../../inc -O -c l64a.c
+l64a.c:
+	cc  -I../../inc -O -c -p l64a.c   && mv l64a.o l64a.p
+ldexp.c:
+	cc   -I../../inc -O -c ldexp.c
+ldexp.c:
+	cc  -I../../inc -O -c -p ldexp.c   && mv ldexp.o ldexp.p
+lfind.c:
+	cc   -I../../inc -O -c lfind.c
+lfind.c:
+	cc  -I../../inc -O -c -p lfind.c   && mv lfind.o lfind.p
+lsearch.c:
+	cc   -I../../inc -O -c lsearch.c
+lsearch.c:
+	cc  -I../../inc -O -c -p lsearch.c   && mv lsearch.o lsearch.p
+malloc.c:
+	cc   -I../../inc -O -c malloc.c
+malloc.c:
+	cc  -I../../inc -O -c -p malloc.c   && mv malloc.o malloc.p
+mall_def.c:
+	cc   -I../../inc -O -c mall_def.c
+mall_def.c:
+	cc  -I../../inc -O -c -p mall_def.c   && mv mall_def.o mall_def.p
+memccpy.c:
+	cc   -I../../inc -O -c memccpy.c
+memccpy.c:
+	cc  -I../../inc -O -c -p memccpy.c   && mv memccpy.o memccpy.p
+memchr.c:
+	cc   -I../../inc -O -c memchr.c
+memchr.c:
+	cc  -I../../inc -O -c -p memchr.c   && mv memchr.o memchr.p
+memcmp.c:
+	cc   -I../../inc -O -c memcmp.c
+memcmp.c:
+	cc  -I../../inc -O -c -p memcmp.c   && mv memcmp.o memcmp.p
+memcpy.c:
+	cc   -I../../inc -O -c memcpy.c
+memcpy.c:
+	cc  -I../../inc -O -c -p memcpy.c   && mv memcpy.o memcpy.p
+memset.c:
+	cc   -I../../inc -O -c memset.c
+memset.c:
+	cc  -I../../inc -O -c -p memset.c   && mv memset.o memset.p
+mktemp.c:
+	cc   -I../../inc -O -c mktemp.c
+mktemp.c:
+	cc  -I../../inc -O -c -p mktemp.c   && mv mktemp.o mktemp.p
+modf.c:
+	cc   -I../../inc -O -c modf.c
+modf.c:
+	cc  -I../../inc -O -c -p modf.c   && mv modf.o modf.p
+mon.c:
+	cc   -I../../inc -O -c mon.c
+mon.c:
+	cc  -I../../inc -O -c -p mon.c   && mv mon.o mon.p
+nlist.c:
+	cc   -I../../inc -O -c nlist.c
+nlist.c:
+	cc  -I../../inc -O -c -p nlist.c   && mv nlist.o nlist.p
+opendir.c:
+	cc   -I../../inc -O -c opendir.c
+opendir.c:
+	cc  -I../../inc -O -c -p opendir.c   && mv opendir.o opendir.p
+old_tolower.c:
+	cc   -I../../inc -O -c old_tolower.c
+old_tolower.c:
+	cc  -I../../inc -O -c -p old_tolower.c   && mv old_tolower.o old_tolower.p
+old_toupper.c:
+	cc   -I../../inc -O -c old_toupper.c
+old_toupper.c:
+	cc  -I../../inc -O -c -p old_toupper.c   && mv old_toupper.o old_toupper.p
+opt_data.c:
+	cc   -I../../inc -O -c opt_data.c
+opt_data.c:
+	cc  -I../../inc -O -c -p opt_data.c   && mv opt_data.o opt_data.p
+perror.c:
+	cc   -I../../inc -O -c perror.c
+perror.c:
+	cc  -I../../inc -O -c -p perror.c   && mv perror.o perror.p
+putenv.c:
+	cc   -I../../inc -O -c putenv.c
+putenv.c:
+	cc  -I../../inc -O -c -p putenv.c   && mv putenv.o putenv.p
+putpwent.c:
+	cc   -I../../inc -O -c putpwent.c
+putpwent.c:
+	cc  -I../../inc -O -c -p putpwent.c   && mv putpwent.o putpwent.p
+pwent_def.c:
+	cc   -I../../inc -O -c pwent_def.c
+pwent_def.c:
+	cc  -I../../inc -O -c -p pwent_def.c   && mv pwent_def.o pwent_def.p
+qsort.c:
+	cc   -I../../inc -O -c qsort.c
+qsort.c:
+	cc  -I../../inc -O -c -p qsort.c   && mv qsort.o qsort.p
+rand.c:
+	cc   -I../../inc -O -c rand.c
+rand.c:
+	cc  -I../../inc -O -c -p rand.c   && mv rand.o rand.p
+readdir.c:
+	cc   -I../../inc -O -c readdir.c
+readdir.c:
+	cc  -I../../inc -O -c -p readdir.c   && mv readdir.o readdir.p
+reall_def.c:
+	cc   -I../../inc -O -c reall_def.c
+reall_def.c:
+	cc  -I../../inc -O -c -p reall_def.c   && mv reall_def.o reall_def.p
+seekdir.c:
+	cc   -I../../inc -O -c seekdir.c
+seekdir.c:
+	cc  -I../../inc -O -c -p seekdir.c   && mv seekdir.o seekdir.p
+sleep.c:
+	cc   -I../../inc -O -c sleep.c
+"sleep.c", line 45: warning: illegal types: pointer = pointer
+sleep.c:
+	cc  -I../../inc -O -c -p sleep.c   && mv sleep.o sleep.p
+"sleep.c", line 45: warning: illegal types: pointer = pointer
+ssignal.c:
+	cc   -I../../inc -O -c ssignal.c
+"ssignal.c", line 35: warning: illegal types: pointer = pointer
+"ssignal.c", line 47: warning: illegal types: pointer == pointer
+"ssignal.c", line 49: warning: illegal types: pointer == pointer
+"ssignal.c", line 52: warning: illegal types: pointer = pointer
+ssignal.c:
+	cc  -I../../inc -O -c -p ssignal.c   && mv ssignal.o ssignal.p
+"ssignal.c", line 35: warning: illegal types: pointer = pointer
+"ssignal.c", line 47: warning: illegal types: pointer == pointer
+"ssignal.c", line 49: warning: illegal types: pointer == pointer
+"ssignal.c", line 52: warning: illegal types: pointer = pointer
+strcat.c:
+	cc   -I../../inc -O -c strcat.c
+strcat.c:
+	cc  -I../../inc -O -c -p strcat.c   && mv strcat.o strcat.p
+strchr.c:
+	cc   -I../../inc -O -c strchr.c
+strchr.c:
+	cc  -I../../inc -O -c -p strchr.c   && mv strchr.o strchr.p
+strcmp.c:
+	cc   -I../../inc -O -c strcmp.c
+strcmp.c:
+	cc  -I../../inc -O -c -p strcmp.c   && mv strcmp.o strcmp.p
+strcpy.c:
+	cc   -I../../inc -O -c strcpy.c
+strcpy.c:
+	cc  -I../../inc -O -c -p strcpy.c   && mv strcpy.o strcpy.p
+strcspn.c:
+	cc   -I../../inc -O -c strcspn.c
+strcspn.c:
+	cc  -I../../inc -O -c -p strcspn.c   && mv strcspn.o strcspn.p
+strdup.c:
+	cc   -I../../inc -O -c strdup.c
+strdup.c:
+	cc  -I../../inc -O -c -p strdup.c   && mv strdup.o strdup.p
+strlen.c:
+	cc   -I../../inc -O -c strlen.c
+strlen.c:
+	cc  -I../../inc -O -c -p strlen.c   && mv strlen.o strlen.p
+strncat.c:
+	cc   -I../../inc -O -c strncat.c
+strncat.c:
+	cc  -I../../inc -O -c -p strncat.c   && mv strncat.o strncat.p
+strncmp.c:
+	cc   -I../../inc -O -c strncmp.c
+strncmp.c:
+	cc  -I../../inc -O -c -p strncmp.c   && mv strncmp.o strncmp.p
+strncpy.c:
+	cc   -I../../inc -O -c strncpy.c
+strncpy.c:
+	cc  -I../../inc -O -c -p strncpy.c   && mv strncpy.o strncpy.p
+strpbrk.c:
+	cc   -I../../inc -O -c strpbrk.c
+strpbrk.c:
+	cc  -I../../inc -O -c -p strpbrk.c   && mv strpbrk.o strpbrk.p
+strrchr.c:
+	cc   -I../../inc -O -c strrchr.c
+strrchr.c:
+	cc  -I../../inc -O -c -p strrchr.c   && mv strrchr.o strrchr.p
+strspn.c:
+	cc   -I../../inc -O -c strspn.c
+strspn.c:
+	cc  -I../../inc -O -c -p strspn.c   && mv strspn.o strspn.p
+strtod.c:
+	cc   -I../../inc -O -c strtod.c
+strtod.c:
+	cc  -I../../inc -O -c -p strtod.c   && mv strtod.o strtod.p
+strtok.c:
+	cc   -I../../inc -O -c strtok.c
+strtok.c:
+	cc  -I../../inc -O -c -p strtok.c   && mv strtok.o strtok.p
+strtol.c:
+	cc   -I../../inc -O -c strtol.c
+strtol.c:
+	cc  -I../../inc -O -c -p strtol.c   && mv strtol.o strtol.p
+swab.c:
+	cc   -I../../inc -O -c swab.c
+swab.c:
+	cc  -I../../inc -O -c -p swab.c   && mv swab.o swab.p
+tell.c:
+	cc   -I../../inc -O -c tell.c
+tell.c:
+	cc  -I../../inc -O -c -p tell.c   && mv tell.o tell.p
+telldir.c:
+	cc   -I../../inc -O -c telldir.c
+telldir.c:
+	cc  -I../../inc -O -c -p telldir.c   && mv telldir.o telldir.p
+tfind.c:
+	cc   -I../../inc -O -c tfind.c
+tfind.c:
+	cc  -I../../inc -O -c -p tfind.c   && mv tfind.o tfind.p
+time_comm.c:
+	cc   -I../../inc -O -c time_comm.c
+time_comm.c:
+	cc  -I../../inc -O -c -p time_comm.c   && mv time_comm.o time_comm.p
+tolower.c:
+	cc   -I../../inc -O -c tolower.c
+tolower.c:
+	cc  -I../../inc -O -c -p tolower.c   && mv tolower.o tolower.p
+toupper.c:
+	cc   -I../../inc -O -c toupper.c
+toupper.c:
+	cc  -I../../inc -O -c -p toupper.c   && mv toupper.o toupper.p
+tsearch.c:
+	cc   -I../../inc -O -c tsearch.c
+tsearch.c:
+	cc  -I../../inc -O -c -p tsearch.c   && mv tsearch.o tsearch.p
+ttyname.c:
+	cc   -I../../inc -O -c ttyname.c
+ttyname.c:
+	cc  -I../../inc -O -c -p ttyname.c   && mv ttyname.o ttyname.p
+ttyslot.c:
+	cc   -I../../inc -O -c ttyslot.c
+ttyslot.c:
+	cc  -I../../inc -O -c -p ttyslot.c   && mv ttyslot.o ttyslot.p

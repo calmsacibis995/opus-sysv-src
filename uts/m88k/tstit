@@ -1,0 +1,6 @@
+cd /usr/src/uts/m88k/bsd/net/; ./tstit *.c
+cd /usr/src/uts/m88k/bsd/netinet/; ./tstit *.c
+cd /usr/src/uts/m88k/fs/s5/; ./tstit *.c
+cd /usr/src/uts/m88k/fs/nfs/; ./tstit *.c
+cd /usr/src/uts/m88k/io/; ./tstit *.c
+cd /usr/src/uts/m88k/os/; ./tstit *.c

@@ -1,0 +1,602 @@
+
+#	Copyright (c) 1990 OPUS Systems
+#	  All Rights Reserved
+
+#ident	"@(#)agesetupmgmt	1.0"
+
+#menu#  install the TIGA interface files
+#help#
+#help#  The AGE software is a TIGA-compatible version of 
+#help#  X Windows (Version 11.3)
+#help#	This subcommand installs the TIGA interface files
+#help#	into the DOS directory \TIGA
+
+error_cleanup()
+{
+	trap "" 1 2 3 15
+	echo "\n\n\007XAGE setup may not have completed successfully.\n"
+	rm -f $instROOT/tmp/opuscfg.$$ $instROOT/tmp/config$$ $instROOT/tmp/config2$$ $instROOT/tmp/autoexec.$$ $instROOT/tmp/autoexec2.$$ $instROOT/tmp/config1.$$ $instROOT/tmp/config2.$$ &
+	sync
+	exit
+}
+trap "error_cleanup" 1 2 3 15
+
+ARTIST_TIGA="artist.alm
+tigacd.exe
+tigagm.out
+tigalnk.exe"
+
+ARTIST_INI="as191084.ini
+as191088.ini
+eiz1k764.ini
+eiz1k768.ini
+eiz1k804.ini
+eiz1k808.ini
+hi2086a4.ini
+hi2086a8.ini
+hit41194.ini
+hit41198.ini
+jvc60204.ini
+jvc60208.ini
+mit121k4.ini
+mit121k8.ini
+mit1k764.ini
+mit1k768.ini
+mit1k804.ini
+mit1k808.ini
+son19504.ini
+son19508.ini
+tax121k4.ini
+tax121k8.ini
+tax1k764.ini
+tax1k768.ini
+tax1k804.ini
+tax1k808.ini
+tosh19c4.ini
+tosh19c8.ini"
+
+NUMBER9_TIGA="1024/color/tiga.mod
+1024/color/tiga340.sym
+1024/color/tigacd.exe
+1024/color/tigagm.out
+1024/color/x11.alm
+1280/color/tiga.mod
+1280/color/tiga340.sym
+1280/mono/tiga.mod
+1280/mono/tiga340.sym
+1280/tigacd.exe
+1280/tigagm.out
+1280/x11.alm
+extprims.rlm
+tidemo.exe
+tigalnk.exe
+tireset.exe"
+
+WYSE_TIGA="tiga.mod
+tigacd.exe
+tigagm.out
+tigalnk.exe"
+
+WYSE_ALM="wyse2mb.alm
+wyse512k.alm"
+
+OTHER_TIGA="x11.rlm
+makealm.bat"
+
+# subroutine to select the monitor
+monitor()
+{
+
+	while :; do
+		echo "\nWhat model Artist card are you using?\n"
+		echo "1) 16-8"
+		echo "2) 256-8"
+		echo "\nEnter [1-2]: \c"
+		read ANS
+		case $ANS in
+			1)
+				MODEL=16
+				break
+				;;
+			2)
+				MODEL=256
+				break
+				;;
+			*)
+				echo "\n\007Invalid response."
+				sleep 1
+				;;
+		esac
+	done
+	
+	LIST=$ARTIST_INI
+	
+	if [ ! "$LIST" ]; then
+		echo "\n\007No .INI files found in the DOS directory \TIGA."
+		echo "Cannot continue with the installation."
+		exit 1
+	fi
+	
+	echo "\nExtracting monitors, please wait..."
+	IFS="
+"
+	NEWLIST=`(echo "^"
+	for i in $LIST; do
+		echo ".\c" > /dev/tty
+		grep " $MODEL " $XAGE_PATH/artist/$i
+	done)`
+	echo
+	
+	PRLIST=""
+	COUNT=0
+	while :; do
+		while [ ! "$PRLIST" ]; do
+			IFS="^
+"
+			for i in $NEWLIST; do
+				COUNT=`expr $COUNT + 1`
+				IFS="
+"
+				if [ "$PRLIST" ]; then
+					PRLIST="$PRLIST^$COUNT) $i"
+				else
+					PRLIST="$COUNT) $i"
+				fi
+			done
+		done
+		if [ $COUNT -gt 21 ]; then
+			PG="/usr/bin/pg -p\"=== Press RETURN to continue ===(page %d): \""
+		else
+			PG=cat
+		fi
+	
+		IFS="^"
+		(echo "\nChoose a monitor:\n"
+		for i in $PRLIST; do
+			IFS=" 	
+"
+			set $i
+			NUM=$1
+			case $1 in
+				[1-9]")")
+					NUM=" $NUM" 
+					;;
+			esac
+			echo "$NUM \c"
+			shift; shift
+			echo $*
+		done) | eval "$PG"
+		
+		echo "\nEnter [1-${COUNT}]: \c"
+		read CHOICE
+		if [ "$CHOICE" -lt 1 -o "$CHOICE" -gt $COUNT ]; then
+			echo "\n\007Choice must be between 1 and $COUNT."
+			sleep 1
+			echo
+		else
+			break
+		fi
+	done
+	
+	export CHOICE
+	IFS="^"
+	for i in $PRLIST; do
+		IFS=" 	
+"
+		set $i
+		NUM=$1
+		FILE=`echo $2 | tr '[A-Z]' '[a-z]'`
+		IFS=")"
+		set $NUM
+		NUM=$1
+		if [ $CHOICE -eq $NUM ]; then
+			echo "\nInstallation of the Artist TIGA DOS files..." 
+			/opus/bin/opdos write /tiga/tiga.ini < $XAGE_PATH/artist/$FILE || UDCP=ERROR
+			echo /tiga/tiga.ini
+			/opus/bin/opdos write /tiga/ti12.ini < $XAGE_PATH/artist/$FILE || UDCP=ERROR
+			echo /tiga/ti12.ini
+			break
+		fi
+	done
+}
+
+# subroutine to modifty autoexec.bat
+autoexec_mod()
+{
+	TIGACD=tigacd
+	AUTOEXEC_TMP="$instROOT/tmp/autoexec.$$"
+	AUTOEXEC_TMP2="$instROOT/tmp/autoexec2.$$"
+	AUTOEXEC_BAT=`/opus/bin/opdos wildcard /autoexec.bat`
+	if [ "$AUTOEXEC_BAT" ]; then
+		/opus/bin/ducp -a /autoexec.bat | sed 's/^PATH/path/
+		/^path/s/\\/\//g
+		s/^path=\/tiga;/path=/
+		s/^path=/path=\/tiga;/
+		s/^SET/set/
+		/^set/s/\\/\//g
+		/^cd/s/\\/\//g
+		' > $AUTOEXEC_TMP
+	
+		SET_TIGA="set TIGA=-MC:/tiga -LC:/tiga -I0x7f"
+		TIGA_SET=`grep -i "^set tiga" $AUTOEXEC_TMP`
+		if [ "$TIGA_SET" ]; then
+			T_SET=`grep -i "^$SET_TIGA" $AUTOEXEC_TMP`
+			if [ ! "$T_SET" ]; then
+				cat $AUTOEXEC_TMP | sed '/^set tiga/a\
+set TIGA=-MC:/tiga -LC:/tiga -I0x7f' > $AUTOEXEC_TMP2
+				mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+				echo "\nWARNING: The DOS command 'set TIGA in \AUTOEXEC.BAT has been redefined.\n"
+			fi
+		else
+			cat $AUTOEXEC_TMP | sed '/^path/a\
+set TIGA=-MC:/tiga -LC:/tiga -I0x7f' > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		fi
+
+		CD_TIGACD=`grep -i "^cd\ \/tiga" $AUTOEXEC_TMP`
+		if [ "$CD_TIGACD" ]; then
+			sed '/^cd\ \/tiga.*$/d' $AUTOEXEC_TMP > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		fi
+		TIGACD_SET=`egrep -i "^tigacd|^\/tiga\/tigacd|^tigacd\ *-hcc00" $AUTOEXEC_TMP`
+		if [ "$TIGACD_SET" ]; then
+			sed '/^tigacd.*$/d' $AUTOEXEC_TMP > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		fi
+		CD_TIGA_SET=`grep -i "^cd\ \/tiga" $AUTOEXEC_TMP`
+		if [ ! "$CD_TIGA_SET" ]; then
+			sed '/^set/a\
+cd /tiga' $AUTOEXEC_TMP > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		fi
+		if [ $MONITOR = Artist -o $MONITOR = Wyse ]; then
+			sed '/^cd\ \/tiga/a\
+tigacd' $AUTOEXEC_TMP > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		elif [ $MONITOR = Number9 ]; then
+			sed '/^cd\ \/tiga/a\
+tigacd -hcc00' $AUTOEXEC_TMP > $AUTOEXEC_TMP2
+			mv $AUTOEXEC_TMP2 $AUTOEXEC_TMP
+		fi
+
+		sed '/^path/s/\//\\/g
+		/^set/s/\//\\/g
+		/^cd/s/\//\\/g
+		' $AUTOEXEC_TMP | /opus/bin/udcp -a /autoexec.bat
+	fi
+	rm -f $AUTOEXEC_TMP
+}
+
+# subroutine to modify config.sys
+config_mod()
+{
+	CONFIG_1="$instROOT/tmp/config1.$$"
+	CONFIG_2="$instROOT/tmp/config2.$$"
+	CONFIG_SYS=`/opus/bin/opdos wildcard /config.sys`
+	if [ "$CONFIG_SYS" ]; then
+		/opus/bin/ducp -a /config.sys > $CONFIG_1
+		BUFFERS=`grep -i "^buffers" $CONFIG_1 | cut -d= -f2`
+		FILES=`grep -i "^files" $CONFIG_1 | cut -d= -f2`
+		if [ "$BUFFERS" ]; then
+			if [ $BUFFERS -lt 10 ]; then
+				sed 's/buffers=.*$/buffers=10/' $CONFIG_1 > $CONFIG_2
+				mv $CONFIG_2 $CONFIG_1
+			fi
+		else
+			echo "buffers=10" >> $CONFIG_1
+		fi
+		if [ "$FILES" ]; then
+			if [ $FILES -lt 32 ]; then
+				sed 's/files=.*$/files=32/' $CONFIG_1 > $CONFIG_2
+				mv $CONFIG_2 $CONFIG_1
+			fi
+		else
+			echo "files=32" >> $CONFIG_1
+		fi
+
+		# remove rambios.exe
+		RAMBIOS_EXE=`grep "device.*rambios.exe" $CONFIG_1`
+
+		if [ "$RAMBIOS_EXE" ]; then
+			sed -e '/device.*rambios.exe/d' -e 's/\\\\/\\/g' $CONFIG_1 > $CONFIG_2
+			mv $CONFIG_2 $CONFIG_1
+		fi
+		uniq $CONFIG_1 | /opus/bin/udcp -a /config.sys
+	else
+		echo "buffers=10
+files=32" | /opus/bin/udcp -a /config.sys
+
+	fi
+
+	rm -f $CONFIG_1 $CONFIG_2
+}
+
+
+# subroutine to modify \opus\opus.cfg
+opuscfg()
+{
+	OPUS_CFG=$instROOT/tmp/opuscfg.$$
+	TEMP=`/opus/bin/opdos wildcard /opus/opus.cfg`
+	if [ ! "$TEMP" ]; then
+		echo "\n\007\\opus\\opus.cfg not found in DOS.\n"
+		echo "\nCannot proceed with the AGE setup."
+		exit 1
+	fi
+	/opus/bin/ducp -a /opus/opus.cfg | sed -e '/<end>/d' -e '/X=X11.*display=age.*pointer=logitech/d' -e 's/^<X=X11/.X=X11/' > $OPUS_CFG
+
+	while :; do
+		TTY_VALID=NO
+		echo "\nEnter the mouse serial port number [tty0]: tty\c"
+		read ANS
+		case $ANS in
+			"")
+				TTY=""
+				echo Default serial line for the mouse is tty0.
+				break
+				;;
+			[0-9]|[0-9][0-9]|[0-9][0-9][0-9])
+				MOUSE=`grep "^<tty.*" $OPUS_CFG | grep -v mega | sed 's/^<tty/=/' | cut -d= -f2"`
+				for i in $MOUSE; do
+					if [ $ANS = $i ]; then
+						TTY_VALID=YES
+					fi
+				done
+				if [ $TTY_VALID = YES ]; then
+					if [ $ANS -eq 0 ]; then
+						TTY=""
+					else
+						TTY=",tty=$ANS"
+					fi
+					break
+				else
+					echo "\n\007Invalid response. Valid tty ports are:\n"
+					for port in $MOUSE; do
+						echo "     tty$port\c"
+					done
+					echo
+				fi
+				;;
+			*)
+				echo "\n\007Invalid response."
+				;;
+		esac
+	done
+	echo "<X=X11:0(display=age,pointer=logitech$TTY)>" >> $OPUS_CFG
+	echo "<end>" >> $OPUS_CFG
+	/opus/bin/udcp -a $OPUS_CFG /opus/opus.cfg
+}
+
+# Setup MAIN()
+
+XAGE_PATH="$instROOT/usr/bin/X11/dos"
+/opus/bin/opdos wildcard /tiga/*.? > /dev/null 2>&1 || dos md \\TIGA
+
+while :; do
+	echo "\n\nAGE Installation Menu"
+	echo "------------------------------------------------------------------------------"
+	echo "\nChoose:\t1) Artist TI12"
+	echo "\t2) Number Nine #9GX"
+	echo "\t3) Wyse WY-8400"
+	echo "\t4) Other"
+	echo "\nEnter [1-4]: \c"
+	read MONITOR
+	case $MONITOR in
+		1)
+			MONITOR=Artist
+			break
+			;;
+		2)
+			MONITOR=Number9
+			break
+			;;
+		3)
+			MONITOR=Wyse
+			break
+			;;
+		4)
+			MONITOR=Other
+			break
+			;;
+		*)
+			echo "\n\007Invalid response."
+			sleep 1
+			;;
+	esac
+done
+
+if [ $MONITOR != Other ]; then
+	echo "\n------------------------------------------------------------------------------"
+	if [ $MONITOR = Artist -o $MONITOR = Wyse ]; then
+		while :; do
+			echo "\nWould you like to use Opus defaults:\n"
+			if [ $MONITOR = Artist ]; then
+				echo "The Opus defaults for the Artist TI12 are:\n"
+				echo "Board:		256-8"
+				echo "Monitor:	Taxan 1000 (1280 x 1024, 256 color)"
+			elif [ $MONITOR = Wyse ]; then
+				echo "The Opus defaults for the WY-8400 are:\n"
+				echo "Board:		WY-8400 with 512K display list memory"
+				echo "Monitor:	Wyse WY-890N (1024 x 768, 256 color)"
+			fi
+			echo "\nEnter [y/n]: \c"
+			read ANS
+			case $ANS in
+				y|Y)
+					if [ $MONITOR = Artist ]; then
+						echo "\nInstallation of the Artist TIGA DOS files..." 
+						/opus/bin/opdos write /tiga/tiga.ini < $XAGE_PATH/artist/tax121k8.ini || UDCP=ERROR
+						echo "/tiga/tiga.ini"
+						/opus/bin/opdos write /tiga/ti12.ini < $XAGE_PATH/artist/tax121k8.ini || UDCP=ERROR
+						echo "/tiga/ti12.ini"
+						for file in $ARTIST_TIGA; do
+							/opus/bin/opdos write /tiga/$file < $XAGE_PATH/artist/$file || UDCP=ERROR
+							echo /tiga/$file
+						done
+						break
+					elif [ $MONITOR = Wyse ]; then
+						echo "\nInstallation of the Wyse TIGA DOS files..."
+						/opus/bin/opdos write /tiga/x11.alm < $XAGE_PATH/wyse/wyse512k.alm || UDCP=ERROR
+						echo "/tiga/x11.alm"
+						for file in $WYSE_TIGA; do
+							/opus/bin/opdos write /tiga/$file < $XAGE_PATH/wyse/$file || UDCP=ERROR
+							echo /tiga/$file
+						done
+						break
+					fi
+					;;
+				n|N)
+					if [ $MONITOR = Artist ]; then
+						monitor
+						IFS=" 	
+"
+						for file in $ARTIST_TIGA; do
+							/opus/bin/opdos write /tiga/$file < $XAGE_PATH/artist/$file || UDCP=ERROR
+							echo /tiga/$file
+						done
+						break
+					elif [ $MONITOR = Wyse ]; then
+						while :; do
+							echo "\nDo you have the WY-8400-2MB memory upgrade option? \c"
+							read ANS
+							case $ANS in 
+								y|Y)
+									echo "\nInstallation of the Wyse TIGA DOS files..."
+									/opus/bin/opdos write /tiga/x11.alm < $XAGE_PATH/wyse/wyse2mb.alm || UDCP=ERROR
+									echo "/tiga/x11.alm"
+									for file in $WYSE_TIGA; do
+										/opus/bin/opdos write /tiga/$file < $XAGE_PATH/wyse/$file || UDCP=ERROR
+										echo /tiga/$file
+									done
+									break 2
+									;;
+								n|N)
+									echo "\nNo other options available for the Wyse WY-8400."
+									echo "Assuming WY-8400 with 512K display list memory."
+									echo "\nInstallation of the Wyse TIGA DOS files..."
+									/opus/bin/opdos write /tiga/x11.alm < $XAGE_PATH/wyse/wyse512k.alm || UDCP=ERROR
+									echo "/tiga/x11.alm"
+									for file in $WYSE_TIGA; do
+										/opus/bin/opdos write /tiga/$file < $XAGE_PATH/wyse/$file || UDCP=ERROR
+										echo /tiga/$file
+									done
+									break 2
+									;;
+								*)
+									echo "\n\007Invalid response."
+									sleep 1
+									;;
+							esac
+						done
+					fi
+					;;
+				*)
+					echo "\n\007Invalid response."
+					sleep 1
+					;;
+			esac
+		done
+	elif [ $MONITOR = Number9 ]; then
+		while :; do
+			echo "\nWhat type of monitor display do you have?\n"
+			echo "1) monochrome"
+			echo "2) color"
+			echo "\nEnter [1-2]: \c"
+			read ANS
+			case $ANS in
+				1)
+					PALETTE=mono
+					RESOLUTION=1280
+					echo "\nMonitor display resolution is 1280 x 1024"
+					break
+					;;
+				2)
+					PALETTE=color
+					break
+					;;
+				*)
+					echo "\n\007Invalid response."
+					sleep 1
+					;;
+			esac
+		done
+		if [ $PALETTE = color ]; then
+			while :; do
+				echo "\nWhat monitor display resolution do you have?\n"
+				echo "1) 1024 x 768"
+				echo "2) 1280 x 1024"
+				echo "\nEnter [1-2]: \c"
+				read ANS
+				case $ANS in
+					1)
+						RESOLUTION=1024/color
+						PALETTE=""
+						break
+						;;
+					2)
+						RESOLUTION=1280
+						break
+						;;
+					*)
+						echo "\n\007Invalid response."
+						sleep 1
+						;;
+				esac
+			done
+		fi
+		echo "\nInstallation of the Number Nine TIGA DOS files..."
+		/opus/bin/opdos write /tiga/extprims.rlm < $XAGE_PATH/number9/extprims.rlm || UDCP=ERROR
+		echo "/tiga/extprims.rlm"
+		/opus/bin/opdos write /tiga/tidemo.exe < $XAGE_PATH/number9/tidemo.exe || UDCP=ERROR
+		echo "/tiga/tidemo.exe"
+		/opus/bin/opdos write /tiga/tigalnk.exe < $XAGE_PATH/number9/tigalnk.exe || UDCP=ERROR
+		echo "/tiga/tigalnk.exe"
+		/opus/bin/opdos write /tiga/tireset.exe < $XAGE_PATH/number9/tireset.exe || UDCP=ERROR
+		echo "/tiga/tireset.exe"
+		/opus/bin/opdos write /tiga/tigacd.exe < $XAGE_PATH/number9/$RESOLUTION/tigacd.exe || UDCP=ERROR
+		echo "/tiga/tigacd.exe"
+		/opus/bin/opdos write /tiga/tigagm.out < $XAGE_PATH/number9/$RESOLUTION/tigagm.out || UDCP=ERROR
+		echo "/tiga/tigagm.out"
+		/opus/bin/opdos write /tiga/x11.alm < $XAGE_PATH/number9/$RESOLUTION/x11.alm || UDCP=ERROR
+		echo "/tiga/x11.alm"
+		/opus/bin/opdos write /tiga/tiga.mod < $XAGE_PATH/number9/$RESOLUTION/$PALETTE/tiga.mod || UDCP=ERROR
+		echo "/tiga/tiga.mod"
+		/opus/bin/opdos write /tiga/tiga340.sym < $XAGE_PATH/number9/$RESOLUTION/$PALETTE/tiga340.sym || UDCP=ERROR
+		echo "/tiga/tiga340.sym"
+	fi
+else
+	echo "\nInstallation of the TIGA DOS files... "
+	for file in $OTHER_TIGA; do
+		/opus/bin/opdos write /tiga/$file < $XAGE_PATH/$file || UDCP=ERROR
+		echo /tiga/$file
+	done
+	echo "\n\007You must manually complete the DOS installation"
+	echo "of your card vendor's TIGA files.\n"
+	echo "Please consult the vendor's installation guide."
+	echo "\n<CR> to continue ...\c"; line
+	echo "You will need to create the file X11.ALM and install it into"
+	echo "the directory \TIGA."
+	echo "\nTo do this, bring your system down to DOS gracefully using the command:\n"
+	echo "     # shutdown\n"
+	echo "Power down, and reboot your system using the newly modified \AUTOEXEC.BAT,"
+	echo "and then enter the following command:\n"
+	echo "     C: \TIGA\MAKEALM"
+	echo "\n\007WARNING:"
+	echo "Some TIGA card vendors require special hardware and software setup."
+	echo "For details, please refer to the 'Known Problems and Caveats' section"
+	echo "of the Opus X Window System Release Notice and to your TIGA vendor's"
+	echo "documentation."
+fi
+
+autoexec_mod
+config_mod
+opuscfg
+
+rm -f $instROOT/tmp/opuscfg.$$ $instROOT/tmp/config$$ $instROOT/tmp/config2$$
+
+if [ "$UDCP" = ERROR ]; then
+	error_cleanup
+else
+	echo "\n\007To activate this setup, the system must be"
+	echo "taken down, powered off, and rebooted.\n"
+fi
+

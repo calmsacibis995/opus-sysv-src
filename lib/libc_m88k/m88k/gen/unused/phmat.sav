@@ -1,0 +1,37 @@
+#include "sys/errno.h"
+#include "sys/types.h"
+#include "sys/ipc.h"
+#include "sys/shm.h"
+
+extern errno;
+static _phmid;
+
+_phmat(paddr, vaddr, size, shmflg)
+register vaddr;
+{
+	register shmid;
+
+	if (_phmid) {
+		errno = EMFILE;
+		return -1;
+	}
+		
+	shmid = _shmget(IPC_PRIVATE, size, IPC_PHYS|IPC_NOCLEAR, paddr);
+	if (shmid == -1)
+		return(shmid);
+	vaddr = _shmat(shmid, vaddr, shmflg);
+	if (vaddr != -1)
+		_phmid = shmid;
+	return(vaddr);
+}
+
+_phmdt(vaddr)
+{
+	register ret;
+
+	if ((ret = _shmdt(vaddr)) == 0) {
+		if ((ret = _shmctl( _phmid, IPC_RMID, 0)) == 0)
+			_phmid = 0;
+	}
+	return(ret);
+}

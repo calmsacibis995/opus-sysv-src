@@ -1,0 +1,57 @@
+
+# #ident	"@(#)sadmin3b2:admin/menu/diskmgmt/format	2.2" #
+
+#menu# formats a removable medium
+#help# 
+#help#	This command prepares a new media for use.  Once a medium is
+#help#	formatted, programs and data may be written onto it.
+#help#	Formatting removes all existing data from the medium, effectively
+#help#	erasing it.
+
+trap 'exit 0' 1 2  15
+flags="-qq -k$$"
+
+while :; do
+	echo "\nWARNING: UNIX will be suspended while the diskette"
+	echo "is being formatted."
+	echo "\nWould you like to continue: [y/n]: \c"
+	read ANS
+	case $ANS in
+		y|Y)
+			break
+			;;
+		n|N)
+			exit 0
+			;;
+		*)
+			\nInvalid response."
+			sleep 1
+			;;
+	esac
+done
+
+fmtcmd=/etc/fmtflop
+
+dens=`/usr/lbin/checklist ${flags} -fe -l ' ' -D 'h' -H '
+	The high density format is intended for high-density diskettes
+	in high-capacity drives. Formatting a low-density diskette as
+	high-capacity may result in unreliable read/writes. ' \
+	"
+Format the diskette as high or low density? (default: h) [?, l, h, q]:"\
+ l h '<RETURN>'` 
+case "${dens}" in
+l* | L* )
+	arg="A:/4"
+	;;
+h* | H* )
+	arg="A:"
+	;;
+?* )
+	;;
+esac
+
+${fmtcmd} ${arg}
+echo
+echo "The medium in drive A: may now be removed."
+
+exit 0

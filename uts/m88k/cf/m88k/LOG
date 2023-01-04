@@ -1,0 +1,46 @@
+	make -f bsd.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	cd sys; make CPU=m88k CC=cc AR=ar DASHO=-O
+	cd netinet; make CPU=m88k CC=cc AR=ar DASHO=-O
+`/usr/src/uts/m88k/cf/m88k/lib.bsd' is up to date.
+	cd net; make CPU=m88k CC=cc AR=ar DASHO=-O
+`/usr/src/uts/m88k/cf/m88k/lib.bsd' is up to date.
+	cd if; make CPU=m88k CC=cc AR=ar DASHO=-O
+`/usr/src/uts/m88k/cf/m88k/lib.bsd' is up to date.
+	make -f fs.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	make -f du.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=-O" 
+	make -f nfs.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=-O" 
+	make -f s5.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=-O" 
+	make -f io.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	cc -O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c opus.c
+	ar ruv ../cf/m88k/lib.io *.o
+r - opus.o
+	rm -f *.o
+	make -f kdb.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	make -f ml.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	m88k: make -f ml.mk "CPU=m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "CC=cc" "AR=ar"
+	make -f fpexcept.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=cc" "FRC=" "INCRT=.." "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=-O" 
+	make -f os.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	make -f stub.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	m88k: make -f stub.mk "CPU=m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "AR=ar" "CC=cc"
+	make -f uio.mk MAKE=make FRC= DASHG= DASHO=-O INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=-O  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+uio.mk: updating as.c
+uio.mk: updating clk.c
+uio.mk: updating cons.c
+uio.mk: updating cpt.c
+uio.mk: updating dk.c
+uio.mk: updating gn.c
+uio.mk: updating lp.c
+uio.mk: updating mt.c
+uio.mk: updating net.c
+uio.mk: updating opus.c
+uio.mk: updating pm400dos.c
+uio.mk: updating pm400pc.c
+uio.mk: updating ram.c
+uio.mk: updating syms.c
+	rm -f sysV88
+	time ld -s -o sysV88 ld.file comm.o m88kvec.o opus.o conf.o  \
+	               lib.ml lib.os lib.io lib.s5 lib.du lib.stub lib.nfs lib.bsd
+
+real       34.8
+user        2.3
+sys         1.7

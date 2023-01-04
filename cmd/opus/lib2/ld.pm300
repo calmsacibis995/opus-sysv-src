@@ -1,0 +1,16 @@
+/* #ident	"@(#)ld.file	1.2 (Fairchild) 9/15/86" */
+
+MEMORY	{
+	valid:	origin	= 0x00000000,	length	=   0x100000
+}
+
+SECTIONS {
+
+
+	.text:	{ }
+	GROUP	ALIGN(0x1000) : {
+	.data:	{ } 
+
+	.bss:	{ }
+	}
+}

@@ -1,0 +1,397 @@
+	file		"init_color.c"
+	text
+	global		_init_color
+_init_color:
+;$$v0
+	subu		r31,r31,120
+	st		r1,r31,116
+	st.d		r21,r31,56
+	st.d		r23,r31,64
+	st		r25,r31,72
+	or.u		r13,r0,hi16(_SP)
+	ld		r13,r13,lo16(_SP)
+	or		r25,r0,r2
+	ld		r21,r13,132
+	or.u		r13,r0,hi16(_cur_bools)
+	ld		r13,r13,lo16(_cur_bools)
+	or		r24,r0,r3
+	ld.b		r13,r13,27
+	or		r23,r0,r4
+	bcnd.n		eq0,r13,@L3
+	or		r22,r0,r5
+	or.u		r11,r0,hi16(_COLORS)
+	ld		r11,r11,lo16(_COLORS)
+	ext		r12,r25,16<0>
+	cmp		r12,r12,r11
+	bb1		ge,r12,@L3
+	ext		r25,r25,16<0>
+	bcnd		ge0,r25,@L2
+@L3:
+	br.n		@L1
+	subu		r2,r0,1
+@L2:
+	ext		r24,r24,16<0>
+	cmp		r12,r24,1000
+	bb1.n		le,r12,@L4
+	ext		r23,r23,16<0>
+	or		r24,r0,1000
+@L4:
+	cmp		r12,r23,1000
+	bb1.n		le,r12,@L5
+	ext		r22,r22,16<0>
+	or		r23,r0,1000
+@L5:
+	cmp		r12,r22,1000
+	bb1.n		le,r12,@L6
+	ext		r24,r24,16<0>
+	or		r22,r0,1000
+@L6:
+	bcnd.n		ge0,r24,@L7
+	ext		r23,r23,16<0>
+	or		r24,r0,r0
+@L7:
+	bcnd.n		ge0,r23,@L8
+	ext		r22,r22,16<0>
+	or		r23,r0,r0
+@L8:
+	bcnd.n		ge0,r22,@L9
+	ext		r12,r25,16<0>
+	or		r22,r0,r0
+@L9:
+	mul		r12,r12,6
+	addu		r21,r21,r12
+	ld.h		r12,r21,0
+	ext		r24,r24,16<0>
+	cmp		r13,r12,r24
+	bb1		ne,r13,@L10
+	ld.h		r13,r21,2
+	ext		r23,r23,16<0>
+	cmp		r12,r13,r23
+	bb1		ne,r12,@L10
+	ld.h		r12,r21,4
+	ext		r22,r22,16<0>
+	cmp		r13,r12,r22
+	bb1		ne,r13,@L10
+	br.n		@L1
+	or		r2,r0,r0
+@L10:
+	st.h		r24,r21,0
+	st.h		r23,r21,2
+	st.h		r22,r21,4
+	or.u		r13,r0,hi16(_cur_strs)
+	ld		r13,r13,lo16(_cur_strs)
+	ld		r21,r13,1196
+	bcnd		eq0,r21,@L19
+	or.u		r13,r0,hi16(_cur_bools)
+	ld		r13,r13,lo16(_cur_bools)
+	ld.b		r13,r13,29
+	bcnd		eq0,r13,@L11
+	addu		r12,r31,44
+	st		r12,r31,32
+	ext		r12,r24,16<0>
+	flt.ss		r12,r12
+	fadd.dss	r2,r0,r12
+	ext		r12,r23,16<0>
+	flt.ss		r12,r12
+	addu		r8,r31,40
+	fadd.dss	r4,r0,r12
+	ext		r12,r22,16<0>
+	flt.ss		r12,r12
+	addu		r9,r31,48
+	bsr.n		__rgb_to_hls
+	fadd.dss	r6,r0,r12
+	ld		r6,r31,44
+	or.u		r12,r0,hi16(_cur_strs)
+	ld		r4,r31,40
+	ld		r12,r12,lo16(_cur_strs)
+	ld		r5,r31,48
+	ext		r3,r25,16<0>
+	bsr.n		_tparm
+	ld		r2,r12,1196
+	or.u		r4,r0,hi16(__outch)
+	or		r4,r4,lo16(__outch)
+	bsr.n		_tputs
+	or		r3,r0,1
+	br		@L20
+@L11:
+	or		r2,r0,r21
+	ext		r3,r25,16<0>
+	ext		r4,r24,16<0>
+	ext		r5,r23,16<0>
+	bsr.n		_tparm
+	ext		r6,r22,16<0>
+	or.u		r4,r0,hi16(__outch)
+	or		r4,r4,lo16(__outch)
+	bsr.n		_tputs
+	or		r3,r0,1
+	br		@L20
+@L19:
+	or.u		r12,r0,hi16(_SP)
+	ld		r12,r12,lo16(_SP)
+	ld		r23,r12,128
+	or.u		r12,r0,hi16(_COLOR_PAIRS)
+	ld		r12,r12,lo16(_COLOR_PAIRS)
+	or		r24,r0,r0
+	cmp		r12,r24,r12
+	bb1		ge,r12,@L20
+@L18:
+	mul		r12,r24,6
+	addu		r22,r23,r12
+	ld.h		r21,r22,0
+	ext		r25,r25,16<0>
+	ext		r21,r21,16<0>
+	cmp		r12,r21,r25
+	bb1		eq,r12,@L16
+	ld.h		r12,r22,2
+	ext		r25,r25,16<0>
+	cmp		r13,r12,r25
+	bb1		ne,r13,@L14
+@L16:
+	ld.h		r4,r22,2
+	ext		r3,r21,16<0>
+	bsr.n		__init_HP_pair
+	or		r2,r0,r24
+@L14:
+	or.u		r12,r0,hi16(_COLOR_PAIRS)
+	ld		r12,r12,lo16(_COLOR_PAIRS)
+	addu		r24,r24,1
+	cmp		r12,r24,r12
+	bb1		lt,r12,@L18
+@L20:
+	or		r2,r0,r0
+@L1:
+	ld		r1,r31,116
+	ld		r25,r31,72
+	ld.d		r23,r31,64
+	ld.d		r21,r31,56
+	jmp.n		r1
+	addu		r31,r31,120
+
+; Allocations for _init_color
+	data
+;	r25		color
+;	r24		r
+;	r23		g
+;	r22		b
+;	r21		ctp
+;	r21		$$1
+;	r21		$$2
+;	r22		$$3
+;	r21		$$4
+;	r31,40		h
+;	r31,44		s
+;	r31,48		l
+;	r24		i
+;	r23		ptp
+	text
+	global		__rgb_to_hls
+__rgb_to_hls:
+;$$v0
+	subu		r31,r31,120
+	st		r1,r31,116
+	st.d		r14,r31,56
+	st.d		r16,r31,64
+	st.d		r18,r31,72
+	st.d		r20,r31,80
+	st.d		r22,r31,88
+	st.d		r24,r31,96
+	st.d		r8,r31,144
+	data
+	align		8
+@L31:	double		+1.00000000000000000000e3
+	text
+	or.u		r16,r0,hi16(@L31)
+	ld.d		r16,r16,lo16(@L31)
+	or		r20,r0,r4
+	or		r21,r0,r5
+	fdiv.ddd	r20,r20,r16
+	or		r22,r0,r2
+	or		r23,r0,r3
+	fdiv.ddd	r22,r22,r16
+	or		r18,r0,r6
+	or		r19,r0,r7
+	fdiv.ddd	r18,r18,r16
+	or		r2,r0,r22
+	or		r3,r0,r23
+	or		r4,r0,r20
+	or		r5,r0,r21
+	or		r6,r0,r18
+	bsr.n		_MAX
+	or		r7,r0,r19
+	fadd.dss	r16,r0,r2
+	or		r2,r0,r22
+	or		r3,r0,r23
+	or		r4,r0,r20
+	or		r5,r0,r21
+	or		r6,r0,r18
+	bsr.n		_MIN
+	or		r7,r0,r19
+	fadd.dss	r14,r0,r2
+	fadd.ddd	r10,r16,r14
+	fcmp.sdd	r12,r16,r14
+	or.u		r13,r0,hi16(0x40000000)
+	st.d		r10,r31,48
+	fdiv.sds	r25,r10,r13
+	bb1		ne,r12,@L29
+	or		r3,r0,r0
+	br.n		@L30
+	or		r4,r0,r3
+@L29:
+	or.u		r12,r0,hi16(0x3f000000)
+	fcmp.sss	r12,r25,r12
+	bb1		ge,r12,@L22
+	fsub.ddd	r10,r16,r14
+	ld.d		r12,r31,48
+	br.n		@L23
+	fdiv.sdd	r4,r10,r12
+@L22:
+	or.u		r13,r0,hi16(0x40000000)
+	fsub.dsd	r12,r13,r16
+	fsub.ddd	r10,r16,r14
+	fsub.ddd	r8,r12,r14
+	fdiv.sdd	r4,r10,r8
+@L23:
+	fsub.ddd	r12,r16,r22
+	fsub.ddd	r14,r16,r14
+	fsub.ddd	r10,r16,r20
+	fdiv.sdd	r3,r12,r14
+	fdiv.sdd	r2,r10,r14
+	fsub.ddd	r10,r16,r18
+	fcmp.sdd	r12,r22,r16
+	fdiv.sdd	r24,r10,r14
+	bb1		ne,r12,@L26
+	br.n		@L27
+	fsub.sss	r3,r24,r2
+@L26:
+	fcmp.sdd	r12,r20,r16
+	bb1		ne,r12,@L24
+	or.u		r13,r0,hi16(0x40000000)
+	fadd.dss	r10,r3,r13
+	br.n		@L27
+	fsub.sds	r3,r10,r24
+@L24:
+	or.u		r13,r0,hi16(0x40800000)
+	fadd.dss	r10,r2,r13
+	fsub.sds	r3,r10,r3
+@L27:
+	fadd.dss	r10,r0,r3
+	or.u		r12,r0,hi16(0x42700000)
+	fmul.sds	r3,r10,r12
+	fcmp.sss	r13,r3,r0
+	bb1.n		ge,r13,@L28
+	or.u		r12,r0,hi16(0x42f00000)
+	or.u		r13,r0,hi16(0x43b40000)
+	fadd.sss	r3,r3,r13
+@L28:
+	fadd.dss	r10,r3,r12
+	trnc.sd		r13,r10
+	div		r12,r13,360
+	mul		r12,r12,360
+	subu		r12,r13,r12
+	flt.ss		r3,r12
+@L30:
+	trnc.ss		r12,r3
+	or.u		r22,r0,hi16(0x40590000)
+	or		r23,r0,0
+	fmul.dsd	r10,r4,r22
+	ld		r13,r31,144
+	st		r12,r13,0
+	ld		r12,r31,152
+	trnc.sd		r13,r10
+	fmul.dsd	r10,r25,r22
+	st		r13,r12,0
+	ld		r12,r31,148
+	trnc.sd		r13,r10
+	st		r13,r12,0
+	ld		r1,r31,116
+	ld.d		r24,r31,96
+	ld.d		r22,r31,88
+	ld.d		r20,r31,80
+	ld.d		r18,r31,72
+	ld.d		r16,r31,64
+	ld.d		r14,r31,56
+	jmp.n		r1
+	addu		r31,r31,120
+
+; Allocations for __rgb_to_hls
+	data
+;	r22,r23		r
+;	r20,r21		g
+;	r18,r19		b
+;	r31,144		hh
+;	r31,148		ll
+;	r31,152		ss
+;	r3		rc
+;	r2		gc
+;	r24		bc
+;	r3		h
+;	r25		l
+;	r4		s
+;	r16,r17		max
+;	r14,r15		min
+;	r31,48		$$5
+;	r14,r15		$$6
+;	r22,r23		$$7
+;	r3		$$8
+;	r16,r17		$$9
+	text
+	global		_MAX
+_MAX:
+;$$v0
+	or		r8,r0,r2
+	or		r9,r0,r3
+	fcmp.sdd	r13,r8,r4
+	bb1		lt,r13,@L37
+	fcmp.sdd	r13,r8,r6
+	bb1		lt,r13,@L33
+	jmp.n		r1
+	fadd.ssd	r2,r0,r8
+@L33:
+	jmp.n		r1
+	fadd.ssd	r2,r0,r6
+@L37:
+	fcmp.sdd	r13,r6,r4
+	bb1		lt,r13,@L35
+	jmp.n		r1
+	fadd.ssd	r2,r0,r6
+@L35:
+	jmp.n		r1
+	fadd.ssd	r2,r0,r4
+
+; Allocations for _MAX
+	data
+;	r8,r9		a
+;	r4,r5		b
+;	r6,r7		c
+	text
+	global		_MIN
+_MIN:
+;$$v0
+	or		r8,r0,r2
+	or		r9,r0,r3
+	fcmp.sdd	r13,r8,r4
+	bb1		le,r13,@L44
+	fcmp.sdd	r13,r4,r6
+	bb1		le,r13,@L40
+	jmp.n		r1
+	fadd.ssd	r2,r0,r6
+@L40:
+	jmp.n		r1
+	fadd.ssd	r2,r0,r4
+@L44:
+	fcmp.sdd	r13,r8,r6
+	bb1		ge,r13,@L42
+	jmp.n		r1
+	fadd.ssd	r2,r0,r8
+@L42:
+	jmp.n		r1
+	fadd.ssd	r2,r0,r6
+
+; Allocations for _MIN
+	data
+;	r8,r9		a
+;	r4,r5		b
+;	r6,r7		c
+
+; Allocations for module
+	data

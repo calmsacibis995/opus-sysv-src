@@ -1,0 +1,14 @@
+MEMORY
+{
+	a: org = 0x100b8, len = 0x7ffeff48
+}
+
+SECTIONS
+{
+	.text 0x100b8 : { }
+	GROUP BIND(NEXT(0x400000) + ((ADDR(.text) + SIZEOF(.text)) % 0x10000)) :
+	{
+		.data : {}
+		.bss  : {}
+	}
+}

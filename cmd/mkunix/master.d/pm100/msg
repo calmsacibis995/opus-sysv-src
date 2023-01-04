@@ -1,0 +1,45 @@
+/* MSG driver */
+#include	"/etc/system"
+#include	<sys/param.h>
+#include	<sys/types.h>
+#include	<sys/stream.h>
+#include	<sys/sysmacros.h>
+#include	<sys/conf.h>
+#include 	<sys/ipc.h>
+#include 	<sys/map.h>
+#include	<sys/msg.h>
+
+/* configuration definitions */
+#define MSGMAP	 100
+#define MSGMAX	 2048
+#define MSGMNB	 4096
+#define MSGMNI	 50
+#define MSGSSZ	 8
+#define MSGTQL	 40
+#define MSGSEG	 1024
+
+/* variable definitions */
+#ifdef MSG
+struct map	msgmap[MSGMAP];
+struct msqid_ds	msgque[MSGMNI];
+struct msg	msgh[MSGTQL];
+char		msglock[MSGMNI];
+struct msginfo	msginfo = {
+			MSGMAP,
+			MSGMAX,
+			MSGMNB,
+			MSGMNI,
+			MSGSSZ,
+			MSGTQL,
+			MSGSEG
+		};
+#else
+#define DUMMY	1
+struct msginfo msginfo;
+struct msqid_ds	msgque[DUMMY];
+msginit() {}
+msgsys()
+{
+	nopkg();
+}
+#endif /* MSG */

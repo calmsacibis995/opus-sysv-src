@@ -1,0 +1,100 @@
+This tape contains the m78k software generation system files.  It is loaded
+by:
+		cpio -iBcvdamu </dev/TAPE.CART
+
+To load the whole tape requires about 8000 blocks of disk space.  If you
+will not need the include files, the "INCLUDE" directory can be removed,
+saving about 2000 blocks.
+
+The tape contains the following directories and files:
+	
+	bin:	m78kcc		SEE NOTE BELOW re: THIS SCRIPT!
+		m78kas		SEE NOTE BELOW re: THIS SCRIPT!
+		m78kar m78kcoffcmp m78kcoffdump m78kcomp
+		m78kconvert m78kcprs m78kdump m78kld m78klorder
+		m78knm m78ksim m78ksize m78kstrip sifilter
+
+	lib:	ghsstubs.s m78kas m78kcc m78kcomp m78kcpp
+		m78kcrt0.o m78klibc.a m78klibcrypt.a m78klibcurses.
+		m78klibgen.a m78klibm.a m78klibns.a m78klibnsl_s.a
+		m78kreorder motstubs.s
+
+	gh7bin: m78kcc		SEE NOTE BELOW re: THIS SCRIPT!
+
+	gh7lib: m78kcomp
+		m78kcrt0.o m78klibc.a m78klibm.a
+
+	INCLUDE:	contains /usr/include and /usr/include/sys
+			files for m78k compilations
+
+                                 NOTES
+
+Once the tape has been loaded, it is necessary to modify the "m78kcc"
+scripts in the "bin" and "gh7bin" directories.  The first line of
+each of these files sets the environment variable $TOOLDIR, which should
+point to the directory into which the tape was loaded.  For example, if
+the tape was loaded into /XENV, so that you created directories
+/XENV/bin, /XENV/gh7bin, and so forth, then the first line should read:
+
+	TOOLDIR=/XENV
+
+It is also necessary to modify the "m78kas" script in the "bin"
+directory.  As described above, the first line of this file must
+point to the TOOLS directory on your system.
+
+Those working on the kernel need to add the "-k" option to the
+"sifilter" call in bin/m78kas.
+
+                            REVISION LIST:
+
+1 1/20/88	built with /bin/cc
+2 1/20/88	SAJ fixes to tables.c and stubs.s
+3 1/22/88	FNF fixes to as/m78k/program.c, comp(.fix)/src/code.c
+4 1/22/88	PEG additions to sim/ctl/cmdstruct.c and integer/sysV.c
+			to support additional system calls
+5 1/26/88	contains libraries built with compiler fixes from #3
+6 1/28/88	PEG fix to simulator - getdents system call
+		FNF fixes to comp.fix and ld
+		SAJ modification to stubs.s
+7 2/2/88	PEG fixes to simulator: sysV.c, trap.c, interface.c, etc.
+		SiFIX libc.a generated
+8 2/8/88	directories reorganized for new compiler setup
+		many fixes to m78kcomp, from Austin / SAJ
+		libraries built with current compiler
+		no more "SiFIX" compiler / libraries; instead, assembler
+			code from "m78kcomp" is passed through "sifilter"
+			before being given to "m78kas".
+		new set of /INCLUDE/sys/.... files from kernel group
+		green hills m78k compiler included
+		-z option turned on for compiler (word alignment)
+9 2/11/88	simulator fixes put in so it works with stuff compiled with
+		-z option:	default (currently) -z
+			-z: char strings NOT word aligned (same as comp -z)
+			-Z: char strings ARE word aligned
+		pg_getpfn stuff added to libc.a as functions
+		libld.a added to library files
+		simulator fix to make ioctl system call work - PEG
+		simulator fix to make getdents word alignment right - PEG
+		GH m78kcrt0.o added to tape (does not inc. following fix)
+		fix to m78kcrt0.o - Dale Farnsworth
+10 2/12/88	sifilter fix to put in no-ops after loads and stores
+		NOTE: sifilter now has a -k flag which needs to be turned
+			_on_ for kernel group, left _off_ for utilities
+		sifilter is now executed as part of the assembler pass,
+			rather than the compiler pass.  This way, .s files
+			also get "fixed".  CAW  2/12/88
+11 2/18/88	compiler fixes from SAJ to common.h order.c pftn.c local2.c
+		sifilter fixes from SAJ to sifilter.c
+12 3/4/88	compiler fixes: allo.c, table.c (SAJ, FNF)
+		cpp fixes: cpp.c (FNF)
+		coffdump fixes: dump,c, filehdr.c, reloc.c, scnhdr.c, syms.c
+		as fixes: gendefs.h, program.c (FNF)
+		sim fixes: sysV.c (FNF)
+		ld fixes: errors.c, globals.c, main.c, utils.c (FNF)
+		ld now linked with -malloc -should run faster
+		new Green Hills compiler binary
+		latest "sys" include files; changes to ./bpp.h ./ci_driver.h
+			./dk.h ./fs/s5filsys.h ./io.h ./io/esdi.h
+			./io/m323io.h ./io/ramdio.h ./mvmecpu.h
+			./osi/ci_const.h ./osi/ci_global.h ./space.h
+			./space/m323space.h

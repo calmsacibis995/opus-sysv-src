@@ -1,0 +1,1092 @@
+#menu# install new software package onto built-in disk
+#help# 
+#help#	Installpkg copies files from removable media onto the built-in disk and
+#help#	performs additional work as necessary so you can run that software.
+#help#	From then on, you will have access to those commands.
+
+:
+cleanup()
+{
+	trap "" 1 2 3 15
+	if [ "$LOADED" -gt 0 ]; then
+		if [ "$LOADED" -eq "$TOTAL" ]; then
+			echo "\n\n${BELL}------------------------------------------------------------------------------"
+			echo "All of the packages on this tape have been installed:\n"
+		else
+			echo "\n\nThe following packages have been installed:"
+		fi
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+				eval echo "\$${GROUP}_NAME"
+			fi
+		done
+	fi
+	if [ -d $ROOTDIR/$INSTALL ]; then
+		cd $ROOTDIR/$INSTALL
+		rm -f CONTENTS REL *.Rlist *.info *.name *.prepkg *.preins *.setup *.size *.ti tape.size
+	fi
+	tape -f/dev/rmt/${DRIVE}mn status > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "\nRewinding, please wait...\n"
+		wait
+	elif [ ! "`tape -f/dev/rmt/${DRIVE}mn rew 2>&1 | grep bot`" ]; then
+		echo "\nRewinding, please wait...\n"
+		tape -f/dev/rmt/${DRIVE}m rew > /dev/null 2>&1
+	fi
+	sync
+	exit 0
+}
+err_cleanup()
+{
+	trap "" 1 2 3 15
+	for GROUP in $MASTER_ALL; do
+		if [ `eval echo \\$\${GROUP}_LOADING` ]; then
+			eval echo "\\\nThe \$${GROUP}_NAME may not have been installed properly."
+		fi
+	done
+	if [ "$LOADED" -gt 0 ]; then
+		echo "\n\nThe following packages have been installed:"
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+				eval echo "\$${GROUP}_NAME"
+			fi
+		done
+	fi
+	cd $ROOTDIR/$INSTALL
+	rm -f CONTENTS REL *.Rlist *.info *.name *.prepkg *.preins *.setup *.size *.ti tape.size
+	tape -f/dev/rmt/${DRIVE}mn status > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "\nRewinding, please wait...\n"
+		wait
+	elif [ ! "`tape -f/dev/rmt/${DRIVE}mn status 2>&1 | grep bot`" ]; then
+		echo "\nRewinding, please wait...\n"
+		tape -f/dev/rmt/${DRIVE}m rew > /dev/null 2>&1
+	fi
+	sync
+	exit 1
+}
+rtc()
+{
+	echo "\nPress RETURN to continue: \c"
+	line
+}
+invld()
+{
+	echo "\n${BELL}Invalid response"
+	sleep 1
+}
+args()
+{
+	echo $#
+}
+sortlist()
+{
+	if [ $# -gt 1 ]; then
+		if [ -x /bin/sort ]; then
+			for item in  $*; do
+				echo $item
+			done | sort -u
+		elif [ -x /usr/bin/uniq ]; then
+			for item in  $*; do
+				echo $item
+			done | uniq
+		else
+			for item in  $*; do
+				echo $item
+			done
+		fi
+	else
+		echo $*
+	fi
+}
+increment()
+{
+	# This is a lot quicker than expr
+	XVAR=`eval echo \\$$1`
+	XVARNAME=$1
+	case $XVAR in
+		0)
+			eval $XVARNAME=1
+			;;
+		1)
+			eval $XVARNAME=2
+			;;
+		2)
+			eval $XVARNAME=3
+			;;
+		3)
+			eval $XVARNAME=4
+			;;
+		4)
+			eval $XVARNAME=5
+			;;
+		5)
+			eval $XVARNAME=6
+			;;
+		6)
+			eval $XVARNAME=7
+			;;
+		7)
+			eval $XVARNAME=8
+			;;
+		8)
+			eval $XVARNAME=9
+			;;
+		9)
+			eval $XVARNAME=10
+			;;
+		10)
+			eval $XVARNAME=11
+			;;
+		11)
+			eval $XVARNAME=12
+			;;
+		*)
+			eval $XVARNAME=`eval expr \\$$XVARNAME + 1`
+			;;
+	esac
+}
+help()
+{
+	trap "exit" 1 2 3 15
+	while :; do
+		echo "\n\nTape Installation Help Menu"
+		echo "------------------------------------------------------------------------------"
+		echo "\nChoose:  0) Exit help"
+		echo "         1) Read information about a selected package"
+		echo "         2) Look at the list of files for a selected package"
+		echo "\nEnter [0-2]: \c"
+		read MODE
+		case $MODE in
+			0) 
+				exit;;
+			1)
+				SHELL=xyzyx
+				while :; do
+					echo "\n\nRead information about a selected package:"
+					echo "------------------------------------------------------------------------------"
+					echo "\nThese are the available packages:\n"
+					display first
+					echo "------------------------------------------------------------------------------"
+	
+					echo "\nPackages:"
+					for i in $MASTER_ALL; do
+						echo $i
+					done | pr -4 -t
+					echo "\nEnter a package name: \c"
+					GRP=`line | tr '[a-z]' '[A-Z]'`
+					if [ `args $GRP` -gt 1 ]; then
+						echo "\n${BELL}Invalid response: only one name expected"
+						sleep 1
+						continue
+					fi
+					case $GRP in
+						Q)
+							continue;;
+						*\;*)
+							invld;;
+						[A-Z]*)
+							if [ "`eval echo \\$\${GRP}_NAME`" = "" ]; then
+								invld
+								continue
+							else
+								if [ ! -f $ROOTDIR/$INSTALL/$GRP.info ]; then
+									echo "\n\n$ROOTDIR/$INSTALL/$GRP.info not found"
+									continue
+								fi
+								echo "\n\n"
+								pr -t $ROOTDIR/$INSTALL/$GRP.info | pg -p"=== `eval echo \\$\${GRP}_NAME`.  Press RETURN to continue: ===(page %d): "
+								continue 2
+							fi;;
+						*)
+							invld;;
+					esac
+				done;;
+			2)
+				SHELL=xyzyx
+				while :; do
+					echo "\n\nLook at the list of files for a selected package:"
+					echo "------------------------------------------------------------------------------"
+					echo "\nThese are the available packages:\n"
+					display first
+					echo "------------------------------------------------------------------------------"
+					echo "\nPackages:"
+					for i in $MASTER_ALL; do
+						echo $i
+					done | pr -4 -t
+					echo "\nEnter a package name: \c"
+					GRP=`line | tr '[a-z]' '[A-Z]'`
+					if [ `args $GRP` -gt 1 ]; then
+						echo "\n${BELL}Invalid response: only one name expected"
+						sleep 1
+						continue
+					fi
+					case $GRP in
+						Q)
+							continue;;
+						*\;*)
+							invld;;
+						[A-Z]*)
+							if [ "`eval echo \\$\${GRP}_NAME`" = "" ]; then
+								invld
+								continue
+							else
+								if [ ! -f $ROOTDIR/$INSTALL/$GRP.Rlist ]; then
+									echo "\n$ROOTDIR/$INSTALL/$GRP.Rlist not found"
+									continue
+								fi
+								pr -2 -a -t $ROOTDIR/$INSTALL/$GRP.Rlist | grep -v "^install" | grep -v "^usr\/options" | pg -p"=== `eval echo \\$\${GRP}_NAME`.  Press RETURN to continue: ===(page %d): "
+								continue 2
+							fi;;
+						*)
+							invld;;
+					esac
+				done;;
+			*)
+				invld;;
+		esac
+	done
+}
+display()
+{
+	DCOUNT=`args $MASTER_ALL`
+	case $1 in
+		select)
+			CCNT=11
+			;;
+		first)
+			CCNT=12
+			;;
+		init)
+			CCNT=14
+			;;
+		more)
+			CCNT=16
+			;;
+		load)
+			CCNT=17
+			;;
+		*)
+			CCNT=15
+			;;
+	esac
+	if [ "$DCOUNT" -gt "$CCNT" ]; then
+		CMD="pg -p\"=== Press RETURN to continue ===(page %d): \""
+	else
+		CMD=cat
+	fi
+	if [ $1 = init ]; then
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}\ \(installed\)"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BLOCK}\ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = select -a $LOADED -gt 0 -a "$RE_INSTALL" ]; then
+		for GROUP in $MASTER_ALL; do
+			LD=`eval echo \\$\${GROUP}_LOADED`
+			FLG=`eval echo \\$\${GROUP}_FLAG`
+			if [ "$LD" -a "$FLG" ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}\ \(re-install\)"
+			elif [ $LD ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}\ \(installed\)"
+			elif [ $FLG ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BLOCK}\ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = select -a $LOADED -gt 0 ]; then
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}\ \(installed\)"
+			elif [ `eval echo \\$\${GROUP}_FLAG` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BLOCK}\ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = select ]; then
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_FLAG` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BLOCK}\ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = load -a $LOADED -gt 0 -a "$RE_INSTALL" ]; then
+		for GROUP in $MASTER_ALL; do
+			LD=`eval echo \\$\${GROUP}_LOADED`
+			FLG=`eval echo \\$\${GROUP}_FLAG`
+			if [ "$LD" -a "$FLG" ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}\ \(re-install\)"
+			elif [ $FLG ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = load ]; then
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_FLAG` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}"
+			fi
+		done | eval $CMD
+	elif [ $1 = first ]; then
+		for GROUP in $MASTER_ALL; do
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r${GROUP}"
+		done | eval $CMD
+	elif [ $1 = more ]; then
+		for GROUP in $MASTER_ALL; do
+			if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\${BBLOCK}\ ${GROUP}"
+			else
+				eval echo "\	\	\	\$${GROUP}_NAME\\\r\ \ ${GROUP}"
+			fi
+		done | eval $CMD
+	fi
+}
+
+install_flp()
+{
+	
+	flags="-qq -k$$"
+	trap 'exit 0' 1 2  15
+	
+	dir=${0}.d
+	if [ -d ${dir} ]
+	then
+		patterns=`ls ${dir} 2>/dev/null`
+	else
+		patterns=
+	fi
+	
+	ddrive=`selectdevice -b $$ /dev/SA ${patterns}`
+	ndrive=`drivename ${ddrive}`
+	
+	if [ -n "${patterns}" ]
+	then
+		. ${dir}/`selpattern ${ddrive}`
+	fi
+	
+	question="
+Insert the removable medium for the package you want to install
+into the ${ndrive}.
+Press <RETURN> when ready.  Type  q  to quit."
+	
+	while true
+	do
+		fulllabel=`disklabel -q "${question}" $$ ${ddrive}`
+		fsname=
+		eval `labelfsname "${fulllabel}"`
+		echo
+		case "${fsname}" in
+		instal | install )
+			trap '	trap "" 1 2
+				cd /;  diskumount -n "${ndrive}" ${ddrive}' 0
+	
+			/etc/umount ${ddrive} 2>/dev/null
+			chmod 700 /install
+			/etc/mount ${ddrive} /install -r
+			if [ $? -ne 0 ]; then
+				echo "installpkg: mount error"
+				exit 1
+			fi
+			;;
+		'' | * )
+			echo "\nThe following files are being installed:"
+			cd /
+			cpio -iBdumcv < ${ddrive} | tee /tmp/install$$
+			if [ $? -ne 0 ]; then
+				echo >&2 "This removable medium is not a package."
+				echo >&2 "Try another."
+				continue
+			fi
+			SWPKG=`grep \"options\/.*\.name\" /tmp/install$$`
+			if [ -z "${SWPKG}" ]; then
+				SWPKG="installed package."
+			fi
+			if [ -f /setup ]; then
+				echo
+				echo "Setting up the ${SWPKG}"
+				chmod 755 /setup
+				/setup
+				rm /setup
+			fi
+			echo
+			echo "Installation complete"
+			rm /tmp/install$$
+			continue
+			;;
+		esac
+	
+		if [ ! -r /install/install/INSTALL ]
+		then
+			admerr $0 'Improperly built software removable medium.'
+			exit 1
+		fi
+	
+		trap '	trap "" 1 2
+			rm -f /tmp/$$*
+			cd / '"
+			diskumount -n '${ndrive}' ${ddrive}" 0
+	
+		cd /tmp
+		cp /install/install/INSTALL $$INSTALL
+		chmod +x $$INSTALL
+	
+		trap : 1 2
+		if [ -r /etc/coredirs  -a  ! -f $$installpkg ]
+		then
+			#	A problem in cpio makes it change the modes and
+			#	ownership of directories it did not create.  This trick
+			#	records and later restores the existing values.  The
+			#	directories to be protected are listed in /etc/coredirs.
+			cpio -o </etc/coredirs >$$installpkg 2>/dev/null
+		fi
+		/tmp/$$INSTALL ${ddrive} /install "${ndrive}"  ||
+			echo 'WARNING:  Installation may not have completed properly.'
+		trap '' 1 2
+		if [ -f $$installpkg ]
+		then
+			#	Restore the directory modes and ownerships.
+			cpio -id <$$installpkg >/dev/null 2>&1
+		fi
+		rm -f $$INSTALL
+		diskumount -n "${ndrive}" ${ddrive}
+		echo ""
+		trap 'rm -f /tmp/$$*' 0
+		trap exit 1 2
+	done
+}
+
+install_ocs()
+{
+
+	if [ $FLOPPIES ]; then
+		BLKFLAG=B
+		DEV=/dev/rflpa
+		TAG=floppy
+	else
+		BLKFLAG=C512000
+		DEV=/dev/rmt/0mn
+		TAG=tape
+	fi
+
+	while [ $TAPES ]; do
+		DRIVE=0
+		DRIVE_STAT0=`/opus/bin/opdos asciiread \\\opus\\\opus.cfg | grep "^<mt/0"`
+		DRIVE_STAT1=`/opus/bin/opdos asciiread \\\opus\\\opus.cfg | grep "^<mt/1"`
+		if [ ! "$DRIVE_STAT0" -a ! "$DRIVE_STAT1" ]; then
+				echo "\n\n${BELL}There is no entry in opus.cfg for tape devices mt/0 or mt/1"
+				echo "Cannot install from tape."
+				rtc
+				exit 1
+		fi
+		while [ "$DRIVE_STAT1" ]; do
+			echo "\n\nDo you want to load the tape from drive 0 or drive 1?"
+			echo "\nEnter [0/1]: \c"
+			read DRIVE
+			case $DRIVE in
+				0|1)
+					break;;
+				*)
+					invld;;
+			esac
+		done
+		break
+	done
+
+	echo "\n\nInsert $TAG number 1 in drive $DRIVE and press RETURN: \c"
+	line
+
+	if [ $TAPES ]; then
+		while [ ! "`tape -f/dev/rmt/${DRIVE}m rew 2>&1 | grep bot`" ]; do
+			echo "\n${BELL}Make sure that the tape is properly installed in drive $DRIVE."
+			rtc
+		done
+	fi
+
+	echo "\nExtracting the installation file..."
+	cd $INSTALL
+	rm -f INSTALL
+	cpio -icvdum$BLKFLAG < $DEV INSTALL > /dev/null 2>&1
+
+	if [ ! -s INSTALL ]; then
+		echo "\n\007The file 'INSTALL' was not found on the $TAG."
+		echo "\nInstallation unsuccessful."
+		exit 1
+	else
+			sh -c "INSTALL $DEV"
+	fi
+	if [ $? -ne 0 ]; then
+		echo "\nInstallation unsuccessful"
+		exit 1
+	else
+		exit 0
+	fi
+}
+
+install_tape()
+{
+	if [ ! "$RE_INSTALL" -a $LOADED -eq $TOTAL ]; then
+		cleanup
+	fi
+	while :; do
+		echo "\n\nReady to install"
+		echo "------------------------------------------------------------------------------"
+		echo "The following packages ($BBLOCK) will be installed:\n"
+		display load
+		echo "------------------------------------------------------------------------------"
+		echo "Choose:  1) re-select"
+		echo "\n[Default: RETURN to begin installation]: \c"
+		read ANS
+		case $ANS in
+			"")
+				break;;
+			1)
+				MASTER_LIST="$MASTER_SAVE"
+				return 2;;
+			*)
+				invld
+				continue;;
+		esac
+	done
+	COUNT=0
+	for GRP in $GROUPS; do
+		increment COUNT
+	done
+	tape -f/dev/rmt/${DRIVE}mn status > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "\nRewinding, please wait..."
+		wait
+	fi
+	if [ "`tape -f/dev/rmt/${DRIVE}mn status 2>&1 | grep bot`" ]; then
+		echo "\n\nSkipping the tape header..."
+		tape -f /dev/rmt/${DRIVE}mn fsf > /dev/null 2>&1
+	fi
+	for GROUP in $MASTER_ALL; do
+		eval ${GROUP}_LOADING=""
+	done
+	for GROUP in $MASTER_ALL; do
+		if [ `eval echo \\$\${GROUP}_FLAG` ]; then
+			eval echo "\\\n\\\nInstalling the \$${GROUP}_NAME..."
+			
+			NEEDS=`line < $ROOTDIR/$INSTALL/$GROUP.size`
+			SPACE=`expr "\`df /dev/dsk/c1d0s0 2>/dev/null\`" : '.*: *\([0-9]*\)'`
+			if [ "$SPACE" -lt "$NEEDS" ]; then
+				eval echo "\\\n\\${BELL}Error:  the \$${GROUP}_NAME cannot be installed."
+				echo "Not enough space on the hard disk."
+				echo "$SPACE blocks are available in the root file system."
+				echo "$NEEDS blocks are needed."
+				return 1
+			fi
+
+			eval ${GROUP}_LOADING=1
+			# Do any pre-installation work.
+			if [ -f $ROOTDIR/$INSTALL/$GROUP.preins ]; then
+				sh $ROOTDIR/$INSTALL/$GROUP.preins
+				if [ $? -ne 0 ]; then
+					return 1
+				fi
+			fi
+			cpio -icvdumC512000 < /dev/rmt/${DRIVE}mn 2> /dev/null
+			if [ $? -ne 0 ]; then
+				eval echo "Error installing the \$${GROUP}_NAME..."
+				sync
+				return 1
+			fi
+			if [ -s $ROOTDIR/$INSTALL/$GROUP.setup ]; then
+				if [ $GROUP = TI ]; then
+					TERMINFO=$instROOT/usr/lib/terminfo; export TERMINFO
+				fi
+				sh $ROOTDIR/$INSTALL/$GROUP.setup
+			fi
+			eval ${GROUP}_LOADING=""
+
+			cp $INSTALL/$GROUP.Rlist $INSTALL/$GROUP.info $USR_OPT
+			LOADED=0
+			for GROUP in $MASTER_ALL; do
+				if [ -f $USR_OPT/$GROUP.Rlist ]; then
+					eval ${GROUP}_LOADED=1
+				fi
+			done
+			COUNT=`expr $COUNT - 1`
+			if [ $COUNT -eq 0 ]; then
+				break
+			fi
+		else
+			eval echo "\\\n\\\nSkipping the \$${GROUP}_NAME..."
+			tape fsf 1 /dev/rmt/${DRIVE}mn > /dev/null 2>&1
+			if [ $? -ne 0 ]; then
+				eval echo "Error fast forwarding over the \$${GROUP}_NAME..."
+				sync
+				return 1
+			fi
+		fi
+	done
+	sync
+	tape -f /dev/rmt/${DRIVE}m rew > /dev/null 2>&1 &
+	return 0
+}
+select()
+{
+	RE_INSTALL=""
+	while :; do
+		for GRP in $MASTER_ALL; do
+			eval ${GRP}_FLAG=""
+		done
+		while [ ! "$MORE" -o "$RETURN" ]; do
+			trap "err_cleanup" 1 2 3 15
+			RETURN=""
+			GROUPS=""
+			COUNT=0
+			echo "\n\nOpus Systems Tape Installation"
+			echo "----------------------------------------------------------------------------"
+			echo "These are the available packages:"
+			echo "${BLOCK} = available"
+			display init
+			echo "------------------------------------------------------------------------------"
+			echo "\nChoose:  0) quit"
+			echo "         1) get information on packages"
+			echo "         2) install specific packages"
+			echo "\n[Default: RETURN to install all packages]: \c"
+			read ANS
+			case $ANS in
+				"")
+					while [ $LOADED -gt 0 ]; do
+						echo "\007\n$LOADED packages have already been installed."
+						echo "Would you like to re-install them? [y/n]: \c"
+						read YN
+						case $YN in
+							y|Y)
+								RE_INSTALL=1
+								MASTER_LIST=$MASTER_ALL
+								break
+								;;
+							n|N)
+								break
+								;;
+							*)
+								invld
+								;;
+						esac
+					done
+					GROUPS="$MASTER_LIST"
+					for GRP in $MASTER_LIST; do
+						eval ${GRP}_FLAG=1
+					done
+					return;;
+				0)
+					if [ $LOADED -gt 0 ]; then
+						cleanup
+					else
+						err_cleanup
+					fi;;
+				1)
+					trap "continue" 1 2 3 15
+					(help)
+					trap "err_cleanup" 1 2 3 15
+					continue;;
+				2)
+					break;;
+				*)
+					invld
+					continue;;
+			esac
+		done
+		CHOICES=""
+		for GRP in $MASTER_LIST; do
+			if [ ! "`eval echo \\$\${GRP}_FLAG`" ]; then
+				CHOICES="$CHOICES $GRP"
+			fi
+		done
+		SELECTED=""
+		while :; do
+			echo "\n\nOpus Systems Tape Installation"
+			echo "------------------------------------------------------------------------------"
+			echo "These are the available packages:"
+			if [ $SELECTED ]; then
+				echo "$BLOCK = available, $BBLOCK = selected"
+			else
+				echo "$BLOCK = available"
+			fi
+			display select
+			echo "------------------------------------------------------------------------------"
+			echo "\nChoose:  0) return to the top level menu"
+			if [ $SELECTED ]; then
+				echo "         1) clear selected entries"
+			fi
+			echo "         or enter the names (i.e, BU AU)"
+			echo "         of the packages you wish to install."
+			if [ $SELECTED ]; then
+				echo "\n[Default: RETURN to install the selected package(s)]: \c"
+			else
+				echo "\nAvailable packages:"
+				for i in $CHOICES; do
+					echo $i
+				done | pr -4 -t
+				if [ $SELECTED ]; then
+					echo "\nEnter 0, 1, or package names: \c"
+				else
+					echo "\nEnter 0, or package names: \c"
+				fi
+			fi
+			LINE=`line | tr '[a-z]' '[A-Z]'`
+			if [ ! "$LINE" -a ! "$SELECTED" ]; then
+				echo "\n\007At least one package must be selected."
+				sleep 1
+				continue
+			elif [ $SELECTED ]; then
+				return
+			elif [ "$LINE" ]; then
+				if [ "`args $LINE`" -gt 1 ]; then
+					for i in $LINE; do
+						if [ ! "`eval echo \\$\${GROUP}_NAME`" ]; then
+							echo "\n\007$i is not an available package."
+							sleep 1
+							continue
+						fi
+					done
+				fi
+			fi
+			COUNT=0
+			for GROUP in $LINE; do
+				case $GROUP in
+					"")
+						SET=0
+						for GRP in $MASTER_LIST; do
+							if [ `eval echo \\$\${GRP}_FLAG` ]; then
+								return
+							fi
+						done
+						echo "\n\n${BELL}At least one package must be selected"
+						sleep 2
+						continue 2;;
+					0)
+						RETURN=1
+						continue 2;;
+					1)
+						MASTER_LIST="$MASTER_SAVE"
+						for GRP in $MASTER_ALL; do
+							eval ${GRP}_FLAG=""
+						done
+						RE_INSTALL=""
+						SELECTED=""
+						RETURN=1
+						;;
+					*\;*)
+						# Filter any lines with two semicolons; eval gets confused
+						invld
+						continue 2;;
+					[A-Z]*)
+						if [ ! "`eval echo \\$\${GROUP}_NAME`" ]; then
+							echo "\n\007$i is not an available package."
+							sleep 1
+							continue 2
+						fi
+						if [ `eval echo \\$\${GROUP}_LOADED` ]; then
+								while :; do
+									echo "\n${BELL}$GROUP has already been installed"
+									echo "\nWould you like to re-install it?"
+									echo "Enter [y/n]: \c"
+									read ANS
+									case $ANS in 
+										y)
+											RE_INSTALL=1
+											eval ${GROUP}_LOADED=""
+											MASTER_LIST=""
+											for GRP in $MASTER_ALL; do 
+												if [ ! "`eval echo \\$\${GRP}_LOADED`" ]; then
+													MASTER_LIST="$MASTER_LIST $GRP"
+												fi
+											done
+											eval ${GROUP}_LOADED=1
+											break;;
+										n)
+											continue 2;;
+										*)
+											invld
+											continue;;
+									esac
+								done
+						elif [ `eval echo \\$\${GROUP}_FLAG` ]; then
+							echo "\n${BELL}$GROUP has already been selected"
+							sleep 1
+							continue 2
+						fi
+						eval ${GROUP}_FLAG=1
+						PRE=""
+						while [ -f $ROOTDIR/$INSTALL/$GROUP.prepkg ]; do
+							PRE_GRPS=`line < $ROOTDIR/$INSTALL/$GROUP.prepkg`
+							NEWLIST=""
+							for GRP in $PRE_GRPS; do
+								if [ ! "`eval echo \\$\${GRP}_FLAG`" -a ! "`eval echo \\$\${GRP}_LOADED`" ]; then
+									NEWLIST="$NEWLIST $GRP"
+									PRE=1
+								fi
+							done
+							if [ ! "$PRE" ]; then
+								break
+							fi
+							for GRP in $MASTER_ALL; do
+								eval ${GRP}_PRE_FLAG=""
+							done
+							if [ "$NEWLIST" ]; then
+								echo "\n\n${BELL}The following package(s) must be installed"
+								eval echo "before the \$${GROUP}_NAME:"
+								PRE_COUNT=1
+								ADD=$GROUP
+								for GRP in $NEWLIST; do
+									if [ ! "`eval echo \\$\${GRP}_FLAG`" -a ! "`eval echo \\$\${GRP}_LOADED`" ]; then
+										ADD="$ADD $GRP"
+										eval echo "=== \$${GRP}_NAME ==="
+										eval ${GRP}_PRE_FLAG=1
+										increment PRE_COUNT
+									fi
+								done
+								while :; do
+									echo "\nWould you like to add these packages?"
+									echo "----------------------------------"
+									for GRP in $ADD; do
+										eval echo "\$${GRP}_NAME"
+									done
+									echo "----------------------------------"
+									echo "Enter [y/n]: \c"
+									read ANS
+									case $ANS in 
+										y)
+											for GRP in $MASTER_ALL; do
+												if [ `eval echo \\$\${GRP}_PRE_FLAG` ]; then
+													eval ${GRP}_FLAG=1
+													increment COUNT
+												fi
+											done
+											break 2;;
+										n)
+											eval ${GROUP}_FLAG=""
+											COUNT=`expr $COUNT - 1`
+											continue 4;;
+										*)
+											invld
+											continue;;
+									esac
+								done
+							fi
+						done
+						SELECTED=1
+						increment COUNT
+						if [ $COUNT -eq $TOTAL ]; then
+							return
+						fi;;
+					*)
+						invld
+						continue 2;;
+				esac
+			done
+			GROUPS=""
+			CHOICES=""
+			if [ $SELECTED ]; then
+				for i in $MASTER_ALL; do
+					if [ `eval echo \\$\${i}_FLAG` ]; then
+						GROUP="$GROUP $i"
+					fi
+				done
+			else
+				for i in $MASTER_ALL; do
+					if [ ! "`eval echo \\$\${i}_FLAG`" -a ! "`eval echo \\$\${i}_LOADED`" ]; then
+						CHOICES="$CHOICES $i"
+					fi
+				done
+			fi
+		done
+	done
+}
+
+#
+# Initialization and main loop
+#
+
+# Set terminal variables
+BELL=""; export BELL
+BLOCK="o"
+BBLOCK="+"
+
+ROOTDIR=/; export ROOTDIR
+INSTALL=/install; export INSTALL
+USR_OPT=/usr/options; export USR_OPT
+PATH=$PATH:/bin:/etc:/usr/bin:/opus/bin:.; export PATH
+while :; do
+	echo "\nWhat type of package are you installing?"
+	echo "------------------------------------------------------------------------------"
+	echo "\nChoose:  1) sysadm"
+	echo "         2) OCS"
+	echo "\nEnter [1-2]: \c"
+	read ANS
+	case $ANS in
+		1)
+			OCS=""
+			break 
+			;;
+		2)
+			OCS=1
+			break 
+			;;
+		*)
+			invld
+			;;
+	esac
+done
+while :; do
+	echo "\nAre you loading from diskette or tape?"
+	echo "------------------------------------------------------------------------------"
+	echo "\nChoose:  1) Diskette"
+	echo "         2) Tape"
+	echo "\nEnter [1-2]: \c"
+	read ANS
+	case $ANS in
+		1)
+			trap "sync; exit" 1 2 3 15
+			instROOT=""; export instROOT
+			FLOPPIES=1
+			TAPES=""
+			if [ $OCS ]; then
+				install_ocs
+			else
+				install_flp
+			fi
+			exit
+			;;
+		2)
+			instROOT="/"; export instROOT
+			FLOPPIES=""
+			TAPES=1
+			if [ $OCS ]; then
+				install_ocs
+			fi
+			break
+			;;
+		*)
+			invld
+			;;
+	esac
+done
+
+DRIVE=0
+DRIVE_STAT0=`/opus/bin/opdos asciiread \\\opus\\\opus.cfg | grep "^<mt/0"`
+DRIVE_STAT1=`/opus/bin/opdos asciiread \\\opus\\\opus.cfg | grep "^<mt/1"`
+if [ ! "$DRIVE_STAT0" -a ! "$DRIVE_STAT1" ]; then
+		echo "\n\n${BELL}There is no entry in opus.cfg for tape devices mt/0 or mt/1"
+		echo "Cannot install from tape."
+		rtc
+		exit 1
+fi
+while [ "$DRIVE_STAT1" ]; do
+	echo "\n\nDo you want to load the tape from drive 0 or drive 1?"
+	echo "\nEnter [0/1]: \c"
+	read DRIVE
+	case $DRIVE in
+		0|1)
+			break;;
+		*)
+			invld;;
+	esac
+done
+echo "\n\nInsert the Opus5 tape in drive $DRIVE and press RETURN: \c"
+line
+while [ ! "`tape -f/dev/rmt/${DRIVE}m rew 2>&1 | grep bot`" ]; do
+	echo "${BELL}Make sure that the tape is properly installed in drive $DRIVE."
+	rtc
+done
+
+cd $ROOTDIR
+echo "\nInstalling setup files..."
+trap "err_cleanup" 1 2 3 15
+cpio -icdumC256000 < /dev/rmt/${DRIVE}mn "install/*"
+sync
+if [ ! -f $ROOTDIR/$INSTALL/CONTENTS -o ! -f $ROOTDIR/$INSTALL/REL ]; then
+	tape -f/dev/rmt/${DRIVE}m rew > /dev/null 2>&1
+	echo "\n\n${BELL}Tape header not found."
+	echo "Cannot perform installation."
+	rtc
+	exit 1
+fi
+
+MASTER_ALL=`line < $ROOTDIR/$INSTALL/CONTENTS`; export MASTER_ALL
+
+TOTAL=0
+LOADED=0
+for GROUP in $MASTER_ALL; do
+	eval ${GROUP}_NAME=\"`line < $ROOTDIR/$INSTALL/$GROUP.info`\"
+	eval ${GROUP}_FLAG=""
+	if [ -f $USR_OPT/$GROUP.Rlist ]; then
+		eval ${GROUP}_LOADED=1
+		increment LOADED
+	fi
+	increment TOTAL
+done
+MORE=""
+cd $ROOTDIR
+
+if [ $LOADED -gt 0 ]; then
+	MASTER_LIST=""
+	for GRP in $MASTER_ALL; do 
+		if [ ! "`eval echo \\$\${GRP}_LOADED`" ]; then
+			MASTER_LIST="$MASTER_LIST $GRP"
+		fi
+	done
+else
+	MASTER_LIST="$MASTER_ALL"
+fi
+MASTER_SAVE="$MASTER_LIST"
+
+while :; do
+	select
+	install_tape $GROUPS
+	RTN=$?
+	if [ $RTN -eq 2 ]; then
+		GROUPS=""
+		continue
+	elif [ $RTN -ne 0 ]; then
+		err_cleanup
+	fi
+	for GRP in $MASTER_ALL; do
+		eval ${GRP}_FLAG=""
+	done
+	if [ $LOADED -eq $TOTAL ]; then
+		cleanup
+	fi
+	while :; do
+		COUNT=0
+		echo "\n\n------------------------------------------------------------------------------"
+		echo "The following packages have been installed: \n"
+		display more
+		echo "------------------------------------------------------------------------------"
+		echo "\nChoose:  0) Terminate installation"
+		echo "         1) install more packages"
+		echo "\nEnter [0-1]: \c"
+		read ANS
+		case $ANS in
+			0)
+				cleanup;;
+			1)
+				MASTER_TEMP="$MASTER_LIST"
+				MASTER_LIST=""
+				MLIST_COUNT=0
+				for GRP in $MASTER_TEMP; do 
+					if [ ! "`eval echo \\$\${GRP}_LOADED`" ]; then
+						increment MLIST_COUNT
+						MASTER_LIST="$MASTER_LIST $GRP"
+					fi
+				done
+				MASTER_SAVE="$MASTER_LIST"
+				MORE=1
+				break;;
+			*)
+				invld;;
+		esac
+	done
+done

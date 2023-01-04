@@ -1,0 +1,168 @@
+cd /usr/src
+find * -type f -print | grep "\/core$" | xargs rm
+# clobber local
+if [ -d /usr/src/local ]; then
+	cd /usr/src/local
+fi
+if [ -f bsd/cmd/bsd/Makefile ]; then
+	cd bsd/cmd/bsd ; make clobber ; cd ../../..
+fi
+if [ -f bsd/lib/libbsd/Makefile ]; then
+	cd bsd/lib/libbsd ; make clobber ; cd ../../..
+fi
+if [ -f wiz/clipper/makefile ]; then
+	cd wiz/ns32000 ; make clobber ; cd ../..
+fi
+if [ -f wiz/clipper/makefile ]; then
+	cd wiz/clipper ; make clobber ; cd ../..
+fi
+if [ -f EXOS/makefile ]; then
+	cd EXOS ; make clean ; cd ..
+fi
+if [ -f boot/pm100/boot.mk ]; then
+	cd boot/pm100 ; make -f boot.mk clobber ; cd ../..
+fi
+if [ -f boot/pm200/boot.mk ]; then
+	cd boot/pm200 ; make -f boot.mk clobber ; cd ../..
+fi
+if [ -f boot/pm300/boot.mk ]; then
+	cd boot/pm300 ; make -f boot.mk clobber ; cd ../..
+fi
+if [ -f cdb/cdb.mk ]; then
+	cd cdb ; make -f cdb.mk clobber ; cd ..
+fi
+if [ -f cpt/cpt.mk ]; then
+	cd cpt ; make -f cpt.mk clobber ; cd ..
+fi
+if [ -f dsb/dwb/mkl ]; then
+	cd dwb ; make -f text.mk clobber ; cd ..
+fi
+if [ -f exos/Makefile ]; then
+	cd exos ; make clean ; cd ..
+fi
+if [ -f ksh-i/makefile ]; then
+	cd ksh-i ; make clobber ; cd ..
+fi
+if [ -f nfs/nfs.mk ]; then
+	cd nfs ; make -f nfs.mk clobber ; cd ..
+fi
+if [ -f opmon.450/opmon.mk ]; then
+	cd opmon.450 ; make -f opmon.mk clean ; cd ..
+fi
+if [ -f pascal/pascal.mk ]; then
+	cd pascal ; make -f pascal.mk clobber ; cd ..
+fi
+if [ -f postscr/postscr.mk ]; then
+	cd postscr ; make -f postscr.mk clobber ; cd ..
+fi
+if [ -f ucb/ucb.mk ]; then
+	cd ucb ;make -f ucb.mk clobber ; cd ..
+fi
+if [ -f x/Makefile ]; then
+	cd x ; make clobber ; cd ..
+fi
+# clobber uts
+cd /usr/src
+if [ -f uts/ns32000/unix.mk ]; then
+	cd uts/ns32000; make -f unix.mk CPU=pm100 clobber; cd ../..
+	cd uts/ns32000; make -f unix.mk CPU=pm200 clobber; cd ../..
+fi
+if [ -f uts/clipper/makefile ]; then
+	cd uts/clipper; make clobber; cd ../..
+fi
+if [ -f uts/m88k/cf/m88k/Makefile ]; then
+	cd uts/m88k/cf/m88k; make clobber; cd ../../../..
+fi
+
+# clobber lib
+cd lib; make clobber; cd ..
+
+# clobber cmd
+SRC=/usr/src
+LSRC=/usr/src
+cd /usr/src/cmd
+MAKE="make -f"
+for arg in *
+do(
+#	Local version takes precedence over official version
+	if [ -f $LSRC/cmd/$arg -o -d $LSRC/cmd/$arg ]
+	then	source=$LSRC
+	else	source=$SRC
+	fi
+	cd ${source}/cmd
+	OBJ=
+	B=`basename $arg`
+#	Is this an aberrant file with its makefile in the $SRC/cmd directory?
+#	If so then skip this file since it will handled by the makefile
+	case $B in
+		*.c | *.s)
+			b=`basename $B ".[cs]"`
+			if [ -f $b.mk ]
+			then	continue
+			fi
+			;;
+	esac
+	echo "\n======== $B"
+	BASE=$B
+#	if not a directory then remove suffix and determine the file type
+	if [ ! -d $B ] 
+	then	BASE=`echo $B | sed -e 's/\(.*\)\..*/\1/'`
+		if [ -f ${BASE}.mk -o -f $LSRC/cmd/${BASE}.mk ]
+		then	B=${BASE}.mk
+		elif [ -f ${BASE}.rc -o -f $LSRC/cmd/${BASE}.rc ]
+		then	B=${BASE}.rc
+		elif [ -f ${BASE}.c  -o -f $LSRC/cmd/${BASE}.c ] 
+		then	B=${BASE}.c
+		elif [ -f ${BASE}.sh -o -f $LSRC/cmd/${BASE}.sh ] 
+		then	B=${BASE}.sh
+		elif [ -f ${BASE}.y -o -f $LSRC/cmd/${BASE}.y ]
+		then	B=${BASE}.y
+		elif [ -f ${BASE}.l -o -f $LSRC/cmd/${BASE}.l ] 
+		then	B=${BASE}.l
+		elif [ -f ${BASE}.s -o -f $LSRC/cmd/${BASE}.s ] 
+		then	B=${BASE}.s
+		elif [ -f ${BASE}.o -o -f $LSRC/cmd/${BASE}.o ] 
+		then	B=${BASE}.o
+		fi
+	fi
+#
+	if [ "$source" = "$SRC" -a -f $LSRC/cmd/$B ]
+	then	source=$LSRC
+		cd ${source}/cmd
+	fi
+#
+#	Now build the command according to its file type
+	case $B in
+
+	*.mk)
+		CMD="$MAKE -b -f ${BASE}.mk clobber"
+		echo "$CMD"
+		;;
+	*.c)
+		rm -f ./${BASE}.o ./${BASE}
+		lib=
+		;;
+	*.s)	
+		rm -f ./${BASE}.o ./{BASE}
+		;;
+	*.o)	rm -f $B 
+		;;
+	*)
+		if [ -d $B ]
+		then	echo "cd $B"
+			cd $B
+			if [ -f $B.mk ]; then
+				CMD="$MAKE $B.mk clobber"
+				echo "$CMD"
+				eval $CMD
+			elif [ -f $B.rc ]
+			then	sh -x $B.rc
+			else	echo "**** Build of $B failed (no makefile found in directory)"
+			fi
+			rm -f *.o
+		else	echo "**** Build of ${BASE} failed (can not determine file type)"
+		fi
+
+	esac
+);done
+find /usr/src -type f -print | egrep "\/core$|\/a\.out$" | xargs rm > /dev/null 2>&1

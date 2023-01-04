@@ -1,0 +1,123 @@
+	if m88k ; then make -e -f libc_bsd.mk specific MACHINE=m88k; fi
+	#
+	# compile portable library modules
+	cd port; make -e CC="cc"
+	#cd gen; make -e  prof NONPROF=@#
+	#cd print; make -e  prof NONPROF=@#
+	#cd stdio; make -e  prof NONPROF=@#
+	#cd sys; make -e  prof NONPROF=@#
+	cd gen; make -e  nonprof PROF=@#
+	cd print; make -e  nonprof PROF=@#
+	cd stdio; make -e  nonprof PROF=@#
+	cd sys; make -e  nonprof PROF=@#
+	#
+	# compile machine-dependent library modules
+	cd m88k; make -e CC="cc"
+	make CC="cc" OFLAG=-O ROOT= M4=m4  -e nonprof PROF=@#
+	m4 m4.def reg.def -DMCOUNT=\;  gen/ctype.s >ctype.s
+	cc -O   -I../inc -I/usr/include -c ctype.s && mv ctype.o gen/ctype.o
+	rm ctype.s
+	cd crt ; make CC="cc" OFLAG=-O ROOT= M4=m4  -e nonprof PROF=@#
+	#make CC="cc" OFLAG=-O ROOT= M4=m4  -e prof NONPROF=@#
+	# compile bsd library modules
+	cd bsd; make -e CC="cc"
+	make CC="cc" OFLAG=-O ROOT= M4=m4  -e nonprof PROF=@#
+	##make CC="cc" OFLAG=-O ROOT= M4=m4  -e prof NONPROF=@#
+	#
+	# place portable modules in "object" directory, then overlay
+	# 	the machine-dependent modules.
+	rm -rf object
+	mkdir object
+	cp port/*/*.o object
+	#cp port/*/*.p object
+	cd m88k; cp */*.o ../object; cd ..
+	#if m88k; then \
+		#cd m88k; cp */*.p ../object; cd ..; \
+	#fi
+	#
+	cd bsd; cp */*.o */*/*.o ../object; cd ..
+	#if m88k; then \
+		#cd bsd; cp */*.p */*/*.p ../object; cd ..; \
+	#fi
+	#
+	if [ -d m32mau ]; then \
+		cd m32mau; \
+		make -e CC=cc; \
+		cd .. ;\
+		cp m32mau/*/*.o object; \
+		#cp m32mau/*/*.p object ;\
+	fi
+	#
+	# delete temporary libraries
+	rm -f lib.libc
+	#-rm -f libp.libc
+	#
+	# set aside run-time modules, which don't go in library archive!
+	cd object; for i in *crt?.o; do mv $i ..; done; cd ..
+	#
+	# build archive out of the remaining modules.
+	cd object; make -e -f ../m88k/makefile archive \
+		AR=ar  LORDER=lorder PROF=#
+	#
+	# (m88k)
+	# Note that "archive" is invoked with libc/object as current directory.
+	#
+	# figure out the correct ordering for all the archive modules except
+	#	cuexit and fakcu, which must go at end of archive.
+	mv cuexit.o cuexit.x
+	mv fakcu.o fakcu.x
+	#mv sigcall.o sigcall.x
+	#mv signal.o signal.x
+	mv _kill.o _kill.x
+	mv __kill.o __kill.x
+	mv _getpid.o _getpid.x
+	mv __getpid.o __getpid.x
+	mv cerror.o cerror.x
+	rm -f old_toupper.o old_tolower.o
+	lorder *.o | tsort >objlist
+UX tsort: INFORM: cycle in data
+	malloc.o
+	assert.o
+	abort.o
+	flsbuf.o
+	isatty.o
+	__ioctl.o
+	___ioctl.o
+UX tsort: INFORM: cycle in data
+	_ascftime.o
+	ascftime.o
+	malloc.o
+	assert.o
+	abort.o
+	sigcall.o
+	___sigaction.o
+UX tsort: INFORM: cycle in data
+	sigcode.o
+	sigcall.o
+	___sigaction.o
+	mv cuexit.x cuexit.o
+	mv fakcu.x fakcu.o
+	#mv sigcall.x sigcall.o
+	#mv signal.x signal.o
+	mv _kill.x _kill.o
+	mv __kill.x __kill.o
+	mv _getpid.x _getpid.o
+	mv __getpid.x __getpid.o
+	mv cerror.x cerror.o
+	#
+	# build the archive with the modules in correct order.
+	ar q ../lib.libc `cat objlist` \
+	_kill.o __kill.o _getpid.o __getpid.o cerror.o cuexit.o fakcu.o
+ar: creating ../lib.libc
+	##
+	## build the profiled library archive, first renaming the
+	##	.p (profiled object) modules to .o
+	#for i in *.p ; do mv $i `basename $i .p`.o ; done
+	if [ "#" != "@#" -a "#" != "#" ]; \
+	then \
+	#ar q ../libp.libc `cat objlist` \
+	#_kill.o __kill.o _getpid.o __getpid.o cerror.o cuexit.o fakcu.o  ; \
+	:; \
+	fi
+	rm -rf object
+	#

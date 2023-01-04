@@ -1,0 +1,1 @@
+	time /bin/ld -o sysV88.syms ld.file comm.o m88kvec.o opus.o conf.o lib.ml lib.os lib.io lib.s5 lib.du lib.stub lib.nfs lib.bsd

@@ -1,0 +1,15 @@
+/* MT driver - mag tape */
+#include "/etc/system"
+
+#ifndef MT
+mtinit() { }
+mtopenb() { nodev(); }
+mtopenc() { nodev(); }
+mtclose() { nodev(); }
+mtread() { nodev(); }
+mtwrite() { nodev(); }
+mtioctl() { nodev(); }
+mtstrategy() { nodev(); }
+mtintr() { }
+mtprint() { nodev(); }
+#endif

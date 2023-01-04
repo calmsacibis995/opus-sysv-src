@@ -1,0 +1,13 @@
+/* SYSDEBUG module */
+#include "/etc/system"
+
+#ifndef	DEBUG
+sysdebug() {
+	printf("System Debugger not available\n");
+};
+
+initsym() 
+{
+	return 0;
+}
+#endif

@@ -1,0 +1,16 @@
+/* GNF driver - general (full duplex) purpose driver interface */
+#include "/etc/system"
+
+#ifndef GNF
+gnfinit() {}
+gnfopenc() { nodev(); }
+gnfopenb() { nodev(); }
+gnfclosec() { nodev(); }
+gnfcloseb() { nodev(); }
+gnfread() { nodev(); }
+gnfwrite() { nodev(); }
+gnfioctl() { nodev(); }
+gnfstrategy() { nodev(); }
+gnfintr() {}
+gnfprint() { nodev(); }
+#endif

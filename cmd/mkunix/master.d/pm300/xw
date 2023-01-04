@@ -1,0 +1,15 @@
+/* XW driver - Xwindow interface */
+#include "/etc/system"
+#include <sys/types.h>
+#include <sys/stream.h>
+
+#ifndef XW
+Xsigrint() {}
+Xdispctlint() {}
+
+#define DUMMY	1
+struct streamtab ptcinfo[DUMMY];
+struct streamtab Xsiginfo[DUMMY];
+struct streamtab conxinfo[DUMMY];
+
+#endif

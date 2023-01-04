@@ -1,0 +1,109 @@
+;	@(#)sigcode.s	6.1 
+	file	"sigcode.s"
+
+; __sigcode: the interface routine to user's signal handlers.
+
+; The kernel forces the entry to __sigcode with the stack thus:
+;
+;LOMEM:
+;SP>		<struct sigframe>
+;HIMEM:
+;
+; __sigcode does this:
+;
+; 1)	save registers    (r1 thru r30)
+;
+; 2)	align the stack and allocate the argument homing area
+;
+; 3)	call __sigcall(struct sigframe *) to call the user's signal handler
+;
+; 4)	restore the registers
+;
+; 5)	Issue sigret to continue.
+
+	text
+	global	__sigcode
+	global	__sigcall
+
+__sigcode:
+;  Control comes directly here from the kernel via an rte.
+
+	subu	r31,r31,4*30	; Make space for saving registers.
+
+	st	r5,r31,0	; Save all scratch registers.
+	st	r6,r31,4
+	st	r7,r31,8
+	st	r8,r31,0xc
+	st	r9,r31,0x10
+	st	r10,r31,0x14
+	st	r11,r31,0x18
+	st	r12,r31,0x1c
+	st	r13,r31,0x20
+	st	r14,r31,0x24
+	st	r15,r31,0x28
+	st	r16,r31,0x2c
+	st	r17,r31,0x30
+	st	r18,r31,0x34
+	st	r19,r31,0x38
+	st	r20,r31,0x3c
+	st	r21,r31,0x40
+	st	r22,r31,0x44
+	st	r23,r31,0x48
+	st	r24,r31,0x4c
+	st	r25,r31,0x50
+	st	r26,r31,0x54
+	st	r27,r31,0x58
+	st	r28,r31,0x5c
+	st	r29,r31,0x60
+	st	r30,r31,0x64
+	st	r4,r31,0x68
+	st	r3,r31,0x6c
+	st	r2,r31,0x70
+	st	r1,r31,0x74
+
+;	argument to __sigcall
+	addu	r2,r31,4*30
+
+;	allocate space for homing args (32) and  
+	subu	r31,r31,32
+
+	bsr	__sigcall	; call _sigcall(sigframe *)
+
+	addu	r31,r31,32
+
+	ld	r5,r31,0	; restore registers.
+	ld	r6,r31,4 
+	ld	r7,r31,8
+	ld	r8,r31,0xc
+	ld	r9,r31,0x10
+	ld	r10,r31,0x14
+	ld	r11,r31,0x18
+	ld	r12,r31,0x1c
+	ld	r13,r31,0x20
+	ld	r14,r31,0x24
+	ld	r15,r31,0x28
+	ld	r16,r31,0x2c
+	ld	r17,r31,0x30
+	ld	r18,r31,0x34
+	ld	r19,r31,0x38
+	ld	r20,r31,0x3c
+	ld	r21,r31,0x40
+	ld	r22,r31,0x44
+	ld	r23,r31,0x48
+	ld	r24,r31,0x4c
+	ld	r25,r31,0x50
+	ld	r26,r31,0x54
+	ld	r27,r31,0x58
+	ld	r28,r31,0x5c
+	ld	r29,r31,0x60
+	ld	r30,r31,0x64
+	ld	r4,r31,0x68
+	ld	r3,r31,0x6c
+	ld	r2,r31,0x70
+	ld	r1,r31,0x74
+	addu	r31,r31,4*30
+
+;
+; at this point we do a sigret
+;
+	tb0	0,r0,448		; sigret

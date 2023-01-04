@@ -1,0 +1,16 @@
+/* SXT driver */
+#include "/etc/system"
+
+#ifdef	SXT
+int	sxt_cnt = 40;
+#else
+sxtin() {}
+sxtout() {}
+sxtinit() {}
+sxtopen() { nodev(); }
+sxtclose() { nodev(); }
+sxtread() { nodev(); }
+sxtwrite() { nodev(); }
+sxtioctl() { nodev(); }
+sxtintr() {}
+#endif

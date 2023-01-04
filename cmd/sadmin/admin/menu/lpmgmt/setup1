@@ -1,0 +1,79 @@
+#ident "@(#)pkg.lp:lp/setup1	1.7"
+#
+#		setup1 type interface [ filter ]
+#
+#	Setup a new printer of type "type" using interface
+#	/usr/spool/lp/model/"interface". 
+#	Hardwired tty lines are set up appropriately in /etc/inittab.
+#
+
+# Choose printer name.
+X=`lpstat -p | grep "${2}_[1-9][0-9]*" | wc -l`
+X=`expr ${X} + 1`
+
+# Let installer override the default.
+echo "The printer name is ${2}_${X}.\n"
+echo "If ${2}_${X} is OK, hit RETURN or"
+echo "if you would prefer another name, enter the name:  \c"
+read popt
+popt=${popt:-"${2}_${X}"}
+
+while
+	[ "${dev}" = "" ]
+do
+	echo "\nThe choices for device name are:\n"
+# MODIFIED FOR OPUS --------------------------------------------
+	for TTY in `cd /dev; ls tty[0-9]*`
+	do
+		echo "/dev/${TTY}"
+	done
+	echo "/dev/lp"
+# -------------------------------------------------------------
+	echo "\nEnter the device name:  \c"
+	read dev
+
+#	Verify that given device is character special.
+	admopt="-h"
+	if
+		[ ! -c "${dev}" ]
+	then
+		echo "${popt} cannot be hardwired to '${dev}'."
+		dev=""
+	else
+
+#	Modify /etc/inittab.
+
+		/usr/admin/menu/lpmgmt/setup2 ${dev}
+		chmod 600 ${dev}
+		chown lp ${dev}
+	fi
+done
+
+# Let lpadmin install the new printer.
+/usr/lib/lpadmin -p${popt} ${admopt} -v${dev} -m${2}
+if
+	[ $? -eq 0 ]
+then
+	if
+		[ "X${admopt}" = "X-h" ]
+	then
+		/usr/lib/accept ${popt}
+		if
+			[ $? -eq 0 ]
+		then
+			enable ${popt}
+			if
+				[ $? -ne 0 ]
+                        then
+				echo "Enable of printer ${popt} failed.  Consult documentation."
+				exit
+			fi
+		else
+			echo "Accept of printer ${popt} failed.  Consult documentation."
+			exit
+		fi
+	fi
+else
+	echo "Installation of printer ${popt} failed.  Consult documentation."
+	exit
+fi

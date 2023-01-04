@@ -1,0 +1,11 @@
+#ident	"@(#)sadmin:admin/menu/lpmgmt/lpstatus	2.3"
+#menu# display the status of the line printer scheduler
+
+#help# 
+#help#	lpstatus displays the current status of the line printer
+#help#	spooler, i.e., is the scheduler is active and what devices
+#help#	are taking requests. 
+#help#
+
+echo "\n Current lp system status:"
+lpstat -t

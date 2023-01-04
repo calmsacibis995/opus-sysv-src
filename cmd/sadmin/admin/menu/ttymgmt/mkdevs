@@ -1,0 +1,595 @@
+#ident	"@(#)sadmin:admin/menu/ttymgmt/mkdevs	1.00"
+#menu# add tty devices to opus.cfg
+#help#
+
+# This wonderful script was written with the help
+# of JY and KR - DC.
+
+CFGFILE=/opus/opus.cfg
+if [ ! "`/opus/bin/opdos wildcard /opus/opus.sav`" ]; then
+	CFGFILE_SAV=/opus/opus.sav
+elif [ ! "`/opus/bin/opdos wildcard /opus/opus.old`" ]; then
+	CFGFILE_SAV=/opus/opus.old
+else
+	CFGFILE_SAV=/opus/opus.sv
+fi
+if [ ! "`/opus/bin/opdos wildcard $CFGFILE`" ]; then
+	echo "\n\007\\opus\\opus.cfg not found in DOS.\n"
+	echo "\nCannot proceed with the tty configuration."
+	exit 1
+fi
+
+invld()
+{
+	if [ "$*" ]; then
+		echo "\n\007$*"
+	else
+		echo "\n\007Invalid response."
+	fi
+	sleep 1
+}
+
+rtc()
+{
+	echo "\nPress RETURN to continue: \c"
+	line
+}
+
+# Set inter-field separator to newline.
+ifs_nl()
+{
+	IFS="
+"
+}
+
+# Set inter-field separator to white space (space, tab, newline).
+ifs_std()
+{
+	IFS=" 	
+"
+}
+
+divider()
+{
+	echo "\n============================================================================"
+	#echo "\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001\\001"
+	#echo "\n---------------------------------------------------------------------"
+	echo "$*"
+}
+
+hex_add()
+{
+	C1=$1
+	C2=$2
+	C3=$3
+	C4=$4
+	if [ ! "$C4" ]; then
+		C4=$C3
+		C3=$C2
+		C2=$C1
+		C1=""
+	fi
+	case $C4 in
+		0)
+			C4=8
+			CARRY3=""
+			;;
+		8)
+			C4=0
+			CARRY3=1
+			;;
+	esac
+	
+	CARRY2=""
+	if [ $CARRY3 ]; then
+		case $C3 in
+			[0-8])
+				increment C3
+				;;
+			9)
+				C3=a
+				;;
+			a)
+				C3=b
+				;;
+			b)
+				C3=c
+				;;
+			c)
+				C3=d
+				;;
+			d)
+				C3=e
+				;;
+			e)
+				C3=f
+				;;
+			f)
+				C3=0
+				CARRY2=1
+				;;
+		esac
+	fi
+	
+	CARRY1=""
+	if [ $CARRY2 ]; then
+		case $C2 in
+			[0-8])
+				increment C2
+				;;
+			9)
+				C2=a
+				;;
+			a)
+				C2=b
+				;;
+			b)
+				C2=c
+				;;
+			c)
+				C2=d
+				;;
+			d)
+				C2=e
+				;;
+			e)
+				C2=f
+				;;
+			f)
+				C2=0
+				CARRY1=1
+				;;
+		esac
+	fi
+	
+	if [ $CARRY1 ]; then
+		case $C1 in
+			[0-8])
+				increment C1
+				;;
+			9)
+				C1=a
+				;;
+			a)
+				C1=b
+				;;
+			b)
+				C1=c
+				;;
+			c)
+				C1=d
+				;;
+			d)
+				C1=e
+				;;
+			e)
+				C1=f
+				;;
+			f)
+				C1=0
+				;;
+		esac
+	fi
+	echo $C1 $C2 $C3 $C4
+}
+
+increment()
+{
+	# This is a lot quicker than expr
+	XVAR=`eval echo \\$$1`
+	XVARNAME=$1
+	case $XVAR in
+		0)
+			eval $XVARNAME=1
+			;;
+		1)
+			eval $XVARNAME=2
+			;;
+		2)
+			eval $XVARNAME=3
+			;;
+		3)
+			eval $XVARNAME=4
+			;;
+		4)
+			eval $XVARNAME=5
+			;;
+		5)
+			eval $XVARNAME=6
+			;;
+		6)
+			eval $XVARNAME=7
+			;;
+		7)
+			eval $XVARNAME=8
+			;;
+		8)
+			eval $XVARNAME=9
+			;;
+		9)
+			eval $XVARNAME=10
+			;;
+		10)
+			eval $XVARNAME=11
+			;;
+		11)
+			eval $XVARNAME=12
+			;;
+		12)
+			eval $XVARNAME=13
+			;;
+		13)
+			eval $XVARNAME=14
+			;;
+		14)
+			eval $XVARNAME=15
+			;;
+		15)
+			eval $XVARNAME=16
+			;;
+		16)
+			eval $XVARNAME=17
+			;;
+		17)
+			eval $XVARNAME=18
+			;;
+		18)
+			eval $XVARNAME=19
+			;;
+		19)
+			eval $XVARNAME=20
+			;;
+		20)
+			eval $XVARNAME=21
+			;;
+		21)
+			eval $XVARNAME=22
+			;;
+		22)
+			eval $XVARNAME=23
+			;;
+		23)
+			eval $XVARNAME=24
+			;;
+		*)
+			eval $XVARNAME=`eval expr \\$$XVARNAME + 1`
+			;;
+	esac
+}
+
+divider "Opus tty configuration:\n\nIn conjunction with appendix D of the Opus user manual,\nthis script is designed to help you set up your serial ports.\n\nYou must refer to this section to determine the correct addresses\nand interrupts for your serial port cards."
+divider "\nRestrictions and limitations:\n\n	- Maximum number of tty's:  100\n	- Maximum number of COM ports:  4\n	- Maximum number of 4/8 port Hostess boards:  3\n	- Maximum number of 12/24 port Megaport boards:  4\n\n	- You may not mix Hostess with Megaport boards.\n	- If you have an active X entry in $CFGFILE,\n	  you may not use Megaport boards."
+
+rtc
+
+CFGLIST=`/opus/bin/ducp -a $CFGFILE | sed -e 's/^\[/X/' -e '/^<tty/d' -e '/<end>/d'`
+TTYLIST=`/opus/bin/ducp -a $CFGFILE | grep "^<tty" | sort -u`
+XACTIVE=`/opus/bin/ducp -a $CFGFILE | grep "^<.*X11"`
+
+if [ "$TTYLIST" ]; then
+	ifs_nl
+	divider "\ntty entries already exist in $CFGFILE:\n"
+	(for LINE in $TTYLIST; do
+		echo $LINE
+	done) | pr -t -2
+	ifs_std
+	echo "\nIf you wish to examine the old entries,"
+	echo "they will be available in $CFGFILE_SAV"
+	rtc
+fi
+
+divider "Com ports:"
+while :; do
+	echo "\nHow many COM ports does this machine have?"
+	echo "\nEnter [0-4]: \c"
+	read NUM_COMS
+	case $NUM_COMS in
+		[0-4])
+			break
+			;;
+		*)
+			invld
+			;;
+	esac
+done
+
+COUNT=3
+while [ $COUNT -le "$NUM_COMS" ]; do
+	while :; do
+		echo "\nEnter the I/O address of COM port #$COUNT: 0x___\b\b\b\c"
+		eval COM_ADDR$COUNT=\"`line`\" 
+		case `eval echo \\$COM_ADDR$COUNT` in
+			[1-9][0-9][08]|[1-9][a-f][08]|[a-f][0-9][08]|[a-f][a-f][08])
+				break
+				;;
+			*)
+				invld
+				continue
+				;;
+		esac
+	done
+	while :; do
+		echo "\nEnter the interrupt level of COM port #$COUNT [2,3,4,5,7,8]: \c"
+		eval COM_INT$COUNT=\"`line`\" 
+		case `eval echo \\$COM_INT$COUNT` in
+			[016])
+				invld This interrupt level is reserved.
+				continue
+				;;
+			[234578])
+				increment COUNT
+				break
+				;;
+			*)
+				invld
+				continue
+				;;
+		esac
+	done
+done
+
+divider "4/8 port Hostess boards:"
+while :; do
+	echo "\nHow many 4/8 port boards does this machine have?"
+	echo "\nEnter [0-3]: \c"
+	read NUM4_8
+	case $NUM4_8 in
+		0|[1-3])
+			break
+			;;
+		*)
+			invld
+			;;
+	esac
+done
+
+COUNT=1
+while [ $COUNT -le "$NUM4_8" ]; do
+	divider "\nHostess board #$COUNT:"
+	while :; do
+		echo "\nHow many ports are on this board?"
+		echo "\nEnter [4/8]: \c"
+		eval HOST_TYPE$COUNT=\"`line`\" 
+		case `eval echo \\$HOST_TYPE$COUNT` in
+			4|8)
+				break
+				;;
+			*)
+				invld
+				;;
+		esac
+	done
+	while :; do
+		echo "\nEnter the I/O address of hostess board #$COUNT: 0x___\b\b\b\c"
+		eval HOST_ADDR$COUNT=\"`line`\" 
+		if [ `eval echo \\$HOST_TYPE$COUNT` -eq 4 ]; then
+			case `eval echo \\$HOST_ADDR$COUNT` in
+				[1-9][02468ace]0|[a-f][02468c]0)
+					break
+					;;
+				*)
+					invld
+					continue
+					;;
+			esac
+		else
+			case `eval echo \\$HOST_ADDR$COUNT` in
+				[1-9][048c]0|[a-f][048c]0)
+					break
+					;;
+				*)
+					invld
+					continue
+					;;
+			esac
+		fi
+	done
+	while :; do
+		echo "\nEnter the interrupt level of hostess board #$COUNT [2,3,4,5,7,8]: \c"
+		eval HOST_INT$COUNT=\"`line`\" 
+		case `eval echo \\$HOST_INT$COUNT` in
+			[016])
+				invld This interrupt level is reserved.
+				continue
+				;;
+			[234578])
+				increment COUNT
+				break
+				;;
+			*)
+				invld
+				continue
+				;;
+		esac
+	done
+done
+
+if [ "$XACTIVE" ]; then
+	invld "There is an active X entry in $CFGFILE,\nno Megaport boards can be configured.\n"
+elif [ "$NUM4_8" -gt 0 ]; then
+	invld "You have configured one or more Hostess boards,\nno Megaport boards can be configured.\n"
+fi
+
+while [ ! "$XACTIVE" -a "$NUM4_8" -eq 0 ]; do
+	divider "12/24 port Megaport boards:"
+	echo "\nHow many 12/24 port boards does this machine have?"
+	echo "\nEnter [0-4]: \c"
+	read NUM12_24
+	case $NUM12_24 in
+		0|[1-4])
+			break
+			;;
+		*)
+			invld
+			;;
+	esac
+done
+
+COUNT=1
+while [ $COUNT -le "$NUM12_24" ]; do
+	divider "Megaport board #$COUNT:"
+	while :; do
+		echo "\nHow many ports are on this board?"
+		echo "\nEnter [12/24]: \c"
+		eval MEG_TYPE$COUNT=\"`line`\" 
+		case `eval echo \\$MEG_TYPE$COUNT` in
+			12|24)
+				break
+				;;
+			*)
+				invld
+				;;
+		esac
+	done
+	while :; do
+		echo "\nEnter the base address of megaport board #$COUNT: 0x____\b\b\b\b\c"
+		eval MEG_BASE$COUNT=\"`line`\" 
+		case `eval echo \\$MEG_BASE$COUNT` in
+			[8-9][0246ace]00|[a-f][02468ace]00)
+				break
+				;;
+			*)
+				invld
+				continue
+				;;
+		esac
+	done
+	while [ $COUNT -eq 1 ]; do
+		echo "\nEnter the data address of megaport board #$COUNT: 0x____\b\b\b\b\c"
+		MEG_DATA=`line` 
+		case $MEG_DATA in
+			[8-9]000|[a-f]000)
+				break
+				;;
+			*)
+				invld
+				continue
+				;;
+		esac
+	done
+	increment COUNT
+done
+
+TTYNUM=0
+com_gen()
+{
+	COUNT=1
+	if [ $COUNT -le "$NUM_COMS" ]; then
+		echo "\nGenerating entries for COM ports...\c" > /dev/tty
+		while [ $COUNT -le "$NUM_COMS" ]; do
+			case $COUNT in
+				1|2)
+					echo "<tty$TTYNUM=com$COUNT>"
+					;;
+				3|4)
+					echo "<tty$TTYNUM=com$COUNT(io=`eval echo \\$COM_ADDR$COUNT`,int=`eval echo \\$COM_INT$COUNT`)>"
+					;;
+			esac
+			increment COUNT
+			increment TTYNUM
+		done
+		echo "done" > /dev/tty
+	fi
+}
+COM_LIST=`com_gen $TTYNUM`
+
+if [ "$NUM_COMS" -gt 0 ]; then
+	TTYNUM=`expr $TTYNUM + $NUM_COMS`
+fi
+
+hostess_gen()
+{
+	COUNT=1
+	COMH=1
+	while [ $COUNT -le "$NUM4_8" ]; do
+		echo "\nGenerating entries for hostess board #$COUNT...\c" > /dev/tty
+		C1=`eval echo \\$HOST_ADDR$COUNT | cut -c1`
+		C2=`eval echo \\$HOST_ADDR$COUNT | cut -c2`
+		C3=`eval echo \\$HOST_ADDR$COUNT | cut -c3`
+		echo "<tty$TTYNUM=comh$COMH(io=0x`eval echo \\$HOST_ADDR$COUNT`,int=`eval echo \\$HOST_INT$COUNT`)>"
+		increment COMH
+		increment TTYNUM
+		I=1
+		while [ $I -lt `eval echo \\$HOST_TYPE$COUNT` ]; do
+			eval NEW_NUM=\"`hex_add $C1 $C2 $C3`\"
+			if [ "$NEW_NUM" ]; then
+				set $NEW_NUM
+				C1=$1
+				C2=$2
+				C3=$3
+			fi
+			echo "<tty$TTYNUM=comh$COMH(io=0x$C1$C2$C3,int=`eval echo \\$HOST_INT$COUNT`)>"
+			increment COMH
+			increment I
+			increment TTYNUM
+		done
+		if [ `eval echo \\$HOST_TYPE$COUNT` -eq 4 ]; then
+			COMH=`expr $COMH + 4`
+		fi
+		increment COUNT
+		echo "done" > /dev/tty
+	done
+}
+HOSTESS_LIST=`hostess_gen $TTYNUM`
+
+if [ "$NUM4_8" -gt 0 ]; then
+	TEMP=`expr $NUM4_8 \* 8`
+	TTYNUM=`expr $TTYNUM + $TEMP`
+fi
+
+mega_gen()
+{
+	COUNT=1
+	while [ $COUNT -le "$NUM12_24" ]; do
+		echo "\nGenerating entries for megaport board #$COUNT...\c" > /dev/tty
+		MEGA=`expr $COUNT \* 100 + 1`
+		echo "<tty$TTYNUM=mega$MEGA(base=0x`eval echo \\$MEG_BASE$COUNT`,data=0x$MEG_DATA)>"
+		increment MEGA
+		increment TTYNUM
+		I=1
+		while [ $I -lt `eval echo \\$MEG_TYPE$COUNT` ]; do
+			echo "<tty$TTYNUM=mega$MEGA>"
+			increment I
+			increment MEGA
+			increment TTYNUM
+		done
+		increment COUNT
+		echo "done" > /dev/tty
+	done
+}
+MEGA_LIST=`(mega_gen $TTYNUM)`
+
+gen_cfg()
+{
+	ifs_nl
+	for LINE in $CFGLIST; do
+		echo $LINE | sed 's/^X/[/'
+	done
+	if [ "$COM_LIST" ]; then
+		for LINE in $COM_LIST; do
+			echo $LINE
+		done
+	fi
+	if [ "$HOSTESS_LIST" ]; then
+		for LINE in $HOSTESS_LIST; do
+			echo $LINE
+		done
+	fi
+	if [ "$MEGA_LIST" ]; then
+		for LINE in $MEGA_LIST; do
+			echo $LINE
+		done
+	fi
+	echo "<end>"
+}
+if [ "$COM_LIST" -o "$HOSTESS_LIST" -o "$MEGA_LIST" ]; then
+	echo "\nGenerating a new $CFGFILE..."
+	echo "done"
+	/opus/bin/ducp -a $CFGFILE | /opus/bin/udcp -a $CFGFILE_SAV
+	gen_cfg | /opus/bin/udcp -a $CFGFILE
+	echo "\n\007To activate this setup, the system must be"
+	echo "taken down and rebooted.\n"
+else
+	echo "\n\007No configuration changes were made.\n"
+fi
+

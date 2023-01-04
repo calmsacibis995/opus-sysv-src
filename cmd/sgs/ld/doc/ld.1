@@ -1,0 +1,286 @@
+.\"	@(#)ld.1	1.7	10/29/87
+.\"
+.\"	Ld (Linker)
+.\"	Nroff/Troff manual page source
+.\"
+.\"	tbl ld.1 | nroff -man >ld.man
+.\"	tbl ld.1 | troff -man | ...
+.\"
+.if n .ds lq ""
+.if n .ds rq ""
+.if t .ds lq ``
+.if t .ds rq ''
+.if n .ds BU o
+.if t .ds BU \(bu
+.de TS
+.RS 15
+..
+.de TE
+.RE
+..
+.ad	
+.TH LD 1 "03/21/88"
+.SH NAME
+ld \- linker
+.SH SYNOPSIS
+.B ld
+[
+.B options
+]
+files
+.SH DESCRIPTION
+.ad
+.I Ld
+is a simple linker which is designed to be small and fast, for use
+primarily as a backend to the Unix C compiler.
+Some of 
+.IR ld 's
+specifications include:
+.sp 1
+.RS 5
+.TP 3
+\*(BU
+Uses the COFF format for object files.
+.TP 3
+\*(BU
+Supports separate address spaces for text and data.
+.TP 3
+\*(BU
+On the m88k, performs 32-bit literal synthesis for data accesses
+to objects above address 0xFFFF in the data address space.
+.TP 3
+\*(BU
+Supports coalescing of separate object modules into a single
+object module which can be used as input to another ld run.
+.TP 3
+\*(BU
+Uses memory rather aggressively, so is potentially faster than standard 
+System V linker.
+.RE
+.LP
+The symbols "\fB\_etext\fP", "\fB\_edata\fP" and "\fB\_end\fP" ("\fBetext\fP",
+"\fBedata\fP" and "\fBend\fP" in C) are reserved, and are set to the first
+location above the program, the first location above initialized
+data, and the first location above all data, respectively.
+No storage is allocated at these addresses.
+The linker will issue a warning if it finds a definition for these
+symbols.
+.SH OPTIONS
+.ad
+.I Ld
+supports a subset of the options supported by the normal linker, plus
+some options not supported in the normal linker.
+The supported options are:
+.TP 10
+.BI \-B\  base
+Use
+.I base
+as the base address of the bss section.
+The address may be specified in octal (0nnn..), hex (0Xnnn...), or
+decimal (nnn...).
+.TP 10
+.BI \-e\  symbol
+Set the entry point for the output file to be the address of
+.IR symbol.
+The default entry point symbol is "__start".
+If the entry point symbol is not found, the entry point is set to
+the virtual address of the start of text.
+.TP 10
+.B \-g
+This flag causes the linker to retain all possible information
+that might be of use during debugging, such as relocation tables,
+all local symbols in the symbol table, etc.
+By default the linker removes all global symbols that aren't definitions
+and all local symbols that are compiler generated labels (begin with the
+character '@').
+.TP 10
+.BI \-D\  base
+Use
+.I base
+as the base address of the data section.
+The address may be specified in octal (0nnn..), hex (0Xnnn...), or
+decimal (nnn...).
+.TP 10
+.BI \-F\  magic
+Build an executable file with the format specified by
+.IR magic .
+Currently recognized magic numbers are:
+.RS
+.TP
+.B 0407
+The executable is linked with text starting at address zero, followed
+immediately by data, followed immediately by bss.
+When executed, all of text, data, and bss will be read-write by the
+user process.
+.TP
+.B 0410
+The same as
+.B 0407
+except that the start of data is rounded up to a specified boundry
+(current default is 0x100000).
+When executed, the text portion will be read-only and shared among all
+users executing the same file.
+.TP
+.B 0413
+The executable is linked in such a manner that it can be directly paged
+in off disk by virtual memory implementations of Unix.
+Although not ideal, for various reasons this is currently the
+default file format produced by the linker.
+.TP
+.B 0414
+The same as
+.B 0413
+except that a liberal interpretation of the COFF specification is used
+to page align the text and data segments within the actual executable
+(thus leaving "holes" in the COFF file which may confuse some naive
+COFF readers).
+In addition, text and data are linked in separate address spaces, both
+of which start at one page boundry up from address zero.
+When executed, page zero of data will be unmapped to catch dereferencing
+of NULL pointers.
+.TP
+.B 0415
+The same as
+.B 0414
+except for the magic number.
+When executed, a dummy page at data address 0 will be supplied by the
+system, so buggy programs that dereference NULL pointers will continue
+to run without trapping.
+A simple patch program will turn a 
+.B 0414
+executable into a
+.B 0415
+executable.
+.RE
+.IP "" 10
+These formats may be modified slightly by use of the
+.BR \-i ,
+.BR \-D ,
+.BR \-R ,
+and
+.B \-T
+options, but not all combinations are fully supported.
+.TP 10
+.B \-i
+Place text and data in separate address spaces.
+The default with \-i is to start both text and data at address 0, and suppress
+complaints about address space overlap.
+.TP 10
+.BI \-l x
+Search library archive
+\fBlib\fIx\fB.a\fR,
+where
+.I x
+is a string specifying a library to be searched for unresolved global
+symbols.
+The linker first searches any directories specified by preceding
+.B \-L
+options, then searches the default directories
+.BR /lib ,
+and
+.BR /usr/lib .
+Since a library is searched when its name is encountered, the
+ordering of 
+.B \-l
+and
+.B \-L
+options is significant.
+.TP 10
+.BI \-L\  dir
+Add directory 
+.I dir
+to the list of library directories to search, before any default
+directories, but after any directories specified by previous
+.B \-L
+options.
+.TP 10
+.BI \-o\  name
+The
+.B output
+file name is set to
+.I name
+rather than the default
+.BR a.out .
+.TP 10
+.B \-r
+Perform object module coalescing only, do not do any relocation.
+The output module will contain relocation information from all the
+input modules, allowing
+it to become input for another linker run.
+.TP 10
+.BI "\-R " value
+This option has slightly different effects depending upon whether the
+executable is one of the non-paging formats (0407, 0410), or one of
+the paging formats (0413, 0414, 0415).
+For the non-paging formats, set the data rounding value to
+.IR value .
+The data base address is rounded up to the next
+multiple of the data rounding value.
+For paging format files,
+.I value
+becomes an offset added to the file offset for the start of the data
+section, to produce the base address of data.
+.TP 10
+.B \-s
+.B Strip
+the relocation tables, line number entries, symbol table, and string table
+from the output file.
+This information can also be removed with the
+.IR strip (1)
+command.
+.TP 10
+.BI \-T\  base
+Use
+.I base
+as the base address of the text section.
+The address may be specified in octal (0nnn..), hex (0Xnnn...), or
+decimal (nnn...).
+.TP 10
+.BI \-u\  name
+Enter
+.I name
+in the symbol table as an undefined global reference.
+This option is useful for loading entirely from an archive library because
+an unresolved global reference is required to force loading of at least
+one object module.
+.TP 10
+.B \-v
+Enable
+.B verbose
+mode.
+Prints the name of each object module loaded, along with other possibly
+useful information.
+.TP 10
+.B \-x
+This option causes the linker to remove all static symbols from the
+output file's symbol table.
+This includes programmer defined static symbols as well as compiler
+generated static symbols.
+.TP 10
+.BI \-X\  args
+Special control options for the linker.
+A lowercase arg turns the option off and an uppercase arg turns the option on.
+Current options are:
+.RS
+.TP
+.B s
+Explicitly disable (enable) 32-bit literal synthesis.
+The default action is to perform 32-bit literal synthesis when required.
+.TP
+.B
+r
+Explicitly disable (enable) allocation of registers r26-r29 as data
+base-pointers.
+The data space will be divided into 64K segments with each register
+initialized at runtime, and all data references modified
+to use the appropriate base-pointer.
+If there is more than 256K of data, the last register will be reserved
+for 32-bit literal synthesis to access data located above 192K from
+the start of data.
+The default action is to allocate as many registers as possible as
+base-pointers.
+.RE
+.SH "SEE ALSO"
+as(1), ar(1), cc(1), ld(1), size(1), strip(1).
+.SH AUTHOR
+Fred Fish

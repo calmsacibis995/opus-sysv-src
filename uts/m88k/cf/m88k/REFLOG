@@ -1,0 +1,453 @@
+	make -f bsd.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	cd sys; make CPU=m88k CC=/usr/bin/cc AR=ar
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_domain.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_mbuf.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_proto.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_socket.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_socket2.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_syscall.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU u_usrreq.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU sys_misc.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU sys_select.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU sys_socket.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU kern_subr.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU sysbsd.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU tty.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DSVR3 -DINKERNEL -DKERNEL -Dm88k -DCMMU bsd_kudp.c;
+	ar ruv /usr/src/uts/m88k/cf/m88k/lib.bsd *.o
+ar: creating /usr/src/uts/m88k/cf/m88k/lib.bsd
+a - bsd_kudp.o
+a - kern_subr.o
+a - sys_misc.o
+a - sys_select.o
+a - sys_socket.o
+a - sysbsd.o
+a - tty.o
+a - u_domain.o
+a - u_mbuf.o
+a - u_proto.o
+a - u_socket.o
+a - u_socket2.o
+a - u_syscall.o
+a - u_usrreq.o
+	rm -f *.o
+	cd netinet; make CPU=m88k CC=/usr/bin/cc AR=ar
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU if_ether.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU in.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU in_cksum.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU in_pcb.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU in_proto.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU ip_icmp.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU ip_input.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU ip_output.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU raw_ip.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_debug.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_input.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_output.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_subr.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_timer.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU tcp_usrreq.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU udp_usrreq.c;
+	ar ruv /usr/src/uts/m88k/cf/m88k/lib.bsd *.o
+a - if_ether.o
+a - in.o
+a - in_cksum.o
+a - in_pcb.o
+a - in_proto.o
+a - ip_icmp.o
+a - ip_input.o
+a - ip_output.o
+a - raw_ip.o
+a - tcp_debug.o
+a - tcp_input.o
+a - tcp_output.o
+a - tcp_subr.o
+a - tcp_timer.o
+a - tcp_usrreq.o
+a - udp_usrreq.o
+	rm -f *.o
+	cd net; make CPU=m88k CC=/usr/bin/cc AR=ar
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU af.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU if.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU if_loop.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU if_sl.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU raw_cb.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU raw_usrreq.c;
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU route.c;
+	ar ruv /usr/src/uts/m88k/cf/m88k/lib.bsd *.o
+a - af.o
+a - if.o
+a - if_loop.o
+a - if_sl.o
+a - raw_cb.o
+a - raw_usrreq.o
+a - route.o
+	rm -f *.o
+	cd if; make CPU=m88k CC=/usr/bin/cc AR=ar
+	/usr/bin/cc -c -I../machine -I../h -I../../sys -Dopus -DINET -DINKERNEL -DKERNEL -Dm88k -DCMMU if_ec.c;
+	ar ruv /usr/src/uts/m88k/cf/m88k/lib.bsd *.o
+a - if_ec.o
+	rm -f *.o
+	make -f fs.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	make -f du.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=/usr/bin/cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=" 
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL  -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -DDUDEBUG=YES -c duiget.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL  -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -DDUDEBUG=YES -c dulocking.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL  -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -DDUDEBUG=YES -c durdwri.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL  -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -DDUDEBUG=YES -c dusubr.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL  -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -DDUDEBUG=YES -c dusys3.c
+	ar ruv ../../cf/m88k/lib.du *.o
+ar: creating ../../cf/m88k/lib.du
+a - duiget.o
+a - dulocking.o
+a - durdwri.o
+a - dusubr.o
+a - dusys3.o
+	rm -f *.o
+	make -f nfs.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=/usr/bin/cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=" 
+	/usr/bin/cc -c -I/usr/src/uts/m88k  -Uvax -Uu3b -Uu3b5 -Uu3b2  -DINKERNEL  -Dm88k -Dopus -DLAINFS -DCMMU au_kern.c au_ux_prot.c clnt_kudp.c clnt_subr.c klm_fcntl.c klm_flock.c klm_kprot.c klm_lckmgr.c lockd.c nfs_blklst.c nfs_dnlc.c nfs_iget.c nfs_kmem.c nfs_kprot.c nfs_nami.c nfs_rdwri.c nfs_server.c nfs_subr.c nfs_sys2.c nfs_sys3.c nfs_vers.c nfs_xdr.c rpc_prot.c subr_kudp.c svc.c svc_au_ux.c svc_auth.c svc_kudp.c xdr.c xdr_array.c xdr_mem.c nfsd.c
+au_kern.c:
+au_ux_prot.c:
+clnt_kudp.c:
+clnt_subr.c:
+klm_fcntl.c:
+klm_flock.c:
+klm_kprot.c:
+klm_lckmgr.c:
+lockd.c:
+nfs_blklst.c:
+nfs_dnlc.c:
+nfs_iget.c:
+nfs_kmem.c:
+nfs_kprot.c:
+nfs_nami.c:
+nfs_rdwri.c:
+nfs_server.c:
+nfs_subr.c:
+nfs_sys2.c:
+nfs_sys3.c:
+nfs_vers.c:
+nfs_xdr.c:
+rpc_prot.c:
+subr_kudp.c:
+svc.c:
+svc_au_ux.c:
+svc_auth.c:
+svc_kudp.c:
+xdr.c:
+xdr_array.c:
+xdr_mem.c:
+nfsd.c:
+	ar rv ../../cf/m88k/lib.nfs au_kern.o au_ux_prot.o clnt_kudp.o clnt_subr.o klm_fcntl.o klm_flock.o klm_kprot.o klm_lckmgr.o lockd.o nfs_blklst.o nfs_dnlc.o nfs_iget.o nfs_kmem.o nfs_kprot.o nfs_nami.o nfs_rdwri.o nfs_server.o nfs_subr.o nfs_sys2.o nfs_sys3.o nfs_vers.o nfs_xdr.o rpc_prot.o subr_kudp.o svc.o svc_au_ux.o svc_auth.o svc_kudp.o xdr.o xdr_array.o xdr_mem.o nfsd.o
+ar: creating ../../cf/m88k/lib.nfs
+a - au_kern.o
+a - au_ux_prot.o
+a - clnt_kudp.o
+a - clnt_subr.o
+a - klm_fcntl.o
+a - klm_flock.o
+a - klm_kprot.o
+a - klm_lckmgr.o
+a - lockd.o
+a - nfs_blklst.o
+a - nfs_dnlc.o
+a - nfs_iget.o
+a - nfs_kmem.o
+a - nfs_kprot.o
+a - nfs_nami.o
+a - nfs_rdwri.o
+a - nfs_server.o
+a - nfs_subr.o
+a - nfs_sys2.o
+a - nfs_sys3.o
+a - nfs_vers.o
+a - nfs_xdr.o
+a - rpc_prot.o
+a - subr_kudp.o
+a - svc.o
+a - svc_au_ux.o
+a - svc_auth.o
+a - svc_kudp.o
+a - xdr.o
+a - xdr_array.o
+a - xdr_mem.o
+a - nfsd.o
+	rm -f au_kern.o au_ux_prot.o clnt_kudp.o clnt_subr.o klm_fcntl.o klm_flock.o klm_kprot.o klm_lckmgr.o lockd.o nfs_blklst.o nfs_dnlc.o nfs_iget.o nfs_kmem.o nfs_kprot.o nfs_nami.o nfs_rdwri.o nfs_server.o nfs_subr.o nfs_sys2.o nfs_sys3.o nfs_vers.o nfs_xdr.o rpc_prot.o subr_kudp.o svc.o svc_au_ux.o svc_auth.o svc_kudp.o xdr.o xdr_array.o xdr_mem.o nfsd.o
+	make -f s5.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=/usr/bin/cc" "FRC=" "INCRT=/usr/src/uts/m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=" 
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5alloc.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5blklist.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5iget.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5nami.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5pipe.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5rdwri.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5subr.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5sys2.c
+	/usr/bin/cc  -I/usr/src/uts/m88k   -DINKERNEL -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c s5sys3.c
+	ar ruv ../../cf/m88k/lib.s5 *.o
+ar: creating ../../cf/m88k/lib.s5
+a - s5alloc.o
+a - s5blklist.o
+a - s5iget.o
+a - s5nami.o
+a - s5pipe.o
+a - s5rdwri.o
+a - s5subr.o
+a - s5sys2.o
+a - s5sys3.o
+	rm -f *.o
+	make -f io.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c as.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c clist.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c clk.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c cons.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c cpt.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c dk.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c err.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c fpu881a.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c gentty.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c gn.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c ipc.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c lp.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c mem.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c msg.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c mt.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c net.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c opus.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c osm.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c partab.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c pm400dos.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c pm400pc.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c prf.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c pty.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c ram.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sem.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c shm.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c stubs.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sxt.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c syms.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c tpoke00.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c tt1.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c tty.c
+	ar ruv ../cf/m88k/lib.io *.o
+ar: creating ../cf/m88k/lib.io
+a - as.o
+a - clist.o
+a - clk.o
+a - cons.o
+a - cpt.o
+a - dk.o
+a - err.o
+a - fpu881a.o
+a - gentty.o
+a - gn.o
+a - ipc.o
+a - lp.o
+a - mem.o
+a - msg.o
+a - mt.o
+a - net.o
+a - opus.o
+a - osm.o
+a - partab.o
+a - pm400dos.o
+a - pm400pc.o
+a - prf.o
+a - pty.o
+a - ram.o
+a - sem.o
+a - shm.o
+a - stubs.o
+a - sxt.o
+a - syms.o
+a - tpoke00.o
+a - tt1.o
+a - tty.o
+	rm -f *.o
+	make -f kdb.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	make -f ml.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	m88k: make -f ml.mk "CPU=m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "CC=/usr/bin/cc" "AR=ar"
+	/usr/bin/cc -I.. -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -P locore.s
+	mv locore.i temp.s
+	/usr/bin/cc -I.. -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c temp.s
+	mv temp.o locore.o
+	rm -f temp.s
+	ar ruv ../../cf/m88k/lib.ml *.o
+ar: creating ../../cf/m88k/lib.ml
+a - locore.o
+	rm -f *.o
+	make -f fpexcept.mk "MAKE=make" "CPU=m88k" "AR=ar" "CC=/usr/bin/cc" "FRC=" "INCRT=.." "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "DASHO=" 
+	m4 fpup.m4 >fpup.s
+	/usr/bin/cc -c fpup.s
+	m4 fpui.m4 >fpui.s
+	/usr/bin/cc -c fpui.s
+	m4 FPintover.m4 >FPintover.s
+	/usr/bin/cc -c FPintover.s
+	m4 FPunimp.m4 >FPunimp.s
+	/usr/bin/cc -c FPunimp.s
+	m4 FPpriviol.m4 >FPpriviol.s
+	/usr/bin/cc -c FPpriviol.s
+	m4 FPresoper.m4 >FPresoper.s
+	/usr/bin/cc -c FPresoper.s
+	m4 FPdivzero.m4 >FPdivzero.s
+	/usr/bin/cc -c FPdivzero.s
+	m4 FPundflow.m4 >FPundflow.s
+	/usr/bin/cc -c FPundflow.s
+	m4 FPovrflow.m4 >FPovrflow.s
+	/usr/bin/cc -c FPovrflow.s
+	m4 NaN.m4 >NaN.s
+	/usr/bin/cc -c NaN.s
+	m4 infinity.m4 >infinity.s
+	/usr/bin/cc -c infinity.s
+	m4 zero.m4 >zero.s
+	/usr/bin/cc -c zero.s
+	m4 denorm.m4 >denorm.s
+	/usr/bin/cc -c denorm.s
+	m4 unixrout.m4 >unixrout.s
+	/usr/bin/cc -c unixrout.s
+	m4 handler.m4 >handler.s
+	/usr/bin/cc -c handler.s
+	m4 fpehndlr.m4 >fpehndlr.s
+	/usr/bin/cc -c fpehndlr.s
+	ar ruv ../../../cf/m88k/lib.ml *.o
+a - FPdivzero.o
+a - FPintover.o
+a - FPovrflow.o
+a - FPpriviol.o
+a - FPresoper.o
+a - FPundflow.o
+a - FPunimp.o
+a - NaN.o
+a - denorm.o
+a - fpehndlr.o
+a - fpui.o
+a - fpup.o
+a - handler.o
+a - infinity.o
+a - unixrout.o
+a - zero.o
+	rm -f *.o
+	make -f os.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c acct.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c bio.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c bcs.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c clock.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c disp.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c exec.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c exit.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c fault.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c fio.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c flock.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c fork.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c fstyp.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c getpages.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c grow.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c iget.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c lock.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c locking.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c machdep.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c main.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c malloc.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c mmu4k.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c move.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c nami.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c page.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c physio.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c pipe.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c pmmu.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c prf.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c probe.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c region.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sched.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sig.c
+"sig.c", line 801: warning: statement not reached
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c slp.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c smallpage.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c space.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c startup.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c streamio.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c string.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c subr.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c swapalloc.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c swtch.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sys2.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sys3.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sys4.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sysent.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c sysm88k.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c text.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c trap.c
+	/usr/bin/cc -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -c utssys.c
+	ar ruv ../cf/m88k/lib.os *.o
+ar: creating ../cf/m88k/lib.os
+a - acct.o
+a - bcs.o
+a - bio.o
+a - clock.o
+a - disp.o
+a - exec.o
+a - exit.o
+a - fault.o
+a - fio.o
+a - flock.o
+a - fork.o
+a - fstyp.o
+a - getpages.o
+a - grow.o
+a - iget.o
+a - lock.o
+a - locking.o
+a - machdep.o
+a - main.o
+a - malloc.o
+a - mmu4k.o
+a - move.o
+a - nami.o
+a - page.o
+a - physio.o
+a - pipe.o
+a - pmmu.o
+a - prf.o
+a - probe.o
+a - region.o
+a - sched.o
+a - sig.o
+a - slp.o
+a - smallpage.o
+a - space.o
+a - startup.o
+a - streamio.o
+a - string.o
+a - subr.o
+a - swapalloc.o
+a - swtch.o
+a - sys2.o
+a - sys3.o
+a - sys4.o
+a - sysent.o
+a - sysm88k.o
+a - text.o
+a - trap.o
+a - utssys.o
+	rm -f *.o
+	make -f stub.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	m88k: make -f stub.mk "CPU=m88k" "BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus " "AR=ar" "CC=/usr/bin/cc"
+	/usr/bin/cc -I.. -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -P stub.s
+	mv stub.i temp.s
+	/usr/bin/cc -I.. -DCMMU -Dopus -DLAINFS -DBCS -DXBus  -Dm88k -c temp.s
+	mv temp.o stub.o
+	rm -f temp.s
+	ar ruv ../../cf/m88k/lib.stub *.o
+ar: creating ../../cf/m88k/lib.stub
+a - stub.o
+	rm -f *.o
+	make -f uio.mk MAKE=make FRC= DASHG= DASHO= INCRT=/usr/src/uts/m88k LIBDIR=../cf/m88k SYS=88 CFLAGS=  -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus  CC=/usr/bin/cc AS=as AR=ar BRDEFS=-DCMMU -Dopus -DLAINFS -DBCS -DXBus  CPU=m88k
+	/usr/bin/cc -c comm.s
+	/usr/bin/cc -c m88kvec.s
+	/usr/bin/cc -c opus.s
+	/usr/bin/cc -c -I/usr/src/uts/m88k -DINKERNEL -DREM -Dm88k -DCMMU -Dopus -DLAINFS -DBCS -DXBus   conf.c
+	rm -f sysV88
+	time ld -s -o sysV88 ld.file comm.o m88kvec.o opus.o conf.o  \
+	               lib.ml lib.os lib.io lib.s5 lib.du lib.stub lib.nfs lib.bsd
+
+real       45.2
+user        1.8
+sys         3.5

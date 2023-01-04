@@ -1,0 +1,10 @@
+/* Floating Point Emulation driver (NS32532 Only) */
+#include "/etc/system"
+
+
+#if !FPE
+FPINST_()
+{
+	panic("FPINST");
+}
+#endif

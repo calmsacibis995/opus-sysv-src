@@ -1,0 +1,813 @@
+NOOP
+{
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"rte",		0,		32,		0xF400FC00
+.
+MONOP1	TREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (op1 -> expval) & 0x1F;
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"jsr",		0,		32,		0xF400C800
+"jsr.n",	0,		32,		0xF400CC00
+"jmp",		0,		32,		0xF400C000
+"jmp.n",	0,		32,		0xF400C400
+.
+MONOP2	(TABSMD | TEXADMD)
+{
+	generate (6, NOACTION, obj >> 26, NULLSYM);
+	tval = op1 -> expval;
+	tval >>= 2;
+#ifndef EXPR
+	if (op1 -> symptr) {
+	    generate (26, PCR26L, op1 -> expval, op1 -> symptr);
+	} else if (op1 -> expval != 0) {
+	    generate (26, PCR26L, op1 -> expval, NULLSYM);
+	} else {
+	    as_error (ERR_OBSOLETE);
+	    generate (26, NOACTION, tval, NULLSYM);
+	}
+#else
+	if (op1 -> symptr || expovf (tval, 0x2FFFFFF, SIGNED, NOPRTERR)) {
+	    genexpr (op1 -> expval, op1 -> symptr);
+	    generate (26, PCR26L, 0L, op1 -> symptr);
+	} else {
+	    as_error (ERR_OBSOLETE);
+	    generate (26, NOACTION, tval, NULLSYM);
+	}
+#endif
+}
+"bsr",		0,		32,		0xC8000000
+"bsr.n",	0,		32,		0xCC000000
+"br",		0,		32,		0xC0000000
+"br.n",		0,		32,		0xC4000000
+.
+DYAOP1	TREGMD, TREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 0);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"ff0",		0,		32,		0xF400EC00
+"ff1",		0,		32,		0xF400E800
+"flt.ss",	0,		32,		0x84002000
+"flt.ds",	0,		32,		0x84002020
+"int.ss",	0,		32,		0x84004800
+"int.sd",	0,		32,		0x84004880
+"nint.ss",	0,		32,		0x84005000
+"nint.sd",	0,		32,		0x84005080
+"trnc.ss",	0,		32,		0x84005800
+"trnc.sd",	0,		32,		0x84005880
+.
+DYAOP2	TREGMD, (TREGMD | TABSMD)
+{
+	if (op2 -> type == ABSMD) {
+	    if (obj & 0xFFFF0000) {
+		obj &= 0xFFFF0000;
+	    } else {
+		as_error (ERR_YYERROR, "second operand must be register");
+	    }
+	} else if (op2 -> type == REGMD) {
+	    if (obj & 0x0000FFFF) {
+		obj &= 0x0000FFFF;
+		expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+		obj |= (0xF4000000 | ((op2 -> expval) & 0x1F));
+	    } else {
+		as_error (ERR_YYERROR, "second operand cannot be register");
+	    }
+	}
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 16);
+	if (op2 -> type == ABSMD) {
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+#ifndef EXPR
+	    if (op2 -> symptr) {
+		generate (16, VRT16, op2 -> expval, op2 -> symptr);
+#else
+	    if (op2 -> symptr || expovf (op2 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op2 -> expval, op2 -> symptr);
+		generate (16, VRT16, 0L, op2 -> symptr);
+#endif
+	    } else {
+		hilofix (op2);
+		generate (16, NOACTION, op2 -> expval, NULLSYM);
+	    }
+	} else {
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	}
+}
+"tbnd",		0,		32,		0xF800F800
+.
+DYAOP3	TREGMD, TCREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x3F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x3F) << 5);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"ldcr",		0,		32,		0x80004000
+"fldcr",	0,		32,		0x80004800
+"eldcr",	0,		32,		0x80005000
+.
+DYAOP4	TREGMD, TCREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x3F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 16);
+	obj |= (((op1 -> expval) & 0x1F) << 0);
+	obj |= (((op2 -> expval) & 0x3F) << 5);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"stcr",		0,		32,		0x80008000
+"fstcr",	0,		32,		0x80008800
+"estcr",	0,		32,		0x80009000
+.
+TRIOP1	TREGMD, TREGMD, TREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	obj |= (((op3 -> expval) & 0x1F) << 0);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"fadd.sss",	0,		32,		0x84002800
+"fadd.ssd",	0,		32,		0x84002880
+"fadd.sds",	0,		32,		0x84002A00
+"fadd.sdd",	0,		32,		0x84002A80
+"fadd.dss",	0,		32,		0x84002820
+"fadd.dsd",	0,		32,		0x840028A0
+"fadd.dds",	0,		32,		0x84002A20
+"fadd.ddd",	0,		32,		0x84002AA0
+"fsub.sss",	0,		32,		0x84003000
+"fsub.ssd",	0,		32,		0x84003080
+"fsub.sds",	0,		32,		0x84003200
+"fsub.sdd",	0,		32,		0x84003280
+"fsub.dss",	0,		32,		0x84003020
+"fsub.dsd",	0,		32,		0x840030A0
+"fsub.dds",	0,		32,		0x84003220
+"fsub.ddd",	0,		32,		0x840032A0
+"fcmp.sss",	0,		32,		0x84003800
+"fcmp.ssd",	0,		32,		0x84003880
+"fcmp.sds",	0,		32,		0x84003A00
+"fcmp.sdd",	0,		32,		0x84003A80
+"fmul.sss",	0,		32,		0x84000000
+"fmul.ssd",	0,		32,		0x84000080
+"fmul.sds",	0,		32,		0x84000200
+"fmul.sdd",	0,		32,		0x84000280
+"fmul.dss",	0,		32,		0x84000020
+"fmul.dsd",	0,		32,		0x840000A0
+"fmul.dds",	0,		32,		0x84000220
+"fmul.ddd",	0,		32,		0x840002A0
+"fdiv.sss",	0,		32,		0x84007000
+"fdiv.ssd",	0,		32,		0x84007080
+"fdiv.sds",	0,		32,		0x84007200
+"fdiv.sdd",	0,		32,		0x84007280
+"fdiv.dss",	0,		32,		0x84007020
+"fdiv.dsd",	0,		32,		0x840070A0
+"fdiv.dds",	0,		32,		0x84007220
+"fdiv.ddd",	0,		32,		0x840072A0
+.
+TRIOP2	TREGMD, TREGMD, (TREGMD | TABSMD)
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	if (op3 -> type == REGMD) {
+	    expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	    obj |= (0x04000000 | (((op3 -> expval) & 0x1F) << 0));
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	} else {
+	    generate (22, NOACTION, obj >> 10, NULLSYM);
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (10, VRT16, op3 -> expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (10, VRT16, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (10, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	}
+}
+"clr",		0,		32,		0xF0008000
+"set",		0,		32,		0xF0008800
+"ext",		0,		32,		0xF0009000
+"extu",		0,		32,		0xF0009800
+"mak",		0,		32,		0xF000A000
+"rot",		0,		32,		0xF000A800
+.
+TRIOP3	TREGMD, TREGMD, (TREGMD | TABSMD | TEXADMD)
+{
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    if (obj & 0xFFFF0000) {
+		obj &= 0xFFFF0000;
+	    } else {
+		as_error (ERR_YYERROR, "third operand must be register");
+	    }
+	} else if (op3 -> type == REGMD) {
+	    if (obj & 0x0000FFFF) {
+		obj &= 0x0000FFFF;
+		expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+		obj |= (0xF4000000 | ((op3 -> expval) & 0x1F));
+	    } else {
+		as_error (ERR_YYERROR, "third operand cannot be register");
+	    }
+	}
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	if (op3 -> type == EXADMD || op3 -> type == ABSMD) {
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+	    if ((op3 -> opflags) & HI16) {
+		action = HVRT16;
+	    } else if ((op3 -> opflags) & LO16) {
+		action = LVRT16;
+	    } else {
+		action = VRT16;
+	    }
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (16, action, op3->expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (16, action, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (16, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	} else {
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	}
+}
+"addu",		0,		32,		0x60006000
+"addu.ci",	0,		32,		0x60006200
+"addu.co",	0,		32,		0x60006100
+"addu.cio",	0,		32,		0x60006300
+"subu",		0,		32,		0x64006400
+"subu.ci",	0,		32,		0x64006600
+"subu.co",	0,		32,		0x64006500
+"subu.cio",	0,		32,		0x64006700
+"divu",		0,		32,		0x68006800
+"mul",		0,		32,		0x6C006C00
+"cmp",		0,		32,		0x7C007C00
+"adduc",	0,		32,		0x00006300
+"subub",	0,		32,		0x00006700
+"and",		0,		32,		0x40004000
+"and.c",	0,		32,		0x00004400
+"and.u",	0,		32,		0x44000000
+"or",		0,		32,		0x58005800
+"or.c",		0,		32,		0x00005C00
+"or.u",		0,		32,		0x5C000000
+"xor",		0,		32,		0x50005000
+"xor.c",	0,		32,		0x00005400
+"xor.u",	0,		32,		0x54000000
+"mask",		0,		32,		0x48000000
+"mask.u",	0,		32,		0x4C000000
+.
+TRIOP4	TABSMD, TREGMD, TABSMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op3 -> expval, 0x1FF, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	obj |= (((op3 -> expval) & 0x1FF) << 0);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"tb0",		0,		32,		0xF000D000
+"tb1",		0,		32,		0xF000D800
+"tcnd",		0,		32,		0xF000E800
+.
+TRIOP5	TABSMD, TREGMD, (TEXADMD | TABSMD)
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	generate (16, NOACTION, obj >> 16, NULLSYM);
+#ifndef EXPR
+	if (op3 -> symptr) {
+	    generate (16, PCR16L, op3 -> expval, op3 -> symptr);
+#else
+	if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, SIGNED, NOPRTERR)) {
+	    genexpr (op3-> expval, op3 -> symptr);
+	    generate (16, PCR16L, 0L, op3 -> symptr);
+#endif
+	} else {
+	    as_error (ERR_OBSOLETE);
+	    hilofix (op3);
+	    generate (16, NOACTION, op3 -> expval, NULLSYM);
+	}
+}
+"bb0",		0,		32,		0xD0000000
+"bb0.n",	0,		32,		0xD4000000
+"bb1",		0,		32,		0xD8000000
+"bb1.n",	0,		32,		0xDC000000
+"bcnd",		0,		32,		0xE8000000
+"bcnd.n",	0,		32,		0xEC000000
+.
+TRIOP6	TREGMD, TREGMD, (TREGMD | TREGMDS | TEXADMD | TABSMD)
+{
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    if (obj & 0xFFFF0000) {	/* WATCH xmem.bu!! */
+		obj &= 0xFF000000;
+	    } else {
+		as_error (ERR_YYERROR, "third operand must be a register");
+	    }
+	} else if (op3 -> type == REGMD || op3 -> type == REGMDS) {
+	    if (op3 -> type == REGMDS) {
+		if (obj & 0x000000FF) {
+		    obj <<= 8;
+		} else {
+		    /* Ok for byte operations, scaled and unscaled are same */
+		    /* as_error (ERR_YYERROR, "third operand may not be scaled"); */
+		}
+	    }
+	    obj &= 0x0000FF00;
+	    expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	    obj |= (0xF4000000 | ((op3 -> expval) & 0x1F));
+	}
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+	    if ((op3 -> opflags) & HI16) {
+		action = HVRT16;
+	    } else if ((op3 -> opflags) & LO16) {
+		action = LVRT16;
+	    } else {
+		action = VRT16;
+	    }
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (16, action, op3->expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (16, action, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (16, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	} else {
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	}
+}
+"ld",		0,		32,		0x14001416
+"ld.usr",	0,		32,		0x00001517
+"ld.b",		0,		32,		0x1C001C00
+"ld.b.usr",	0,		32,		0x00001D00
+"ld.bu",	0,		32,		0x0C000C00
+"ld.bu.usr",	0,		32,		0x00000D00
+"ld.d",		0,		32,		0x10001012
+"ld.d.usr",	0,		32,		0x00001113
+"ld.h",		0,		32,		0x1800181A
+"ld.h.usr",	0,		32,		0x0000191B
+"ld.hu",	0,		32,		0x0800080A
+"ld.hu.usr",	0,		32,		0x0000090B
+"st",		0,		32,		0x24002426
+"st.usr",	0,		32,		0x00002527
+"st.b",		0,		32,		0x2C002C00
+"st.b.usr",	0,		32,		0x00002D00
+"st.d",		0,		32,		0x20002022
+"st.d.usr",	0,		32,		0x00002123
+"st.h",		0,		32,		0x2800282A
+"st.h.usr",	0,		32,		0x0000292B
+.
+TRIOP7	TREGMD, TREGMD, TCREGMD
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op3 -> expval, 0x3F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	obj |= (((op2 -> expval) & 0x1F) << 0);
+	obj |= (((op3 -> expval) & 0x3F) << 5);
+	generate (nbits, NOACTION, obj, NULLSYM);
+}
+"xcr",		0,		32,		0x8000C000
+"fxcr",		0,		32,		0x8000C800
+"excr",		0,		32,		0x8000D000
+.
+TRIOP8	TREGMD, TREGMD, (TREGMD | TREGMDS | TABSMD | TEXADMD)
+{
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	if (op3 -> type == REGMDS) {
+	    obj |= (((op1 -> expval) & 0x1F) << 21);
+	    obj |= (((op2 -> expval) & 0x1F) << 16);
+	    expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	    obj |= (((op3 -> expval) & 0x1F) << 0);
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	} else if (op3 -> type == REGMD) {
+	    obj = 0xF4006000;		/* addu reg,reg,reg */
+	    obj |= (((op1 -> expval) & 0x1F) << 21);
+	    obj |= (((op2 -> expval) & 0x1F) << 16);
+	    expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	    obj |= (((op3 -> expval) & 0x1F) << 0);
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	} else {
+	    obj = 0x60000000;		/* addu reg,reg,imm16 */
+	    obj |= (((op1 -> expval) & 0x1F) << 21);
+	    obj |= (((op2 -> expval) & 0x1F) << 16);
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+	    if ((op3 -> opflags) & HI16) {
+		action = HVRT16;
+	    } else if ((op3 -> opflags) & LO16) {
+		action = LVRT16;
+	    } else {
+		action = VRT16;
+	    }
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (16, action, op3 -> expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (16, action, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (16, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	}
+}
+"lda.b",	0,		32,		0xF4003E00
+"lda.h",	0,		32,		0xF4003A00
+"lda",		0,		32,		0xF4003600
+"lda.d",	0,		32,		0xF4003200
+.
+TRIOP9	TREGMD, TREGMD, (TREGMD | TABSMD | TEXADMD)
+{
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    if (obj & 0xFFFF0000) {
+		obj &= 0xFFFF0000;
+	    } else {
+		as_error (ERR_YYERROR, "third operand must be register");
+	    }
+	} else if (op3 -> type == REGMD) {
+	    if (obj & 0x0000FFFF) {
+		obj &= 0x0000FFFF;
+		expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+		obj |= (0xF4000000 | ((op3 -> expval) & 0x1F));
+	    } else {
+		as_error (ERR_YYERROR, "third operand cannot be register");
+	    }
+	}
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	if (op3 -> type == EXADMD || op3 -> type == ABSMD) {
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+	    if ((op3 -> opflags) & HI16) {
+		action = HVRT16;
+	    } else if ((op3 -> opflags) & LO16) {
+		action = LVRT16;
+	    } else {
+		action = VRT16;
+	    }
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (16, action, op3 -> expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (16, action, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (16, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	} else {
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	}
+}
+"add",		0,		32,		0x70007000
+"add.ci",	0,		32,		0x70007200
+"add.co",	0,		32,		0x70007100
+"add.cio",	0,		32,		0x70007300
+"sub",		0,		32,		0x74007400
+"sub.ci",	0,		32,		0x74007600
+"sub.co",	0,		32,		0x74007500
+"sub.cio",	0,		32,		0x74007700
+"div",		0,		32,		0x78007800
+"addc",		0,		32,		0x00007200
+"subb",		0,		32,		0x00007600
+.
+TRIOP10	TREGMD, TREGMD, (TREGMD | TREGMDS | TEXADMD | TABSMD)
+{
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    if (obj & 0xFFFF0000) {	/* WATCH xmem.bu!! */
+		obj &= 0xFF000000;
+	    } else {
+		as_error (ERR_YYERROR, "third operand must be a register");
+	    }
+	} else if (op3 -> type == REGMD || op3 -> type == REGMDS) {
+	    if (op3 -> type == REGMDS) {
+		if (obj & 0x000000FF) {
+		    obj <<= 8;
+		} else {
+		    /* Ok for byte operations, scaled and unscaled are same */
+		    /* as_error (ERR_YYERROR, "third operand may not be scaled"); */
+		}
+	    }
+	    obj &= 0x0000FF00;
+	    expovf (op3 -> expval, 0x1F, UNSIGNED, PRTERR);
+	    obj |= (0xF4000000 | ((op3 -> expval) & 0x1F));
+	}
+	expovf (op1 -> expval, 0x1F, UNSIGNED, PRTERR);
+	expovf (op2 -> expval, 0x1F, UNSIGNED, PRTERR);
+	obj |= (((op1 -> expval) & 0x1F) << 21);
+	obj |= (((op2 -> expval) & 0x1F) << 16);
+	if (op3 -> type == ABSMD || op3 -> type == EXADMD) {
+	    generate (16, NOACTION, obj >> 16, NULLSYM);
+	    if ((op3 -> opflags) & HI16) {
+		action = HVRT16;
+	    } else if ((op3 -> opflags) & LO16) {
+		action = LVRT16;
+	    } else {
+		action = VRT16;
+	    }
+#ifndef EXPR
+	    if (op3 -> symptr) {
+		generate (16, action, op3 -> expval, op3 -> symptr);
+#else
+	    if (op3 -> symptr || expovf (op3 -> expval, 0xFFFF, UNSIGNED, NOPRTERR)) {
+	        genexpr (op3 -> expval, op3 -> symptr);
+		generate (16, action, 0L, op3 -> symptr);
+#endif
+	    } else {
+		hilofix (op3);
+		generate (16, NOACTION, op3 -> expval, NULLSYM);
+	    }
+	} else {
+	    generate (nbits, NOACTION, obj, NULLSYM);
+	}
+}
+"xmem",		0,		32,		0x04000406
+"xmem.usr",	0,		32,		0x00000507
+"xmem.bu",	0,		32,		0x00010000
+"xmem.bu.usr",	0,		32,		0x00000100
+.
+PSTEXT
+{
+	if (txtsec < 0) {
+	    txtsec = mksect(lookup(_TEXT,INSTALL,USRNAME)->stp, STYP_TEXT);
+	}
+	cgsect(txtsec);
+}
+"text",	TXT,		0,	0x0L
+.
+PSDATA
+{
+	if (datsec < 0) {
+	    datsec = mksect(lookup(_DATA,INSTALL,USRNAME)->stp, STYP_DATA);
+	}
+	cgsect(datsec);
+}
+"data",	DAT,		0,	0x0L
+.
+PSPREV
+{
+	if (!previous) {
+	    as_error(ERR_YYERROR, "'previous' invoked before any other section");
+	}
+	cgsect(previous);
+}
+"previous",	0,		0,	0x0L
+.
+PSIL
+{
+	generate (0,SETEXPAND,NULLVAL,NULLSYM);
+}
+"il",		PSEUDO,		0,	0x0L
+.
+PSZERO TABSMD
+{
+	long nbytes;
+
+	if (op1 -> exptype != ABS) {
+	    as_error (ERR_YYERROR, "'zero' size not absolute");
+	}
+	if ((nbytes = op1 -> expval) < 0) {
+	    as_error (ERR_YYERROR, "Invalid 'zero' size");
+	}
+	if (strictalign) {
+		ckalign (4L);
+	}
+	while (nbytes >= 2) {
+	    generate (2 * BITSPBY, 0, 0, NULLSYM);
+	    nbytes -= 2;
+	}
+	if (nbytes) {
+	    generate (BITSPBY, 0, 0, NULLSYM);
+        }
+}
+"zero",	PSEUDO,		0,	0x0L
+.
+PSALIGN TABSMD
+{
+	if (op1 -> exptype != ABS) {
+	    as_error (ERR_YYERROR, "'align' field not absolute");
+	}
+	ckalign (op1 -> expval);
+}
+"align",	PSEUDO,		0,	0x0L
+.
+PSENDEF
+{
+	generate (0,ENDEF,NULLVAL,NULLSYM);
+}
+"endef",	PSEUDO,		0,	0x0L
+.
+PSLN (TEXADMD|TABSMD)
+{
+	cline = (short)op1 -> expval;
+	generate (0,LLINENO,op1 -> expval,op1 -> symptr);
+}
+"ln",		PSEUDO,		0,	0x0L
+.
+PSVAL (TEXADMD|TABSMD)
+{
+	generate (0,(unsigned short) SETVAL,op1 -> expval,op1 -> symptr);
+}
+"val",	PSEUDO,		0,	0x0L
+.
+PSSCL (TEXADMD|TABSMD)
+{
+	generate (0,(unsigned short) SETSCL,op1 -> expval,op1 -> symptr);
+}
+"scl",	PSEUDO,		0,	0x0L
+.
+PSTYPE (TEXADMD|TABSMD)
+{
+	generate (0,(unsigned short) SETTYP,op1 -> expval,op1 -> symptr);
+}
+"type",	PSEUDO,		0,	0x0L
+.
+PSLINE TABSMD
+{
+	generate (0,(unsigned short) SETLNO,op1 -> expval,op1 -> symptr);
+}
+"line",	PSEUDO,		0,	0x0L
+.
+PSSIZE (TEXADMD|TABSMD)
+{
+	generate (0,(unsigned short) SETSIZ,op1 -> expval,op1 -> symptr);
+}
+"size",	PSEUDO,		0,	0x0L
+.
+PSVERS
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"version",	PSEUDO,		0,	0x0L
+.
+PSSTRING
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"string",	PSEUDO,		0,	0x0L
+.
+PSIDENT
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"ident",	PSEUDO,		0,	0x0L
+.
+PSGLOBAL
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"global",	PSEUDO,		0,	0x0L
+.
+PSSTATIC
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"static",	PSEUDO,		0,	0x0L
+.
+PSSET	TEXADMD, (TABSMD | TEXADMD)
+{
+	psset ();
+}
+"def",	PSEUDO,		0,	0x0L
+.
+PSSECTION
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"section",	PSEUDO,	0,	0x0L
+.
+PSBSS
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"bss",	BSS,		0,	0x0L
+.
+PSCOMM	TEXADMD, TABSMD
+{
+	pscomm ();
+}
+"comm",	PSEUDO, 	0,	0x0L
+.
+PSFILE
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"file",	PSEUDO,		0,	0x0L
+.
+PSDEF
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"sdef",	PSEUDO,		0,	0x0L
+.
+PSTAG
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"tag",	PSEUDO,		0,	0x0L
+.
+PSDIM
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"dim",	PSEUDO,		0,	0x0L
+.
+PSBYTE
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"byte",	PSEUDO,		0,	0x0L
+.
+PSHALF
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"half",	PSEUDO,		0,	0x0L
+.
+PSWORD
+{
+	/* handled in mixed parsing and semantics switch */
+}
+"word",	PSEUDO,		0,	0x0L
+.
+PSDECFP
+{
+	/* handled in mixed parsing and semantics switch */
+}
+#if	FLOAT
+"decfp",	PSEUDO,		0,	0x0L
+#endif
+.
+PSDECINT
+{
+	/* handled in mixed parsing and semantics switch */
+}
+#if	FLOAT
+"decint",	PSEUDO,		0,	0x0L
+#endif
+.
+PSFLOAT
+{
+	/* handled in mixed parsing and semantics switch */
+}
+#if	FLOAT
+"float",	PSEUDO,		0,	0x0L
+#endif
+.
+PSDOUBLE
+{
+	/* handled in mixed parsing and semantics switch */
+}
+#if	FLOAT
+"double",	PSEUDO,		0,	0x0L
+#endif
+.
+PSDOUBLX
+{
+	/* handled in mixed parsing and semantics switch */
+}
+#if	FLOAT
+"doublx",	PSEUDO,		0,	0x0L
+#endif
+.

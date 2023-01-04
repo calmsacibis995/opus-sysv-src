@@ -1,0 +1,41 @@
+# clobber local
+cd /usr/src/local
+if [ -f EXOS/makefile ]; then
+	cd EXOS ; make clean ; cd ..
+fi
+if [ -f cdb/cdb.mk ]; then
+	cd cdb ; make -f cdb.mk clobber ; cd ..
+fi
+if [ -f cpt/cpt.mk ]; then
+	cd cpt ; make -f cpt.mk clobber ; cd ..
+fi
+if [ -f dsb/dwb/mkl ]; then
+	cd dwb ; make -f text.mk clobber ; cd ..
+fi
+if [ -f exos/Makefile ]; then
+	cd exos ; make clean ; cd ..
+fi
+if [ -f ksh-i/makefile ]; then
+	cd ksh-i ; make clobber ; cd ..
+fi
+if [ -f nfs/nfs.mk ]; then
+	cd nfs ; make -f nfs.mk clobber ; cd ..
+fi
+if [ -f opmon.440/opmon.mk ]; then
+	cd opmon.440 ; make -f opmon.mk clean ; cd ..
+fi
+if [ -f opmon/opmon.mk ]; then
+	cd opmon ; make -f opmon.mk clean ; cd ..
+fi
+if [ -f pascal/pascal.mk ]; then
+	cd pascal ; make -f pascal.mk clobber ; cd ..
+fi
+if [ -f postscr/postscr.mk ]; then
+	cd postscr ; make -f postscr.mk clobber ; cd ..
+fi
+if [ -f ucb/ucb.mk ]; then
+	cd ucb ;make -f ucb.mk clobber ; cd ..
+fi
+if [ -f x/Makefile ]; then
+	cd x ; make clobber ; cd ..
+fi

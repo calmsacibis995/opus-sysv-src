@@ -1,0 +1,114 @@
+cd $PWD
+> $LOG
+if [ $MODE = 1 ]; then
+	BANNER="usr/src (minus local)"
+	trap 'rm -f VFYLOG; echo "\n\n${REVERSE} ${DATE} ${UNBOLD}\n\n****************************************************\n${REVERSE} Backup of usr/src (minus local) aborted abnormally ${UNBOLD}\n****************************************************\n" > $LOG; sync; exit 1' 1 2 3 12 15
+else
+	BANNER="usr/src/local"
+	trap 'rm -f VFYLOG; echo "\n\n${REVERSE} ${DATE} ${UNBOLD}\n\n********************************************\n${REVERSE} Backup of usr/src/local aborted abnormally ${UNBOLD}\n********************************************\n" > $LOG; sync; exit 1' 1 2 3 12 15
+fi
+while :; do
+	if [ $MODE = 1 ]; then
+		echo $CLEAR
+		echo "\n\nYou have the following options:"
+		echo "\n1) Leaving $BANNER as is."
+		echo "\n2) Doing a quick cleanup (*.o, core, and LOG files)."
+		echo "\n3) Doing an extended cleanup (same as above plus"
+		echo "   a giant clobber)  Use this if the backup will be"
+		echo "   transferred to another machine (i.e. 32000 -> clipper)."
+		echo "\nEnter [1-3]: \c"
+		read CLEAN
+		case $CLEAN in
+			1|2|3)
+				break;;
+			*)
+				echo "\n\nInvalid response."
+				sleep 1;;
+		esac
+	else
+		echo $CLEAR
+		echo "\n\nYou have the following options:"
+		echo "\n1) Leaving $BANNER as is."
+		echo "\n2) Doing a cleanup (removing core and LOG files,"
+		echo "   plus a giant clobber)."
+		echo "\nEnter [1-2]: \c"
+		read CLEAN
+		case $CLEAN in
+			1|2)
+				break;;
+			*)
+				echo "\n\nInvalid response."
+				sleep 1;;
+		esac
+	fi
+done
+echo $CLEAR
+echo "\n\n${REVERSE} $DATE ${UNBOLD}\n${REVERSE} $BANNER backup ${UNBOLD}"
+echo "\n\nLoad the $LDAY $BANNER tape in tape unit 0."
+echo "\nPress RETURN when ready: \c"
+line
+# Save date to 1st file written
+date > :backup.date
+REWSTAT=`/opus/bin/tape rew 2>&1 | grep nowrite` 
+while [ "$REWSTAT" != "" ]; do
+	if [ "$REWSTAT" != "" ]; then
+		echo $CLEAR
+		echo "\n\nPlease disable the write-protect wheel on the backup tape."
+		echo "\nPress RETURN when ready: \c"
+		line
+		REWSTAT=`/opus/bin/tape rew 2>&1 | grep nowrite` 
+	fi
+done
+cd /
+if [ $CLEAN = 2 ]; then
+	echo $CLEAR
+	echo "\n\nCleaning up $BANNER..."
+	if [ $MODE = 1 ]; then
+		find usr/src/cmd usr/src/lib usr/src/uts -type f -print | egrep "\.o$|\/core$|LOG" | xargs rm > /dev/null 2>&1
+	else
+		find usr/src/local -type f -print | egrep "\.o$|\/core$|LOG" | xargs rm > /dev/null 2>&1
+		${PWD}/:clobber.loc > /dev/null 2>&1
+	fi
+elif [ $CLEAN = 3 ]; then
+	echo $CLEAR
+	echo "\n\nDoing an extended cleanup of $BANNER..."
+	find usr/src/cmd usr/src/lib usr/src/uts -type f -print | egrep "\.o$|\/core$|LOG" | xargs rm > /dev/null 2>&1
+	${PWD}/:clobber.noloc > /dev/null 2>&1
+fi
+echo $CLEAR
+echo "\n\nBacking up ${BANNER}..."
+if [ $MODE = 1 ]; then
+	find usr/src -print | egrep -v "^usr/src/local|^usr/src/uts/ns32000/pm|^usr/src/G4|^usr/src/X11|usr/src/MOTIF|^usr/src/SDP" | sort | cpio -ocC1024000 > /dev/rmt/0m
+	#find usr/src -print | grep -v "\/src\/local" | sort | cpio -ocC1024000 > /dev/rmt/0m
+	RTN=$?
+else
+	#find usr/src/local -print | cpio -ocC1024000 > /dev/rmt/0m
+	find usr/src/local -print | grep -v "\/src\/local\/cross" | sort | cpio -ocC1024000 > /dev/rmt/0m
+	RTN=$?
+fi
+if [ $RTN != 0 ]; then
+	/opus/bin/tape rew > /dev/null 2>&1
+	echo "\n\n${REVERSE} ${DATE} ${UNBOLD}\n\n${REVERSE} ERROR backing up ${BANNER}. ${UNBOLD}" > $LOG
+	echo "(Error writing tape.)\n" >> $LOG
+	exit 1
+fi
+cd $PWD
+/opus/bin/tape rew > /dev/null 2>&1
+echo $CLEAR
+echo "\n\nVerifying the $LDAY $BANNER backup tape...\c"
+cpio -itcC1024000 < /dev/rmt/0m > /dev/null 2>VFYLOG
+if [ $? != 0 -o "`cat VFYLOG | grep -v 'blocks$'`" != "" ]; then
+	cp VFYLOG VFYLOG.BAD
+	/opus/bin/tape rew > /dev/null 2>&1
+	echo "\n\n${REVERSE} ${DATE} ${UNBOLD}\n\n${REVERSE} ERROR backing up ${BANNER}. ${UNBOLD}" > $LOG
+	echo "(Error verifying tape.)" >> $LOG
+	echo "\nExamine the file VFYLOG.BAD.\n" >> $LOG
+	exit 1
+else
+	/opus/bin/tape rew > /dev/null 2>&1
+	echo "\n\n${REVERSE} ${DATE} ${UNBOLD}\n\n${REVERSE} Tape backup for ${BANNER} successful. ${UNBOLD}" > $LOG
+	echo "\n${REVERSE} `cat VFYLOG` were written to tape.${UNBOLD}" >> $LOG
+	echo "\n${REVERSE} Please set the write-protect ring to 'safe'. ${UNBOLD}\n" >> $LOG
+	rm -f VFYLOG
+	exit 0
+fi

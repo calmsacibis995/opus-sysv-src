@@ -1,0 +1,6 @@
+PROC=88000
+DCC=$DCCROOT/usr/lib/dcc
+BIN=$DCC/bin
+LIB=$DCC/MC$PROC
+
+exec $BIN/das -T $LIB/M$PROC.tab "$@"

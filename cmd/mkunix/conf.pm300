@@ -1,0 +1,899 @@
+/*
+ *  Configuration information
+ */
+
+#include	"/etc/master.d/kernel"
+#include 	<sys/stream.h>
+#include 	<sys/ipc.h>
+#include 	<sys/map.h>
+
+char *  Sys = SYS;
+char *  Node = NODE;
+char *  Rel  = REL;
+char *  Ver = VER;
+char *  Machine = MACH;
+
+/* from name.c */
+char	*version = VER;
+char	*release = REL;
+
+/* default device assignments */
+
+int	rootdev = makedev(0,0);
+
+int	swapdev = makedev(0,0);
+
+int	swplo = 100000;
+
+int	nswap = 4000;
+
+int	pipedev = makedev(0,0);
+
+int	dumpdev = makedev(0,0);
+
+int	(*dump)() = 0;
+
+int	dmplo = 0;
+
+hdeexit(){} ;
+
+int	slice_size = MAXSLICE;
+
+#include <sys/buf.h>
+
+struct	buf	pbuf[NPBUF];
+struct	buf	*buf;
+char	*buffers;
+
+struct	hbuf	hbuf[NHBUF];
+#include <sys/file.h>
+
+struct	file	file[NFILE];	/* done at boot time */
+#include <sys/inode.h>
+
+struct	inode	inode[NINODE];	/* done at boot time */
+#include <sys/fs/s5inode.h>
+struct	s5inode	s5inode[NS5INODE];	/* done at boot time */
+
+#include <sys/fs/s5dir.h>
+#include <sys/immu.h>
+#include <sys/region.h>
+#include <sys/proc.h>
+
+struct proc proc[NPROC];	/* done at boot time */
+
+struct	region	region[NREGION];	/* done at boot time */
+#include <sys/callo.h>
+
+struct	callo	callout[NCALL];
+
+#define	MAXUMEM	8192
+#define	GPGSMSK	0x82
+#define	MAXFC	1
+#define	MAXSC	1
+#define	VHANDL	10
+#define DMAMAP  100
+#define	SPTMAP	100
+
+/* NFS parameter definitions */
+#define	nfs_FLAGS	1		/* FS_NOICACHE */
+#define	nfs_NAME	"NFS"
+#define	nfs_NOTIFY	0xC		/* NO_SEEK|NO_IGET */
+
+#define SIZE(X)		sizeof(X) / sizeof(struct X)
+
+#include <sys/mount.h>
+
+struct	mount	mount[NMOUNT];
+
+struct	map	sptmap[SPTMAP];
+struct	map	dmamap[DMAMAP];
+
+char		putbuf[PUTBUFSZ];
+
+int		putbufsz = PUTBUFSZ;
+
+#include <sys/var.h>
+
+struct	var	v =  {
+
+	NBUF,
+
+	NCALL,
+
+	NINODE,
+
+	(char *)(&inode[NINODE]),
+
+	NFILE,
+
+	(char *)(&file[NFILE]),
+
+	NMOUNT,
+
+	(char *)(&mount[NMOUNT]),
+
+	NPROC,
+
+	(char *)(&proc[NPROC]),
+
+	NREGION,
+
+	NCLIST,
+
+	MAXUP,
+
+	NHBUF,
+
+	NHBUF-1,
+
+	NPBUF,
+
+	SPTMAP,
+
+	DMAMAP,
+
+	VHNDFRAC,
+
+	MAXPMEM,
+
+	NAUTOUP,
+
+	NOFILES,
+
+	NQUEUE,
+
+	NSTREAM,
+
+	NBLK4096,
+
+	NBLK2048,
+
+	NBLK1024,
+
+	NBLK512,
+
+	NBLK256,
+
+	NBLK128,
+
+	NBLK64,
+
+	NBLK16,
+
+	NBLK4,
+
+	NS5INODE,
+
+};
+#include <sys/tuneable.h>
+
+tune_t	tune	= {
+
+	GPGSLO,
+
+	GPGSHI,
+
+	GPGSMSK,
+
+	VHANDR,
+
+	VHANDL,
+
+	MAXSC,
+
+	MAXFC,
+
+	MAXUMEM,
+
+	BDFLUSHR,
+
+	MINARMEM,
+
+	MINASMEM,
+
+};
+#include <sys/fcntl.h>
+#include <sys/flock.h>
+
+struct	flckinfo	flckinfo = {FLCKREC};
+
+struct	filock		flox[FLCKREC];
+#include <sys/sysinfo.h>
+
+struct	shlbinfo	shlbinfo = {SHLBMAX, 0, 0};
+
+extern int	ttopen(), ttclose(), ttread(), ttwrite(), ttioctl(),
+
+		ttin(), ttout();
+
+extern int	nulldev();
+extern int	sxtin(), sxtout();
+
+struct	linesw linesw[] = {
+
+	ttopen, ttclose, ttread, ttwrite, ttioctl, ttin, ttout, nulldev,
+
+#ifdef	SXT
+
+	nulldev, nulldev, nulldev, nulldev, nulldev, sxtin, sxtout, nulldev,
+
+#endif
+
+};
+
+int	linecnt = 2;
+
+struct	queue		queue[NQUEUE];
+
+struct	stdata		streams[NSTREAM];
+
+mblk_t			mblock[BLKTOTAL];
+
+dblk_t			dblock[BLKTOTAL];
+
+struct	linkblk		linkblk[NMUXLINK];
+
+int	nmuxlink =	NMUXLINK;
+
+int	nstrpush =	NSTRPUSH;
+
+struct	strevent	strevent[NSTREVENT];
+
+int	nstrevent =	NSTREVENT;
+
+int	maxsepgcnt =	MAXSEPGCNT;
+
+int	strmsgsz =	STRMSGSZ;
+
+int	strctlsz =	STRCTLSZ;
+
+char	strlofrac =	STRLOFRAC;
+
+char	strmedfrac =	STRMEDFRAC;
+
+int	nmblock =	BLKTOTAL;
+
+struct	srmnt		srmount[NSRMOUNT];
+
+int	nsrmount =	NSRMOUNT;
+
+int	nservers =	0;
+
+int	idleserver =	0;
+
+int	msglistcnt =	0;
+#include <sys/utsname.h>
+
+struct	utsname utsname = {
+
+	SYS,
+
+	NODE,
+
+	REL,
+
+	VER,
+
+	MACH,
+
+};
+
+int	s5flag =	s5_FLAGS;
+char	s5name[15] =	s5_NAME;
+int	s5notfy =	s5_NOTIFY;
+
+extern nodev(), nulldev();
+extern true(), false();
+extern fsnull(), fsstray();
+extern nopkg(), noreach();
+
+extern struct streamtab clninfo[];
+
+extern dkopenb(), dkopenc(), dkclosec(), dkcloseb(), dkread(),
+       dkwrite(), dkstrategy(), dkioctl(), dkprint();
+extern rgdopen(),rgdclose(),rgdstrategy(),rgdprint();
+extern rgdread(),rgdwrite(),rgdioctl();
+extern conopen(), conclose(), conread(), conwrite(), conioctl();
+extern struct tty con_tty[];
+extern asopen(), asclose(), asread(),aswrite(),asioctl();
+extern struct tty as_tty[];
+extern lpopen(),lpclose(),lpwrite(),lpioctl();
+extern prfread(), prfwrite(), prfioctl();
+extern sxtopen(), sxtclose(), sxtread(), sxtwrite(), sxtioctl();
+extern dosopen(), dosclose(), dosioctl();
+extern pclopen(), pclclose(), pclread(), pclwrite(), pclioctl();
+extern pclcopen(), pclcclose(), pclcread(), pclcioctl();
+extern gnopenc(), gnopenb(), gnclosec(), gncloseb(), gnread(),
+       gnwrite(), gnioctl(), gnstrategy(), gnprint();
+extern ptcopen(), ptcclose(), ptcrsrv(),ptcwput();
+extern ptsopen(), ptsclose(), ptsread(),ptswrite(),ptsioctl();
+
+extern Xdispopen(), Xdispclose(), Xdispioctl();
+extern Xsigopen(), Xsigclose(), Xsigrsrv();
+extern conxopen(), conxclose(), conxrsrv();
+extern mtopenb(), mtopenc(), mtclose(), mtread(),
+       mtwrite(), mtioctl(), mtstrategy(), mtprint();
+extern xttyopen(), xttyclose(), xttyread(), xttywrite(), xttyioctl(),
+	exopen(), exclose(), exread(), exwrite(), exioctl(),
+	xmread(), xmwrite(), xmioctl(),
+	xsoopen(), xsoclose(), xsoread(), xsowrite(), xsoioctl();
+extern cptopen(), cptclose(), cptioctl();
+extern duinit(), duiput(), duiread(), duiupdat(), dureadi(),
+duwritei(), duitrunc(), dustatf(), dunamei(), dumount(),
+duumount(), dugetinode(), duopeni(), duclosei(), duupdate(),
+dustatfs(), duaccess(), dugetdents(), duallocmap(), dufreemap(),
+dureadmap(), dusetattr(), dunotify(), dufcntl(), duioctl();
+
+
+extern sxtioctl(), sxtopen(), sxtclose(), sxtread(), sxtwrite();
+
+extern struct streamtab loginfo[];
+
+extern struct streamtab pckinfo[];
+extern struct streamtab sexinfo[];
+
+extern struct streamtab ptcinfo[];
+extern struct streamtab Xsiginfo[];
+extern struct streamtab conxinfo[];
+
+#if ns32000
+extern prinit(), priput(), priread(), priupdat(), prreadi(),
+prwritei(), pritrunc(), prstatf(), prnamei(), prmount(),
+prumount(), prgetinode(), propeni(), prclosei(), prupdate(),
+prstatfs(), praccess(), prgetdents(), prallocmap(), prfreemap(),
+prreadmap(), prsetattr(), prnotify(), prfcntl(), prioctl();
+#endif
+
+
+extern struct streamtab spinfo[];
+
+
+extern struct streamtab timinfo[];
+
+
+extern struct streamtab trwinfo[];
+
+
+extern s5init(), s5iput(), s5iread(), s5iupdat(), s5readi(),
+s5writei(), s5itrunc(), s5statf(), s5namei(), s5mount(),
+s5umount(), s5getinode(), s5openi(), s5closei(), s5update(),
+s5statfs(), s5access(), s5getdents(), s5allocmap(), s5freemap(),
+s5readmap(), s5setattr(), s5notify(), s5fcntl(), s5ioctl();
+
+extern nfsinit(), nfsiput(), nfsiread(), nfsiupdat(), nfsreadi(),
+nfswritei(), nfsitrunc(), nfsstatf(), nfsnamei(), nfsmount(),
+nfsumount(), nfsopeni(), nfsclosei(), nfsupdate(),
+nfsstatfs(), nfsaccess(), nfsgetdents(), nfsallocmap(), nfsfreemap(),
+nfsreadmap(), nfssetattr(), nfsnotify(), nfsfcntl(), nfsioctl();
+
+extern nfsdioctl();
+extern nfsdstrategy();
+
+extern mmread(), mmwrite();
+extern syioctl(), syopen(), syread(), sywrite();
+
+struct bdevsw bdevsw[] = {
+/* 0*/	dkopenb,	dkcloseb,	dkstrategy,	dkprint,
+/* 1*/	nodev,          nodev,  	nodev,		nodev,
+/* 2*/	gnopenb,	gncloseb,	gnstrategy,	gnprint,
+/* 3*/	mtopenb,	mtclose,	mtstrategy,	mtprint,
+/* 4*/	nodev,		nodev,		nodev,		nodev,
+/* 5*/	nodev,		nodev,		nodev,		nodev,
+/* 6*/	nodev,		nodev,		nodev,		nodev,
+/* 7*/	nodev,		nodev,		nfsdstrategy,	nodev,
+};
+
+
+struct cdevsw cdevsw[] = {
+/*0*/  conopen, conclose,  conread,  conwrite,  conioctl,  con_tty,  0,
+/*1*/  nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*2*/  syopen,  nulldev,   syread,   sywrite,   syioctl,   0,        0,
+/*3*/  nulldev, nulldev,   mmread,   mmwrite,   nodev,     0,        0,
+/*4*/  dkopenc, dkclosec,  dkread,   dkwrite,   dkioctl,   0,        0,
+/*5*/  nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*6*/  nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*7*/  nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*8*/  nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*9*/  asopen,  asclose,   asread,   aswrite,   asioctl,   as_tty,   0,
+/*10*/ lpopen,  lpclose,   nodev,    lpwrite,   lpioctl,   0,        0,
+/*11*/ nulldev, nulldev,   prfread,  prfwrite,  prfioctl,  0,        0,
+#if SXT
+/*12*/ sxtopen, sxtclose,  sxtread,  sxtwrite,  sxtioctl,  0,        0,
+#else
+/*12*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+#endif
+/*13*/ dosopen, dosclose,  nodev,    nodev,     dosioctl,  0,        0,
+/*14*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*15*/ gnopenc, gnclosec,  gnread,   gnwrite,   gnioctl,   0,        0,
+#if PCL
+/*16*/ pclopen, pclclose,  pclread,  pclwrite,  pclioctl,  0,        0,
+/*17*/ pclcopen,pclcclose, pclcread, nulldev,   pclcioctl, 0,        0,
+#else
+/*16*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*17*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+#endif
+/*18*/ mtopenc, mtclose,   mtread,   mtwrite,   mtioctl,   0,        0,
+#if TCP
+/*19*/ xttyopen,xttyclose, xttyread, xttywrite, xttyioctl, 0,        0, 
+/*20*/ exopen,  exclose,   exread,   exwrite,   exioctl,   0,        0 , 
+/*21*/ nulldev, nulldev,   xmread,   xmwrite,   xmioctl,   0,        0, 
+/*22*/ xsoopen, xsoclose,  xsoread,  xsowrite,  xsoioctl,  0,        0, 
+#else
+/*19*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*20*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*21*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*22*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+#endif
+/*23*/ cptopen, cptclose,  nulldev,  nulldev,   cptioctl,  0,        0, 
+/*24*/ nulldev, nulldev,   nulldev,  nulldev,   nulldev,   0,        sexinfo,
+/*25*/ nulldev, nulldev,   nulldev,  nulldev,   nulldev,   0,        clninfo,
+/*26*/ nulldev, nulldev,   nulldev,  nulldev,   nulldev,   0,        loginfo,
+/*27*/ nulldev, nulldev,   nulldev,  nulldev,   nulldev,   0,        pckinfo,
+/*28*/ nulldev, nulldev,   nulldev,  nulldev,   nulldev,   0,        spinfo,
+#if XW
+/*29*/ ptcopen, ptcclose,  ptcrsrv,  ptcwput,   nodev,     0,        ptcinfo,
+/*30*/ ptsopen, ptsclose,  ptsread,  ptswrite,  ptsioctl,  0,        0,
+/*31*/ Xsigopen,Xsigclose, Xsigrsrv, nodev,     nodev,     0,        Xsiginfo,
+/*32*/ Xdispopen,Xdispclose,  nodev, nodev,     Xdispioctl,0,        0,
+/*33*/ nulldev, nulldev,   nulldev,  nulldev,   nfsdioctl, 0,        0,
+/*34*/ conxopen,conxclose, conxrsrv, nodev,     nodev,     0,        conxinfo,
+#else
+/*29*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*30*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*31*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*32*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+/*33*/ nulldev, nulldev,   nulldev,  nulldev,   nfsdioctl, 0,        0,
+/*34*/ nodev,   nodev,     nodev,    nodev,     nodev,     0,        0,
+#endif
+};
+
+/* Driver initialization routines */
+
+extern	int	cinit(), binit(), inoinit(), fsinit(),
+
+		finit(), iinit(), flckinit(), strinit();
+
+extern		confinit();
+extern	int	pckinit(), sexinit();
+extern 		pcinit(), dosinit(), coninit(), dkinit(), mtinit();
+extern		sxtinit(), lpinit(), gninit(), asinit(), exinit();
+extern		pclinit();
+extern		Xinit();
+extern		syminit();
+
+int (*init_tbl[])() = {
+
+	pcinit,
+
+	dosinit,
+
+	coninit,
+
+	dkinit,
+
+	mtinit,
+
+	asinit,
+
+	lpinit,
+
+#if SXT
+	sxtinit,
+#endif
+
+	gninit,
+
+#if XW
+	Xinit,
+#endif
+
+#if PCNET
+	pclinit,
+#endif
+
+#if TCP
+	exinit,
+#endif
+
+	confinit,
+
+	cinit,
+
+	binit,
+
+	inoinit,
+
+	fsinit,
+
+	finit,
+
+	iinit,
+
+	flckinit,
+
+	strinit,
+
+	syminit,
+
+	0,
+};
+
+struct fmodsw fmodsw[] = {
+	"timod",	timinfo,
+	"tirdwr",	trwinfo,
+	"",	0,
+};
+
+extern	int	sexinit() ;
+extern	int	pckinit() ;
+extern		msginit() ;
+extern		seminit() ;
+extern		shminit() ;
+int	(*io_start[])() = {
+	(int (*)())0
+};
+
+int	(*io_init[])() = {
+#if RFS
+	sexinit,
+	pckinit,
+#endif
+#ifdef MSG
+	msginit,
+#endif
+#ifdef SEM
+	seminit,
+#endif
+#ifdef SHM
+	shminit,
+#endif
+	(int (*)())0
+};
+
+/* variable definitions */
+int	duflag =	du_FLAGS;
+char	duname[12] =	du_NAME;
+int	dunotfy =	du_NOTIFY;
+#define	duumount	fsstray
+#define	dugetinode	fsstray
+#define	dustatfs	fsstray
+#define	duallocmap	fsstray
+#define	dureadmap	fsstray
+#define	dusetattr	fsstray
+
+struct fstypsw fstypsw[] = {
+/* 0*/	fsstray,
+	fsstray,
+	(struct inode *(*)())fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	(struct inode *(*)())fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	(int *(*)())fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	fsstray,
+	{fsstray,fsstray,fsstray,fsstray,fsstray},
+/* 1*/	duinit,
+	duiput,
+	(struct inode *(*)())duiread,
+	fsstray,
+	duiupdat,
+	dureadi,
+	duwritei,
+	duitrunc,
+	dustatf,
+	dunamei,
+	dumount,
+	duumount,
+	(struct inode *(*)())dugetinode,
+	duopeni,
+	duclosei,
+	duupdate,
+	dustatfs,
+	duaccess,
+	dugetdents,
+	duallocmap,
+	(int *(*)())dufreemap,
+	dureadmap,
+	dusetattr,
+	dunotify,
+	dufcntl,
+	fsstray,
+	duioctl,
+	{fsnull,fsnull,fsnull,fsnull,fsnull},
+#ifdef ns32000
+/* 2*/	prinit,
+	priput,
+	(struct inode *(*)())priread,
+	fsstray,
+	priupdat,
+	prreadi,
+	prwritei,
+	pritrunc,
+	prstatf,
+	prnamei,
+	prmount,
+	prumount,
+	(struct inode *(*)())prgetinode,
+	propeni,
+	prclosei,
+	prupdate,
+	prstatfs,
+	praccess,
+	prgetdents,
+	prallocmap,
+	(int *(*)())prfreemap,
+	prreadmap,
+	prsetattr,
+	prnotify,
+	prfcntl,
+	fsstray,
+	prioctl,
+	{fsnull,fsnull,fsnull,fsnull,fsnull},
+#else
+/* 2*/	fsnull,
+	fsnull,
+	(struct inode *(*)())fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	(struct inode *(*)())fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	(int *(*)())fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	fsnull,
+	{fsnull,fsnull,fsnull,fsnull,fsnull},
+#endif
+/* 3*/	s5init,
+	s5iput,
+	(struct inode *(*)())s5iread,
+	fsstray, 
+	s5iupdat,
+	s5readi,
+	s5writei,
+	s5itrunc,
+	s5statf,
+	s5namei,
+	s5mount,
+	s5umount,
+	(struct inode *(*)())s5getinode,
+	s5openi,
+	s5closei,
+	s5update,
+	s5statfs,
+	s5access,
+	s5getdents,
+	s5allocmap,
+	(int *(*)())s5freemap,
+	s5readmap,
+	s5setattr,
+	s5notify,
+	s5fcntl,
+	fsstray,
+	s5ioctl,
+	{fsnull,fsnull,fsnull,fsnull,fsnull},
+#if NFS
+/* 4*/	nfsinit,
+	nfsiput,
+	(struct inode *(*)())nfsiread,
+	fsstray, 
+	nfsiupdat,
+	nfsreadi,
+	nfswritei,
+	nfsitrunc,
+	nfsstatf,
+	nfsnamei,
+	nfsmount,
+	nfsumount,
+	(struct inode *(*)())fsstray,
+	nfsopeni,
+	nfsclosei,
+	nfsupdate,
+	nfsstatfs,
+	nfsaccess,
+	nfsgetdents,
+	nfsallocmap,
+	(int *(*)())nfsfreemap,
+	nfsreadmap,
+	nfssetattr,
+	nfsnotify,
+	nfsfcntl,
+	fsstray,
+	nfsioctl,
+	{fsnull,fsnull,fsnull,fsnull,fsnull},
+#endif
+};
+
+struct fsinfo fsinfo[] = {
+	0,
+	0,
+	"",
+	0,
+/* 0*/	du_FLAGS,
+	du_PIPE,
+	du_NAME,
+	du_NOTIFY,
+/* 1*/	0,
+	0,
+	"",
+	0,
+/* 2*/	s5_FLAGS,
+	s5_PIPE,
+	s5_NAME,
+	s5_NOTIFY,
+#if NFS
+/* 3*/	nfs_FLAGS,
+	0,
+	nfs_NAME,
+	nfs_NOTIFY,
+#endif
+};
+
+int	bdevcnt = SIZE( bdevsw );
+int	cdevcnt = SIZE( cdevsw );
+short	nfstyp =  SIZE( fstypsw );
+
+int	fmodcnt = 2;
+int sok_dev = 22;
+int xtty_cnt = 1;
+int ex_cnt = 1;
+int xm_cnt = 1;
+int xso_cnt = 1;
+int sex_cnt = 2;
+
+/*
+ * Device specification for mm.
+ */
+int	mm_cnt = 1;
+
+
+/*
+ * Device specification for sy.
+ */
+int	sy_cnt = 1;
+
+int	(*pwr_clr[])() = 
+{
+	(int (*)())0
+};
+
+int	(*dev_init[])() = 
+{
+	(int (*)())0
+};
+
+rtnfirm() 
+{
+	spl7();
+	while(1);
+}
+
+monitor()
+{
+}
+
+mdebug() 
+{
+}
+
+/* make MAJOR code mapping one to one */
+
+char MAJOR[]={
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
+32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+};
+
+char MINOR[]={
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
+32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+};
+
+	shmslp(){hs(9);}
+	shmtext(){hs(10);}
+	xtin(){hs(12);}
+	xtout(){hs(13);}
+	xtvtproc(){hs(14);}
+	errlayer(){hs(15);}
+	mau_fault(){hs(18);}
+	mau_setup(){hs(19);}
+	mau_save(){hs(20);}
+	mau_restore(){hs(21);}
+	mau_pfault(){hs(22);}
+	mtcrchk(){hs(23);}
+
+hs(x){
+#ifdef 1
+printf("HIT STUB %d\n",x) ;
+#endif
+}
+
+/* rewrite thease in assembler when get chance */
+
+#include	"sys/signal.h"
+#include 	"sys/user.h"
+
+strcmp(aa,bb)
+char *aa,*bb;
+{
+	register char *a,*b;
+	
+	a = aa; b = bb;
+
+	while ( *b )
+		if( *a++ !=  *b++)return 1;
+	if( *a )return 1;
+	else
+	return 0;
+}
+
+debuginit(flag)
+int flag;
+{
+}
+
+nopkg()
+{
+}
+
+char * syscalls[]= { "indir", "exit", "fork", "read", "write", "open", "close",
+		   "wait", "creat", "link", "unlink", "exec", "chdir", "time",
+		   "mknod", "chmod", "chown", "break", "stat", "seek", "getpid",
+		   "mount", "umount", "setuid", "getuid", "stime", "ptrace",
+	  	   "alarm", "fstat", "pause", "utime", "stty", "gtty", "access",
+		   "nice", "statfs", "sync", "kill", "fstatfs", "setpgrp",
+		   "tell", "dup", "pipe", "times", "prof", "proc lock",
+		   "setgid", "getgid", "sig", "IPC message", "3b2scall",
+		   "acct", "shared memory", "IPC semaphores", "ioctl",
+		   "uadmin", "reserved for exch", "utssys", "res USG",
+		   "exece", "umask", "chroot", "fcntl", "ulimit", "+0 nosys",
+		   "+1 nosys", "+2 nosys", "+3 file locking call", 
+		   "+4 local calls", "+5 inode open", "advfs", "unadvfs",
+		   "rmount", "rumount", "rfstart", "not used", "rdebug",
+		   "rfstop", "rfsys", "rmdir", "mkdir", "getdents", "not used",
+		   "not used", "sysfs", "getmsg", "putmsg", "poll" };

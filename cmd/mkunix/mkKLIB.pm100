@@ -1,0 +1,113 @@
+
+# This makefile is part of the Opus kernel reconfiguration process.
+# It is not a released file. It is used to build a core kernel with
+# only the minimal drivers needed to boot. This file resides in the
+# "/boot/libs" directory.
+# The objects of this make will be installed in the /boot directory.
+# They will be used by "drvinstall" and "mkunix" to rebuild the kernel.
+
+ROOT = /
+INCRT = /usr/include
+INS = /etc/install
+INSDIR = $(ROOT)/
+FRC =
+DEFS = /etc/system
+MASDIR = /etc/master.d
+BOOTDIR=/boot
+UTS=/usr/src/uts/$(TYPE)/$(CPU)
+
+MACH = $(CPU)
+
+KLIBS=$(UTS)/10lib.os $(UTS)/20lib.io $(UTS)/50lib.fs.s5
+
+DRIVERS=$(UTS)/70lib.drivers
+
+BASE_DRVRS=cons.o dk.o $(CPU)dos.o $(CPU)pc.o mem.o gentty.o syms.o
+OBSOLETE=vdi.o pcl.o
+
+DEBUG=$(UTS)/90lib.debug
+TCP=$(UTS)/80lib.exos
+NFS=$(UTS)/60lib.fs.nfs
+NSU=clone.o log.o timod.o tirdwr.o sp.o
+RFSLIB0=$(UTS)/40lib.fs.dufst
+RFSLIB1=$(UTS)/30lib.nudnix
+RFS=sex.o npack.o
+XW=conx.o Xdisp.o Xsig.o ptc.o ptcspace.o pts.o ptsspace.o
+
+all:	drivers KLIB
+
+KLIB: univec.o
+	rm -rf $(MASDIR)
+	mkdir $(MASDIR)
+	cp ./master.d/$(CPU)/* $(MASDIR)
+	cp /usr/src/uts/ns32000/cf/$(CPU).file $(BOOTDIR)/LD.FILE
+	cp $(UTS)/locore.o $(BOOTDIR)/LOCORE
+	cp $(UTS)/disp.o .
+	cp conf.$(CPU) $(BOOTDIR)/conf.c
+	-mkdir tmp
+	-rm -f tmp/*
+	cd tmp; echo $(KLIBS) | xargs -n1 ar x
+	cd tmp; ar x $(DRIVERS) $(BASE_DRVRS)
+	-rm -f $(BOOTDIR)/KLIB
+	cd tmp; ar q $(BOOTDIR)/KLIB \
+		../univec.o ../disp.o *.o
+
+drivers: debug.o tcp.o nfs.o nsu.o rfs.o xw.o
+	cp system.$(CPU) /etc/system
+	-cd tmp; rm  -f *
+	cd tmp; ar x $(DRIVERS)
+	-cd tmp; rm -f $(BASE_DRVRS) $(OBSOLETE) $(NSU) $(RFS) $(XW)
+	cd tmp; /bin/ls *.o | xargs -i /bin/ld -rd -o $(BOOTDIR)/{} {}
+	-cd tmp; rm -f *
+
+debug.o: FRC
+	@echo "- debug"
+	-rm -rf $(BOOTDIR)
+	mkdir $(BOOTDIR)
+	-mkdir tmp
+	-cd tmp; rm -f *
+	cd tmp; ar x $(DEBUG)
+	cd tmp; ld -rd -o $(BOOTDIR)/debug.o *.o
+	cd tmp; rm -f *
+
+nfs.o: FRC
+	@echo "- nfs"
+	cd tmp; ar x $(NFS)
+	cd tmp; ld -rd -o $(BOOTDIR)/nfs.o *.o
+	cd tmp; rm -f *
+
+tcp.o: FRC
+	@echo "- tcp"
+	cd tmp; ar x $(TCP)
+	cd tmp; ld -rd -o $(BOOTDIR)/tcp.o *.o
+	cd tmp; rm -f *
+
+nsu.o: FRC
+	@echo "- nsu"
+	cd tmp; ar x $(DRIVERS) $(NSU)
+	cd tmp; ld -rd -o $(BOOTDIR)/nsu.o *.o
+	cd tmp; rm -f *
+
+rfs.o: FRC
+	@echo "- rfs"
+	cd tmp; ar x $(DRIVERS) $(RFS)
+	cd tmp; ar x $(RFSLIB0)
+	cd tmp; ar x $(RFSLIB1)
+	cd tmp; ld -rd -o $(BOOTDIR)/rfs.o *.o
+	cd tmp; rm -f *
+
+xw.o: FRC
+	@echo "- xw"
+	cd tmp; ar x $(DRIVERS) $(XW)
+	cd tmp; ld -rd -o $(BOOTDIR)/xw.o *.o
+	cd tmp; rm -f *
+
+univec.o: $(FRC)
+	cp univec.$(CPU) univec.c
+	cc -c $(CFLAGS) univec.c
+
+FRC:
+
+clobber:
+	-rm -rf tmp
+	-rm -f univec.c *.o

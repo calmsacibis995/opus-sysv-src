@@ -1,0 +1,16 @@
+#ident	"@(#)initpkg:init.d/firstcheck	1.2"
+#	Perform the "never have been run before" checks.
+
+set `who -r`
+if [ $9 != "S" ]
+then
+	exit
+fi
+
+echo '
+        Welcome!
+This machine has to be set up by you.  When you see the "login" message type
+                                setup
+followed by the RETURN key.  This will start a procedure that leads you through
+those things that should be done the "first time" the machine is used.
+'

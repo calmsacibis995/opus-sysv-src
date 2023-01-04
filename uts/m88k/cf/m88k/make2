@@ -1,0 +1,4 @@
+grep VERSION /usr/src/uts/m88k/cf/m88k/config.h
+echo udcp /usr/src/uts/m88k/cf/m88k/sysV88 a:unix
+udcp /usr/src/uts/m88k/cf/m88k/sysV88 a:unix
+echo == done ==

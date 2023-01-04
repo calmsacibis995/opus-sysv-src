@@ -1,0 +1,126 @@
+PROBLEM STATEMENT
+
+The current 88000 Architecture specification has several inconsistencies
+between various sections, related to instructions that have the same
+mnemonic name but more than one addressing mode.  The tendency is to
+mix semantic information for selecting the correct object code between
+the type of the operands, and modifier fields for the mnemonics.
+
+As an example, consider the tbnd instruction, which can have either a
+register or 16 bit literal as the second operand.  Page 36 gives
+the sample assembler syntax as:
+
+	tbnd	rs1,lit16		(mnemonic overloaded)
+	tbnd	rs1,rs2
+
+yet page 102 has instruction set encodings for the "tbnd" and "tbndi"
+mnemonics, such that to be consistent the example should be
+
+	tbndi	rs1,lit16		(mnemonic not overloaded)
+	tbnd	rs1,rs2
+
+As another example, consider the floating point instructions that can
+take any mix of single or double operands in registers.  In this case,
+the convention is to append a field to the mnemonic which specifies
+the sizes of the operands, such as:
+
+	fadd.sds	rd,rs1,rs2	(mnemonic not overloaded)
+	fadd.ddd	rd,rs1,rs2
+
+when this could alternatively be done as:
+
+	fadd		rd.s,rs1.d,rs2.s	(mnemonic overloaded)
+	fadd		rd.d,rs1.d,rs2.d
+
+As I see it, the benefits of "overloading" the mnemonic name and letting
+types and modifiers for the operands select the correct object code are:
+
+	Pro:	Simplicity of listing the command set.  There is
+		the appearance of only having one "fadd" or one "tbnd"
+		instruction, which has multiple "addressing" modes.
+
+	Con:	This appearance is deceiving.  Just because two instructions
+		happen to do something similar (a floating point add) is
+		not necessarily a good reason for using the same mnemonic.
+		If it was, we would have one "move" mnemonic rather than
+		"ld" and "st" (load and store).
+
+	Pro:	Having one mnemonic simplifies the basic code tables internal
+		to the assembler, and makes recognition of the mnemonics
+		easier.
+
+	Con:	It greatly complicates the operand parsing.  The space saved
+		in the object code tables is probably more than made up for in
+		increased size and complexity of the operand parsing code.
+
+
+SUGGESTIONS
+
+I suggest that we decide which side of the fence we are going to
+stand on.  Sitting on the middle is too uncomfortable.
+
+The choice is between:
+
+	(1)	Overload mnemonic completely and do away with
+		the ".<some additional information>" type modifiers.
+		Select the correct object code based ONLY on a single
+		mnemonic and parsing of the operands.  This means that
+		several instructions which currently have different
+		mnemonic can be combined to share the same mnemonic
+		since the specific object code can be determined from
+		the types of the operands.
+
+		For example:
+
+			jsr	rs2
+			bsr	off26
+			ld	r1,r2,r3
+			ld.b	r1,r2,label
+			ld.bu	r1,r2[r3]
+			and	r1,r2,r3
+			and	r1,r2,7
+			and.c	r1,r2,r3
+			and.u	r1,r2,7
+
+		becomes:
+
+			jsr	rs2
+ 			jsr	off26		(note NOT bsr)
+			ld	r1,r2,r3
+			ld	r1.b,r2,label
+			ld	r1.bu,r2[r3]
+			and	r1,r2,r3
+			and	r1,r2,7
+			and	r1,r2.c,r3
+			and	r1,r2.u,7
+
+
+
+	(2)	Use a different mnemonic for every single machine
+		instruction listed in Appendix B of the M88xxx 
+		Architecture Specification, including ones that
+		currently use '.n', '.c', and '.u' mnemonic modifiers.
+
+		For example:
+
+			jsr	rs2
+			bsr	off26
+			ld	r1,r2,r3
+			ld.b	r1,r2,label
+			ld.bu	r1,r2[r3]
+			and	r1,r2,r3
+			and	r1,r2,7
+			and.c	r1,r2,r3
+			and.u	r1,r2,7
+
+		becomes:
+
+			jsr	rs2
+			bsr	off26
+			ld	r1,r2,r3
+			ldb	r1,r2,label
+			ldbiu	r1,r2,r3
+			and	r1,r2,r3
+			andi	r1,r2,7
+			andc	r1,r2,r3
+			andiu	r1,r2,7

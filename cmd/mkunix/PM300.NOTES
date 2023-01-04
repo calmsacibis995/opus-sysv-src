@@ -1,0 +1,29 @@
+When building the 1st CFG release for the PM300, I had
+to do these steps manually. They fall into two catagories.
+First are those additions that fix deficiencies in the
+stock E1 release. These should not have to be carried forward
+into the next CFG release, provided they are fixed in the next
+clipper stock release.
+The second catagory is things that are different from the PM100/
+PM200 CFG releases. The release scripts only allow different file
+lists for the different processors, but not changes within those
+files. These changes will probably have to be carried forward into
+the next clipper CFG release. 
+
+Manual additions that should not have to be done in next PM300 CFG release:
+
+	- added new version of /usr/include/sys/var.h
+	- added /dev/unix
+	- added new version of /etc/sysdef
+	- added several networking include files because they
+	  were mistakenly left out of the E1/E2 SGS package.
+
+Manual additions that should be done in next PM300 CFG release:
+
+	- Add GHC compiler to INSTALL script pre-installed package check.
+	- remove tput from Rlist
+	- remove any references to the gnf driver:
+		/boot/gnf.o
+		/etc/master.d/gnf
+		/etc/mkkernel
+	

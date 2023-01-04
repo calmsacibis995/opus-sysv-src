@@ -1,0 +1,19 @@
+/* TTY driver - asynchronous serial ports */
+/* links with as and gentty */
+#include "/etc/system"
+
+#ifndef AS
+asinit() {}
+asopen() { nodev(); }
+asclose() { nodev(); }
+asread() { nodev(); }
+aswrite() { nodev(); }
+asioctl() { nodev(); }
+asrint() {}
+asxint() {}
+asctlint() {}
+struct tty {
+	char dummy;
+};
+struct tty as_tty;
+#endif

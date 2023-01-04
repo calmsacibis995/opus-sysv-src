@@ -1,0 +1,41 @@
+/* Interrupt Service Routine table */
+
+#include	"/etc/system"
+
+extern nulldev();
+extern conrint(), conxint(), conctlint();
+extern dkintr();
+extern mtintr();
+extern asrint(), asxint(), asctlint();
+extern lpintr();
+extern gnintr();
+extern dosintr();
+extern ethintr();
+extern Xsigrint(), Xdispctlint();
+extern gnfintr();
+
+int (*intdevsw[])() = {
+	nulldev,	/* 0 */
+	nulldev,	/* 1 */
+	conrint,	/* 2 */
+	conxint,	/* 3 */
+	dkintr,		/* 4 */
+	nulldev,	/* 5 */
+	asrint,		/* 6 */
+	asxint,		/* 7 */
+	dosintr,	/* 8 */
+	lpintr,		/* 9 */
+	asctlint,	/* 10 */
+	conctlint,	/* 11 */
+	nulldev,	/* 12 */
+	nulldev,	/* 13 */
+	gnintr,		/* 14 */
+	mtintr,		/* 15 */
+	ethintr,	/* 16 */
+	nulldev,	/* 17 */
+	nulldev,	/* 18 */
+	nulldev,	/* 19 */
+	Xsigrint,	/* 20 */
+	Xdispctlint,/* 21 */
+};
+int	intdevcnt = sizeof(intdevsw)/sizeof(int *);

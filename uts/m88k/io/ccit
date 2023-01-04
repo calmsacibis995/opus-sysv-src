@@ -1,0 +1,5 @@
+for i in $@
+do
+echo cc -DBCS -I.. -DINKERNEL -Dm88k -Dopus -DCMMU -c $i
+/bin/mcc -DBCS -I.. -DINKERNEL -Dm88k -Dopus -DCMMU -c $i
+done

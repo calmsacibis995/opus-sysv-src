@@ -1,0 +1,3 @@
+# This script downloads the Excelan firmware for TCP/IP 
+
+netrc INIT TCP

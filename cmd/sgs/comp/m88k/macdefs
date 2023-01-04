@@ -1,0 +1,84 @@
+/*	@(#)macdefs	1.4	*/
+# define makecc(val,i)  lastcon = (lastcon<<8)|((val<<24)>>24);  
+
+# ifndef MC88000
+# define MC88000 1
+# endif
+
+# define  ARGINIT 0 
+# define  AUTOINIT (8*32)
+# define  SZCHAR 8
+# define  SZINT 32
+# define  SZFLOAT 32
+# define  SZDOUBLE 64
+# define  SZLONG 32
+# define  SZSHORT 16
+# define SZPOINT 32
+# define ALCHAR 8
+# define ALINT 32
+# define ALFLOAT 32
+# define ALDOUBLE 64
+# define ALLONG 32
+# define ALSHORT 16
+# define ALPOINT 32
+# define ALSTRUCT 8
+# define  ALSTACK 32 
+
+/*	size in which constants are converted */
+/*	should be long if feasable */
+
+# define CONSZ long
+# define CONFMT "%ld"
+
+/*	size in which offsets are kept
+/*	should be large enough to cover address space in bits
+*/
+
+# define OFFSZ long
+
+/* 	character set macro */
+
+# define  CCTRANS(x) x
+
+/* register cookie for stack poINTer */
+
+# define STKREG 31
+# define ARGREG 30
+
+/*	maximum and minimum register variables */
+
+# define MAXRVAR 25
+# define MINRVAR 14
+
+	/* various standard pieces of code are used */
+# define STDPRTREE
+# define LABFMT "@L%d"
+
+/* stack grows negatively, but locals are allocated positively */
+/*#define BACKAUTO*/
+/*#define BACKTEMP*/
+
+/* show field hardware support on 88k */
+#define FIELDOPS
+
+/* bytes are numbered from left to right */
+/*#define RTOLBYTES*/
+
+/* we want prtree included */
+# define STDPRTREE
+# ifndef FORT
+# define ONEPASS
+#endif
+
+# define ENUMSIZE(high,low) INT
+
+
+# define ADDROREG
+# define FIXDEF(p) fixdef(p)
+# define FIXSTRUCT(p,q) strend(p)
+# define SETDCON(p) 0		/* setdcon(p) need side effects */
+
+# define SDB
+
+extern long usedregs;			/* to keep track of usage */
+#define USAGE(p) usedregs |= 1 << ( p )
